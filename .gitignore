@@ -1,0 +1,10 @@
+# Handoff bundle original (pesado, no necesario para el sitio)
+Taller motos Opción 1-handoff.zip
+taller-motos-opci-n-1/
+
+# Config local del entorno de previsualización
+.claude/
+
+# Dependencias / build
+node_modules/
+.vercel/

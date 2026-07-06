@@ -1,0 +1,1798 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800;900&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box}
+html,body{overflow-x:clip}
+body{margin:0;background:#FFFFFF;color:#141414;font-family:'Archivo',system-ui,sans-serif;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+::selection{background:var(--accent,#F56007);color:#fff}
+input,textarea,button{font-family:inherit}
+#svc-carousel::-webkit-scrollbar{height:0}
+#rel-carousel::-webkit-scrollbar{height:0}
+#tab-strip{scrollbar-width:none}
+#tab-strip::-webkit-scrollbar{display:none}
+.moto-card-nav{opacity:0;transition:opacity .2s ease}
+.moto-card:hover .moto-card-nav{opacity:.9}
+.gallery-overlay{opacity:0;transition:opacity .2s ease}
+.gallery-wrap:hover .gallery-overlay{opacity:1}
+body.is-touch .moto-card-nav,body.is-touch .gallery-overlay{opacity:1!important}
+@keyframes fadeIn{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+@keyframes kenburns{0%{transform:scale(1.08) translate(0,0)}100%{transform:scale(1.22) translate(-2.5%,-2%)}}
+@keyframes sweep{0%{transform:translateX(-140%) skewX(-18deg)}100%{transform:translateX(240%) skewX(-18deg)}}
+@keyframes wa-pulse{0%,100%{box-shadow:0 0 0 0 rgba(37,211,102,0)}50%{box-shadow:0 0 0 12px rgba(37,211,102,.12)}}
+@keyframes pop{0%{transform:scale(.7);opacity:0}100%{transform:scale(1);opacity:1}}
+@media (max-width:940px){
+  #tab-strip{overflow-x:auto;justify-content:flex-start!important}
+  .logo-img{height:44px!important}
+  .hero-h1{font-size:clamp(40px,10vw,68px)!important}
+  .detail-grid{grid-template-columns:1fr!important}
+  .cat-grid{grid-template-columns:1fr!important}
+  .co-grid{grid-template-columns:1fr!important}
+}
+@media (max-width:560px){
+  .logo-img{height:40px!important}
+}
+</style>
+</helmet>
+<div style="--accent: {{ accent }}; --ink:#141414;">
+
+<!-- ================= TOP TAB BAR ================= -->
+<header style="position:fixed;top:0;left:0;right:0;z-index:70;height:88px;background:#141414;overflow:hidden;">
+  <div style="position:relative;z-index:1;max-width:1400px;height:100%;margin:0 auto;padding:0 30px;display:flex;align-items:center;gap:24px;">
+    <button onClick="{{ goInicio }}" title="{{ taller }}" class="logo-plate" style="position:relative;flex:none;display:flex;align-items:center;height:100%;background:none;border:none;cursor:pointer;padding:0;margin-right:6px;">
+      <img src="img/logo-v2.png" alt="{{ taller }}" class="logo-img" style="height:70px;width:auto;display:block;"/>
+    </button>
+    <nav id="tab-strip" style="flex:1;display:flex;align-items:center;justify-content:center;gap:4px;min-width:0;">
+      <sc-for list="{{ tabs }}" as="t" hint-placeholder-count="5">
+        <sc-if value="{{ t.active }}" hint-placeholder-val="{{ false }}">
+          <button onClick="{{ t.onClick }}" style="flex:none;height:40px;padding:0 24px;border:none;background:var(--accent,#F56007);color:#fff;clip-path:polygon(15px 0,100% 0,calc(100% - 15px) 100%,0 100%);cursor:pointer;font-size:14px;font-weight:700;letter-spacing:.01em;white-space:nowrap;display:flex;align-items:center;justify-content:center;">{{ t.label }}</button>
+        </sc-if>
+        <sc-if value="{{ t.inactive }}" hint-placeholder-val="{{ true }}">
+          <button onClick="{{ t.onClick }}" style="flex:none;height:40px;padding:0 18px;border:none;background:transparent;color:#e8e8e2;cursor:pointer;font-size:14px;font-weight:500;letter-spacing:.01em;white-space:nowrap;display:flex;align-items:center;justify-content:center;" style-hover="color:#fff">{{ t.label }}</button>
+        </sc-if>
+      </sc-for>
+    </nav>
+    <div style="flex:none;display:flex;align-items:center;gap:10px;">
+      <div style="display:flex;align-items:center;border:1.5px solid #3a3a3a;border-radius:0;overflow:hidden;margin-right:2px;">
+        <button onClick="{{ onLangEs }}" title="Castellano" style="height:40px;padding:0 11px;border:none;cursor:pointer;font-size:12px;font-weight:700;font-family:'IBM Plex Mono',monospace;background: {{ langEsBg }};color: {{ langEsColor }};">ES</button>
+        <button onClick="{{ onLangCa }}" title="Català" style="height:40px;padding:0 11px;border:none;cursor:pointer;font-size:12px;font-weight:700;font-family:'IBM Plex Mono',monospace;background: {{ langCaBg }};color: {{ langCaColor }};">CA</button>
+      </div>
+      <button onClick="{{ openCart }}" title="{{ t.cesta }}" style="position:relative;height:40px;padding:0 13px;border:1.5px solid #3a3a3a;border-radius:0;background:transparent;color:#e8e8e2;display:flex;align-items:center;gap:8px;cursor:pointer;font-weight:600;font-size:13px;" style-hover="border-color:#e8e8e2">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#e8e8e2" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="20" r="1.4"/><circle cx="18" cy="20" r="1.4"/><path d="M2 3h3l2.4 12.4a1.6 1.6 0 0 0 1.6 1.3h8.2a1.6 1.6 0 0 0 1.6-1.3L22 7H6"/></svg>
+        <span>{{ t.cesta }}</span>
+        <sc-if value="{{ hasCart }}" hint-placeholder-val="{{ false }}">
+          <span style="min-width:19px;height:19px;padding:0 5px;background:var(--accent,#F56007);color:#fff;border-radius:0;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;font-family:'IBM Plex Mono',monospace;">{{ cartCount }}</span>
+        </sc-if>
+      </button>
+      <button onClick="{{ openForm }}" style="height:40px;padding:0 18px;border:none;border-radius:0;background:var(--accent,#F56007);color:#fff;font-weight:700;font-size:13px;cursor:pointer;" style-hover="filter:brightness(1.08)">{{ t.pedirCita }}</button>
+    </div>
+  </div>
+</header>
+
+<div style="padding-top:88px;">
+
+<!-- ================= TAB · INICIO ================= -->
+<sc-if value="{{ isInicio }}" hint-placeholder-val="{{ true }}">
+<div style="animation:fadeIn .5s ease both;">
+  <!-- HERO -->
+  <section style="position:relative;height:calc(100vh - 88px);min-height:580px;overflow:hidden;background:#141414;">
+    <div style="position:absolute;top:6%;right:3%;width:min(42%,520px);display:flex;align-items:flex-start;justify-content:flex-end;pointer-events:none;">
+      <img src="img/logo-v2.png" alt="" aria-hidden="true" style="width:100%;opacity:1;transform:rotate(-7deg);"/>
+    </div>
+    <div style="position:absolute;inset:0;background:linear-gradient(120deg,rgba(20,20,20,.82) 0%,rgba(20,20,20,.55) 55%,rgba(20,20,20,.35) 100%);"></div>
+    <div style="position:absolute;inset:0;background:repeating-linear-gradient(115deg,rgba(255,255,255,.015) 0px,rgba(255,255,255,.015) 2px,transparent 2px,transparent 26px);"></div>
+    <div style="position:absolute;inset:0;background:linear-gradient(180deg,rgba(20,20,20,.35) 0%,rgba(20,20,20,.1) 40%,rgba(20,20,20,.55) 100%);"></div>
+
+    <div style="position:absolute;left:0;right:0;bottom:0;padding:0 30px 56px;max-width:1400px;margin:0 auto;">
+      <div style="display:flex;align-items:center;gap:12px;font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:.12em;color:rgba(255,255,255,.72);text-transform:uppercase;margin-bottom:20px;">
+        <span style="width:34px;height:2px;background:var(--accent,#F56007);"></span>{{ t.heroKicker }}
+      </div>
+      <h1 class="hero-h1" style="margin:0;color:#fff;font-weight:900;letter-spacing:-.03em;line-height:.96;font-size:clamp(48px,7vw,96px);max-width:16ch;">{{ t.heroTitle }}</h1>
+      <p style="margin:22px 0 0;color:rgba(255,255,255,.78);font-size:clamp(16px,1.5vw,20px);max-width:52ch;line-height:1.5;">{{ t.heroSub }}</p>
+      <div style="margin-top:32px;display:flex;flex-direction:column;gap:16px;align-items:flex-start;">
+        <button onClick="{{ openForm }}" style="height:58px;padding:0 34px;background:var(--accent,#F56007);color:#fff;border:none;border-radius:0;font-weight:700;font-size:16px;cursor:pointer;letter-spacing:.01em;" style-hover="filter:brightness(1.1)">{{ t.pedirCita }}</button>
+        <div style="display:flex;flex-wrap:wrap;gap:12px;align-items:center;">
+          <button onClick="{{ goMotos }}" style="height:46px;padding:0 22px;background:transparent;color:#fff;border:1.5px solid rgba(255,255,255,.5);border-radius:0;font-weight:700;font-size:14px;cursor:pointer;display:flex;align-items:center;gap:8px;" style-hover="border-color:#fff">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="5.5" cy="17" r="3"/><circle cx="18.5" cy="17" r="3"/><path d="M8.5 17h6l2-6h3M6 11l2-4h4l3 4"/></svg>
+            {{ t.compraMoto }}</button>
+          <button onClick="{{ openSell }}" style="height:46px;padding:0 22px;background:transparent;color:#fff;border:1.5px solid rgba(255,255,255,.5);border-radius:0;font-weight:700;font-size:14px;cursor:pointer;display:flex;align-items:center;gap:8px;" style-hover="border-color:#fff">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="20" r="1.4"/><circle cx="18" cy="20" r="1.4"/><path d="M2 3h3l2.4 12.4a1.6 1.6 0 0 0 1.6 1.3h8.2a1.6 1.6 0 0 0 1.6-1.3L22 7H6"/></svg>
+            {{ t.vendeMoto }}</button>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+</sc-if>
+
+<!-- ================= TAB · MOTOS (listado + filtros) ================= -->
+<sc-if value="{{ isMotosHome }}" hint-placeholder-val="{{ false }}">
+<div style="animation:fadeIn .5s ease both;max-width:1400px;margin:0 auto;padding:56px 30px 110px;">
+  <div style="font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:.12em;color:var(--accent,#F56007);text-transform:uppercase;">Compra tu próxima moto</div>
+  <h2 style="margin:12px 0 0;font-size:clamp(34px,4.6vw,60px);font-weight:900;letter-spacing:-.03em;line-height:.98;">Motos disponibles.</h2>
+  <div style="margin-top:14px;display:flex;align-items:flex-end;justify-content:space-between;gap:20px;flex-wrap:wrap;">
+    <p style="margin:0;font-size:16px;color:#5e5e5e;max-width:52ch;line-height:1.55;">Ocasión y nuevas, todas revisadas en nuestro banco antes de salir. Filtra hasta dar con la tuya.</p>
+    <button onClick="{{ openSell }}" style="flex:none;height:44px;padding:0 18px;background:transparent;border:1.5px solid var(--accent,#F56007);color:var(--accent,#F56007);border-radius:0;font-weight:700;font-size:13.5px;cursor:pointer;display:flex;align-items:center;gap:8px;" style-hover="background:var(--accent,#F56007);color:#fff">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="20" r="1.4"/><circle cx="18" cy="20" r="1.4"/><path d="M2 3h3l2.4 12.4a1.6 1.6 0 0 0 1.6 1.3h8.2a1.6 1.6 0 0 0 1.6-1.3L22 7H6"/></svg>
+      ¿Vendes tu moto? Cuéntanoslo</button>
+  </div>
+
+  <!-- top bar -->
+  <div style="margin-top:36px;display:flex;gap:14px;flex-wrap:wrap;align-items:center;">
+    <div style="flex:1;min-width:240px;position:relative;">
+      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#9a9a92" stroke-width="2" stroke-linecap="round" style="position:absolute;left:14px;top:50%;transform:translateY(-50%);"><circle cx="11" cy="11" r="7"/><path d="m20 20-3-3"/></svg>
+      <input value="{{ mf.q }}" onInput="{{ onSearch }}" placeholder="Buscar por marca, modelo, estilo..." style="width:100%;height:50px;border:1px solid #E0E0DA;border-radius:2px;padding:0 14px 0 40px;font-size:15px;background:#fff;outline:none;" style-focus="border-color:var(--ink)"/>
+    </div>
+    <select value="{{ mf.sort }}" onChange="{{ onSort }}" style="height:50px;border:1px solid #E0E0DA;border-radius:2px;padding:0 14px;font-size:14px;font-weight:600;background:#fff;outline:none;cursor:pointer;color:#141414;" style-focus="border-color:var(--ink)">
+      <option value="reco">Recomendadas</option>
+      <option value="priceAsc">Precio: menor a mayor</option>
+      <option value="priceDesc">Precio: mayor a menor</option>
+      <option value="yearDesc">Año: más nuevas</option>
+      <option value="kmAsc">Km: menor a mayor</option>
+    </select>
+    <button onClick="{{ onCreateAlert }}" title="Crear alerta con estos filtros" style="height:50px;padding:0 18px;background:#141414;color:#fff;border:none;border-radius:0;font-weight:700;font-size:13.5px;cursor:pointer;display:flex;align-items:center;gap:9px;flex:none;" style-hover="filter:brightness(1.3)">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/></svg>
+      {{ alertLabel }}</button>
+  </div>
+
+  <div class="motos-layout" style="margin-top:24px;display:grid;grid-template-columns:266px 1fr;gap:36px;align-items:start;">
+    <!-- filters sidebar -->
+    <aside class="motos-filters" style="border:1px solid #ECECE6;background:#fff;padding:22px 20px;">
+      <div style="display:flex;align-items:baseline;justify-content:space-between;">
+        <div style="font-size:17px;font-weight:800;letter-spacing:-.01em;">Filtros</div>
+        <button onClick="{{ onClearFilters }}" style="background:none;border:none;cursor:pointer;font-family:'IBM Plex Mono',monospace;font-size:11px;color:#9a9a92;letter-spacing:.04em;" style-hover="color:var(--accent,#F56007)">Limpiar</button>
+      </div>
+
+      <!-- Condición -->
+      <div style="margin-top:22px;padding-top:20px;border-top:1px solid #F0F0EA;">
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.08em;color:#8a8a82;text-transform:uppercase;margin-bottom:11px;">Condición</div>
+        <div style="display:flex;gap:8px;">
+          <button onClick="{{ onCondOcasion }}" style="flex:1;height:38px;border:1.5px solid {{ fc.ocaBorder }};background:{{ fc.ocaBg }};color:{{ fc.ocaColor }};border-radius:0;font-weight:700;font-size:13px;cursor:pointer;transition:all .15s;">Ocasión</button>
+          <button onClick="{{ onCondNueva }}" style="flex:1;height:38px;border:1.5px solid {{ fc.nueBorder }};background:{{ fc.nueBg }};color:{{ fc.nueColor }};border-radius:0;font-weight:700;font-size:13px;cursor:pointer;transition:all .15s;">Nueva</button>
+        </div>
+        <div style="margin-top:14px;display:flex;flex-direction:column;gap:12px;">
+          <button onClick="{{ onToggleOferta }}" style="display:flex;align-items:center;justify-content:space-between;background:none;border:none;cursor:pointer;padding:0;">
+            <span style="font-size:13.5px;font-weight:600;color:#3a3a3a;">En oferta</span>
+            <span style="position:relative;width:42px;height:24px;border-radius:12px;background:{{ ofertaTrack }};transition:background .2s;flex:none;"><span style="position:absolute;top:2px;left:{{ ofertaX }};width:20px;height:20px;border-radius:50%;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.3);transition:left .2s;"></span></span>
+          </button>
+          <button onClick="{{ onToggleKm0 }}" style="display:flex;align-items:center;justify-content:space-between;background:none;border:none;cursor:pointer;padding:0;">
+            <span style="font-size:13.5px;font-weight:600;color:#3a3a3a;">Km 0</span>
+            <span style="position:relative;width:42px;height:24px;border-radius:12px;background:{{ km0Track }};transition:background .2s;flex:none;"><span style="position:absolute;top:2px;left:{{ km0X }};width:20px;height:20px;border-radius:50%;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.3);transition:left .2s;"></span></span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Marca -->
+      <div style="margin-top:20px;padding-top:20px;border-top:1px solid #F0F0EA;">
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.08em;color:#8a8a82;text-transform:uppercase;margin-bottom:11px;">Marca</div>
+        <input value="{{ mf.brandQ }}" onInput="{{ onBrandQ }}" placeholder="Buscar marca..." style="width:100%;height:38px;border:1px solid #E8E8E2;border-radius:2px;padding:0 11px;font-size:13px;background:#FFFFFF;outline:none;margin-bottom:10px;" style-focus="border-color:var(--ink)"/>
+        <div style="display:flex;flex-direction:column;gap:3px;max-height:168px;overflow-y:auto;">
+          <sc-for list="{{ brandOptions }}" as="b" hint-placeholder-count="5">
+            <button onClick="{{ b.onToggle }}" style="display:flex;align-items:center;gap:9px;background:none;border:none;cursor:pointer;padding:5px 0;text-align:left;">
+              <span style="flex:none;width:17px;height:17px;border:1.5px solid {{ b.boxBorder }};background:{{ b.boxBg }};display:flex;align-items:center;justify-content:center;">
+                <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round" style="opacity: {{ b.check }};"><path d="M20 6 9 17l-5-5"/></svg>
+              </span>
+              <span style="font-size:13.5px;color:#3a3a3a;font-weight:500;">{{ b.name }}</span>
+            </button>
+          </sc-for>
+        </div>
+      </div>
+
+      <!-- Precio -->
+      <div style="margin-top:20px;padding-top:20px;border-top:1px solid #F0F0EA;">
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.08em;color:#8a8a82;text-transform:uppercase;margin-bottom:11px;">Precio · €</div>
+        <div style="display:flex;gap:8px;">
+          <input value="{{ mf.priceMin }}" onInput="{{ onPriceMin }}" placeholder="Desde" inputmode="numeric" style="width:50%;height:36px;border:1px solid #E8E8E2;border-radius:2px;padding:0 10px;font-size:13px;font-family:'IBM Plex Mono',monospace;background:#FFFFFF;outline:none;" style-focus="border-color:var(--ink)"/>
+          <input value="{{ mf.priceMax }}" onInput="{{ onPriceMax }}" placeholder="Hasta" inputmode="numeric" style="width:50%;height:36px;border:1px solid #E8E8E2;border-radius:2px;padding:0 10px;font-size:13px;font-family:'IBM Plex Mono',monospace;background:#FFFFFF;outline:none;" style-focus="border-color:var(--ink)"/>
+        </div>
+      </div>
+
+      <!-- Cilindrada -->
+      <div style="margin-top:20px;padding-top:20px;border-top:1px solid #F0F0EA;">
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.08em;color:#8a8a82;text-transform:uppercase;margin-bottom:11px;">Cilindrada · cc</div>
+        <div style="display:flex;gap:8px;">
+          <input value="{{ mf.ccMin }}" onInput="{{ onCcMin }}" placeholder="Desde" inputmode="numeric" style="width:50%;height:36px;border:1px solid #E8E8E2;border-radius:2px;padding:0 10px;font-size:13px;font-family:'IBM Plex Mono',monospace;background:#FFFFFF;outline:none;" style-focus="border-color:var(--ink)"/>
+          <input value="{{ mf.ccMax }}" onInput="{{ onCcMax }}" placeholder="Hasta" inputmode="numeric" style="width:50%;height:36px;border:1px solid #E8E8E2;border-radius:2px;padding:0 10px;font-size:13px;font-family:'IBM Plex Mono',monospace;background:#FFFFFF;outline:none;" style-focus="border-color:var(--ink)"/>
+        </div>
+      </div>
+
+      <!-- Estilo -->
+      <div style="margin-top:20px;padding-top:20px;border-top:1px solid #F0F0EA;">
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.08em;color:#8a8a82;text-transform:uppercase;margin-bottom:11px;">Estilo</div>
+        <div style="display:flex;flex-direction:column;gap:3px;">
+          <sc-for list="{{ styleOptions }}" as="o" hint-placeholder-count="5">
+            <button onClick="{{ o.onToggle }}" style="display:flex;align-items:center;gap:9px;background:none;border:none;cursor:pointer;padding:5px 0;text-align:left;">
+              <span style="flex:none;width:17px;height:17px;border:1.5px solid {{ o.boxBorder }};background:{{ o.boxBg }};display:flex;align-items:center;justify-content:center;">
+                <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round" style="opacity: {{ o.check }};"><path d="M20 6 9 17l-5-5"/></svg>
+              </span>
+              <span style="font-size:13.5px;color:#3a3a3a;font-weight:500;">{{ o.name }}</span>
+            </button>
+          </sc-for>
+        </div>
+      </div>
+
+      <!-- Carnet -->
+      <div style="margin-top:20px;padding-top:20px;border-top:1px solid #F0F0EA;">
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.08em;color:#8a8a82;text-transform:uppercase;margin-bottom:11px;">Carnet</div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;">
+          <sc-for list="{{ licenseOptions }}" as="o" hint-placeholder-count="4">
+            <button onClick="{{ o.onToggle }}" style="min-width:44px;height:34px;padding:0 12px;border:1.5px solid {{ o.border }};background:{{ o.bg }};color:{{ o.color }};border-radius:0;font-weight:700;font-size:12px;cursor:pointer;font-family:'IBM Plex Mono',monospace;transition:all .15s;">{{ o.name }}</button>
+          </sc-for>
+        </div>
+      </div>
+
+      <!-- Kilometraje -->
+      <div style="margin-top:20px;padding-top:20px;border-top:1px solid #F0F0EA;">
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.08em;color:#8a8a82;text-transform:uppercase;margin-bottom:11px;">Kilometraje · km</div>
+        <div style="display:flex;gap:8px;">
+          <input value="{{ mf.kmMin }}" onInput="{{ onKmMin }}" placeholder="Desde" inputmode="numeric" style="width:50%;height:36px;border:1px solid #E8E8E2;border-radius:2px;padding:0 10px;font-size:13px;font-family:'IBM Plex Mono',monospace;background:#FFFFFF;outline:none;" style-focus="border-color:var(--ink)"/>
+          <input value="{{ mf.kmMax }}" onInput="{{ onKmMax }}" placeholder="Hasta" inputmode="numeric" style="width:50%;height:36px;border:1px solid #E8E8E2;border-radius:2px;padding:0 10px;font-size:13px;font-family:'IBM Plex Mono',monospace;background:#FFFFFF;outline:none;" style-focus="border-color:var(--ink)"/>
+        </div>
+      </div>
+
+      <!-- Año -->
+      <div style="margin-top:20px;padding-top:20px;border-top:1px solid #F0F0EA;">
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.08em;color:#8a8a82;text-transform:uppercase;margin-bottom:11px;">Año</div>
+        <div style="display:flex;gap:8px;">
+          <input value="{{ mf.yearMin }}" onInput="{{ onYearMin }}" placeholder="Desde" inputmode="numeric" style="width:50%;height:36px;border:1px solid #E8E8E2;border-radius:2px;padding:0 10px;font-size:13px;font-family:'IBM Plex Mono',monospace;background:#FFFFFF;outline:none;" style-focus="border-color:var(--ink)"/>
+          <input value="{{ mf.yearMax }}" onInput="{{ onYearMax }}" placeholder="Hasta" inputmode="numeric" style="width:50%;height:36px;border:1px solid #E8E8E2;border-radius:2px;padding:0 10px;font-size:13px;font-family:'IBM Plex Mono',monospace;background:#FFFFFF;outline:none;" style-focus="border-color:var(--ink)"/>
+        </div>
+      </div>
+
+      <!-- Vende tu moto -->
+      <div style="margin-top:24px;padding-top:22px;border-top:1px solid #E4E4DE;">
+        <div style="display:flex;align-items:center;gap:9px;">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#F56007" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex:none;"><circle cx="9" cy="20" r="1.4"/><circle cx="18" cy="20" r="1.4"/><path d="M2 3h3l2.4 12.4a1.6 1.6 0 0 0 1.6 1.3h8.2a1.6 1.6 0 0 0 1.6-1.3L22 7H6"/></svg>
+          <div style="font-size:14px;font-weight:800;letter-spacing:-.01em;">¿Tienes una moto para vender?</div>
+        </div>
+        <p style="margin:8px 0 0;font-size:12.5px;color:#8a8a82;line-height:1.5;">La tasamos y te hacemos una oferta sin compromiso.</p>
+        <button onClick="{{ openSell }}" style="margin-top:12px;width:100%;height:42px;background:#fff;border:1.5px solid var(--accent,#F56007);color:var(--accent,#F56007);border-radius:0;font-weight:700;font-size:13px;cursor:pointer;" style-hover="background:var(--accent,#F56007);color:#fff">Vender mi moto</button>
+      </div>
+    </aside>
+
+    <!-- results -->
+    <div>
+      <sc-if value="{{ hasActiveChips }}" hint-placeholder-val="{{ false }}">
+        <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px;">
+          <sc-for list="{{ activeChips }}" as="c" hint-placeholder-count="2">
+            <button onClick="{{ c.onRemove }}" style="display:flex;align-items:center;gap:7px;height:32px;padding:0 12px;background:rgba(245,96,7,.08);border:1px solid rgba(245,96,7,.35);border-radius:0;color:var(--accent,#F56007);font-weight:600;font-size:12.5px;cursor:pointer;" style-hover="background:rgba(245,96,7,.16)">{{ c.label }} <span style="font-size:14px;">✕</span></button>
+          </sc-for>
+        </div>
+      </sc-if>
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:#8a8a82;letter-spacing:.04em;margin-bottom:20px;">Mostrando {{ resultCount }} motos</div>
+      <sc-if value="{{ hasResults }}" hint-placeholder-val="{{ true }}">
+        <div class="motos-results" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:26px;">
+          <sc-for list="{{ motosView }}" as="m" hint-placeholder-count="4">
+            <div onClick="{{ m.onView }}" class="moto-card" style="background:#fff;border:1px solid #E8E8E2;border-radius:18px;overflow:hidden;cursor: {{ m.cardCursor }};transition:box-shadow .2s,border-color .2s,transform .2s;" style-hover="box-shadow:0 14px 34px -18px rgba(0,0,0,.4);border-color:#DADAD3;transform:translateY(-3px)">
+              <div style="height:230px;position:relative;background:#1a1a1a center/cover no-repeat;background-image: {{ m.bgCss }};opacity: {{ m.imgOpacity }};filter: {{ m.imgGray }};">
+                <div style="position:absolute;inset:0;display:flex;align-items:flex-start;justify-content:space-between;padding:16px;background:linear-gradient(180deg,rgba(0,0,0,.3) 0%,transparent 40%);z-index:2;">
+                  <button onClick="{{ m.onToggleSaved }}" title="Guardar" style="width:38px;height:38px;border:none;background:rgba(20,20,20,.4);backdrop-filter:blur(3px);border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;flex:none;" style-hover="background:rgba(20,20,20,.65)">
+                    <svg width="19" height="19" viewBox="0 0 24 24" fill="{{ m.heartFill }}" stroke="{{ m.heartStroke }}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="transition:all .2s;"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1-1.1a5.5 5.5 0 0 0-7.8 7.8l1 1.1L12 21l7.8-7.5 1-1.1a5.5 5.5 0 0 0 0-7.8z"/></svg>
+                  </button>
+                  <sc-if value="{{ m.showState }}" hint-placeholder-val="{{ true }}">
+                    <span style="background: {{ m.stateBg }};color:#fff;font-size:11px;font-weight:700;padding:5px 11px;letter-spacing:.03em;">{{ m.state }}</span>
+                  </sc-if>
+                </div>
+                <sc-if value="{{ m.gMulti }}" hint-placeholder-val="{{ false }}">
+                  <button onClick="{{ m.onGalPrev }}" title="Anterior" class="moto-card-nav" style="position:absolute;top:50%;left:10px;transform:translateY(-50%);z-index:3;width:32px;height:32px;border:none;background:rgba(20,20,20,.45);backdrop-filter:blur(3px);color:#fff;border-radius:50%;font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;" style-hover="background:var(--accent,#F56007)">‹</button>
+                  <button onClick="{{ m.onGalNext }}" title="Siguiente" class="moto-card-nav" style="position:absolute;top:50%;right:10px;transform:translateY(-50%);z-index:3;width:32px;height:32px;border:none;background:rgba(20,20,20,.45);backdrop-filter:blur(3px);color:#fff;border-radius:50%;font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;" style-hover="background:var(--accent,#F56007)">›</button>
+                  <div style="position:absolute;bottom:10px;left:0;right:0;z-index:3;display:flex;gap:6px;justify-content:center;">
+                    <sc-for list="{{ m.gDots }}" as="d" hint-placeholder-count="3">
+                      <span style="width:6px;height:6px;border-radius:50%;background: {{ d.dotColor }};box-shadow:0 0 3px rgba(0,0,0,.4);"></span>
+                    </sc-for>
+                  </div>
+                </sc-if>
+              </div>
+              <div style="padding:22px 24px 24px;">
+                <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;">
+                  <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--accent,#F56007);letter-spacing:.06em;font-weight:600;">{{ m.brand }}</div>
+                  <span style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:#8a8a82;border:1px solid #E4E4DE;padding:3px 8px;">{{ m.condLabel }}</span>
+                </div>
+                <h3 style="margin:6px 0 0;font-size:25px;font-weight:800;letter-spacing:-.02em;">{{ m.model }}</h3>
+                <div style="margin-top:14px;display:flex;gap:24px;font-family:'IBM Plex Mono',monospace;flex-wrap:wrap;">
+                  <div><div style="font-size:11px;color:#999;">{{ m.stat1k }}</div><div style="font-size:15px;margin-top:2px;">{{ m.stat1v }}</div></div>
+                  <div><div style="font-size:11px;color:#999;">{{ m.stat2k }}</div><div style="font-size:15px;margin-top:2px;">{{ m.stat2v }}</div></div>
+                </div>
+                <div style="margin-top:16px;display:flex;align-items:baseline;gap:10px;">
+                  <span style="font-size:28px;font-weight:900;letter-spacing:-.02em;color: {{ m.priceColor }};">{{ m.price }}</span>
+                  <sc-if value="{{ m.hasOld }}" hint-placeholder-val="{{ false }}">
+                    <span style="font-size:16px;color:#9a9a92;text-decoration:line-through;">{{ m.priceOld }}</span>
+                  </sc-if>
+                </div>
+              </div>
+            </div>
+          </sc-for>
+        </div>
+      </sc-if>
+      <sc-if value="{{ noResults }}" hint-placeholder-val="{{ false }}">
+        <div style="border:1px dashed #DADAD3;background:#fff;padding:60px 24px;text-align:center;">
+          <div style="font-size:18px;font-weight:800;">Ninguna moto coincide con tu búsqueda</div>
+          <div style="margin-top:8px;font-size:14px;color:#8a8a82;">Prueba a quitar algún filtro o ampliar los rangos.</div>
+          <button onClick="{{ onClearFilters }}" style="margin-top:18px;height:44px;padding:0 22px;background:var(--accent,#F56007);color:#fff;border:none;border-radius:0;font-weight:700;font-size:14px;cursor:pointer;">Limpiar filtros</button>
+        </div>
+      </sc-if>
+    </div>
+  </div>
+</div>
+</sc-if>
+
+<!-- ================= MOTO DETAIL ================= -->
+<sc-if value="{{ isDetail }}" hint-placeholder-val="{{ false }}">
+<div style="animation:fadeIn .5s ease both;background:#FFFFFF;color:#141414;min-height:calc(100vh - 88px);">
+  <div style="max-width:1400px;margin:0 auto;padding:34px 30px 90px;">
+    <div style="font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:.06em;color:#8a8a82;display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
+      <span onClick="{{ detail.onBack }}" style="cursor:pointer;color:#5a5a5a;" style-hover="color:#fff">Motos</span>
+      <span style="color:#c4c4bc;">/</span>
+      <span style="color:var(--accent,#F56007);">{{ detail.brand }}</span>
+      <span style="color:#c4c4bc;">/</span>
+      <span style="color:#3a3a3a;">{{ detail.model }}</span>
+    </div>
+
+    <div class="detail-grid" style="margin-top:26px;display:grid;grid-template-columns:1.5fr 1fr;gap:40px;align-items:start;">
+      <div>
+        <div class="gallery-wrap" style="position:relative;width:100%;aspect-ratio:4/3;background:#EFEFEB center/cover no-repeat;background-image: {{ detail.heroCss }};border:1px solid #E8E8E2;">
+          <div class="gallery-overlay" style="position:absolute;top:14px;left:14px;font-family:'IBM Plex Mono',monospace;font-size:12px;color:#fff;background:rgba(0,0,0,.55);padding:5px 11px;">{{ detail.counter }}</div>
+          <div class="gallery-overlay" style="position:absolute;top:14px;right:14px;display:flex;gap:8px;z-index:2;">
+            <button onClick="{{ detail.onToggleSaved }}" title="Guardar" style="width:40px;height:40px;border:none;background:rgba(20,20,20,.5);backdrop-filter:blur(3px);color:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;" style-hover="background:rgba(20,20,20,.75)">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="{{ detail.heartFill }}" stroke="{{ detail.heartStroke }}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="transition:all .2s;"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1-1.1a5.5 5.5 0 0 0-7.8 7.8l1 1.1L12 21l7.8-7.5 1-1.1a5.5 5.5 0 0 0 0-7.8z"/></svg>
+            </button>
+            <button onClick="{{ detail.onAlert }}" title="Crear alerta" style="width:40px;height:40px;border:none;background:rgba(20,20,20,.5);backdrop-filter:blur(3px);color:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;" style-hover="background:rgba(20,20,20,.75)">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/></svg>
+            </button>
+            <button onClick="{{ onOpenLightbox }}" title="Ampliar imagen" style="width:40px;height:40px;border:none;background:rgba(20,20,20,.5);backdrop-filter:blur(3px);color:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;" style-hover="background:var(--accent,#F56007)">
+              <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg>
+            </button>
+            <div style="position:relative;">
+              <button onClick="{{ detail.onShare }}" title="Compartir" style="width:40px;height:40px;border:none;background:rgba(20,20,20,.5);backdrop-filter:blur(3px);color:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;" style-hover="background:rgba(20,20,20,.75)">
+                <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="M8.6 13.5l6.8 4M15.4 6.5l-6.8 4"/></svg>
+              </button>
+              <sc-if value="{{ detail.shareOpen }}" hint-placeholder-val="{{ false }}">
+                <div style="position:absolute;top:48px;right:0;z-index:5;background:#fff;border:1px solid #E4E4DE;box-shadow:0 14px 34px -12px rgba(0,0,0,.35);min-width:190px;padding:6px;">
+                  <button onClick="{{ detail.onCopyLink }}" style="width:100%;display:flex;align-items:center;gap:10px;background:none;border:none;cursor:pointer;padding:10px 12px;font-size:13.5px;font-weight:600;color:#141414;text-align:left;" style-hover="background:#F3F3EE"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#141414" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7 0l3-3a5 5 0 0 0-7-7l-1 1"/><path d="M14 11a5 5 0 0 0-7 0l-3 3a5 5 0 0 0 7 7l1-1"/></svg>Copiar enlace</button>
+                  <a href="{{ detail.shareWa }}" target="_blank" rel="noopener" style="width:100%;display:flex;align-items:center;gap:10px;text-decoration:none;padding:10px 12px;font-size:13.5px;font-weight:600;color:#141414;" style-hover="background:#F3F3EE"><svg width="15" height="15" viewBox="0 0 24 24" fill="#25D366"><path d="M12 2a10 10 0 0 0-8.6 15l-1.3 4.7 4.8-1.3A10 10 0 1 0 12 2Z"/></svg>WhatsApp</a>
+                  <a href="{{ detail.shareMail }}" style="width:100%;display:flex;align-items:center;gap:10px;text-decoration:none;padding:10px 12px;font-size:13.5px;font-weight:600;color:#141414;" style-hover="background:#F3F3EE"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#141414" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="1"/><path d="m3 7 9 6 9-6"/></svg>Email</a>
+                </div>
+              </sc-if>
+            </div>
+          </div>
+          <button onClick="{{ detail.onPrev }}" title="Anterior" class="gallery-overlay" style="position:absolute;top:50%;left:14px;transform:translateY(-50%);width:46px;height:46px;border-radius:50%;border:1.5px solid rgba(20,20,20,.25);background:rgba(255,255,255,.8);color:#141414;font-size:20px;cursor:pointer;display:flex;align-items:center;justify-content:center;" style-hover="background:var(--accent,#F56007);border-color:var(--accent,#F56007)">‹</button>
+          <button onClick="{{ detail.onNext }}" title="Siguiente" class="gallery-overlay" style="position:absolute;top:50%;right:14px;transform:translateY(-50%);width:46px;height:46px;border-radius:50%;border:1.5px solid rgba(20,20,20,.25);background:rgba(255,255,255,.8);color:#141414;font-size:20px;cursor:pointer;display:flex;align-items:center;justify-content:center;" style-hover="background:var(--accent,#F56007);border-color:var(--accent,#F56007)">›</button>
+        </div>
+        <div style="margin-top:12px;display:flex;gap:10px;flex-wrap:wrap;">
+          <sc-for list="{{ detail.thumbs }}" as="t" hint-placeholder-count="5">
+            <div onClick="{{ t.onClick }}" style="width:88px;height:66px;background:#EFEFEB center/cover no-repeat;background-image: {{ t.css }};border:2px solid {{ t.border }};cursor:pointer;transition:border-color .2s;"></div>
+          </sc-for>
+        </div>
+      </div>
+      <div style="position:sticky;top:92px;">
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:13px;color:var(--accent,#F56007);letter-spacing:.08em;font-weight:600;">{{ detail.brand }}</div>
+        <h1 style="margin:8px 0 0;font-size:clamp(30px,3.6vw,46px);font-weight:900;letter-spacing:-.03em;line-height:1;color:#141414;">{{ detail.model }}</h1>
+        <div style="margin-top:10px;font-family:'IBM Plex Mono',monospace;font-size:12px;color:#8a8a82;letter-spacing:.04em;">{{ detail.type }} · REF {{ detail.code }}</div>
+        <div style="margin-top:18px;font-size:clamp(32px,4vw,44px);font-weight:900;letter-spacing:-.02em;color:#141414;">{{ detail.price }}</div>
+        <div style="margin-top:22px;border:1px solid #E8E8E2;background:#fff;padding:22px;">
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.1em;color:var(--accent,#F56007);text-transform:uppercase;margin-bottom:16px;">Certificado MOTORLAB</div>
+          <sc-for list="{{ certList }}" as="c" hint-placeholder-count="4">
+            <div style="display:flex;align-items:flex-start;gap:11px;padding:7px 0;">
+              <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#F56007" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" style="flex:none;margin-top:2px;"><path d="M20 6 9 17l-5-5"/></svg>
+              <span style="font-size:14px;color:#333;line-height:1.4;">{{ c }}</span>
+            </div>
+          </sc-for>
+        </div>
+        <sc-if value="{{ detail.sold }}" hint-placeholder-val="{{ false }}">
+          <div style="margin-top:18px;background:#F3F3EE;border:1px solid #E4E4DE;padding:22px;">
+            <div style="display:flex;align-items:center;gap:9px;font-weight:800;font-size:17px;letter-spacing:-.01em;"><span style="width:9px;height:9px;background:#4a4a4a;border-radius:50%;"></span>Esta moto ya ha sido vendida</div>
+            <p style="margin:9px 0 0;font-size:13.5px;color:#6a6a64;line-height:1.5;">Crea una alerta y te avisamos si entra otra unidad del mismo modelo o similar.</p>
+            <button onClick="{{ detail.onAlert }}" style="margin-top:16px;width:100%;height:54px;background:var(--accent,#F56007);color:#fff;border:none;border-radius:0;font-weight:700;font-size:15px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:9px;" style-hover="filter:brightness(1.1)">
+              <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/></svg>
+              Crear alerta</button>
+          </div>
+        </sc-if>
+        <sc-if value="{{ detail.notSold }}" hint-placeholder-val="{{ true }}">
+        <button onClick="{{ detail.onReserve }}" style="margin-top:18px;width:100%;height:56px;background:var(--accent,#F56007);color:#fff;border:none;border-radius:0;font-weight:700;font-size:16px;cursor:pointer;" style-hover="filter:brightness(1.1)">Reservar · Pedir cita para verla</button>
+        <a href="{{ detail.waHref }}" target="_blank" rel="noopener" style="margin-top:11px;width:100%;height:52px;background:transparent;border:1.5px solid #25D366;color:#25D366;border-radius:0;font-weight:700;font-size:15px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:10px;text-decoration:none;" style-hover="background:#25D366;color:#fff">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 0 0-8.6 15l-1.3 4.7 4.8-1.3A10 10 0 1 0 12 2Zm5.6 14.1c-.2.6-1.2 1.2-1.7 1.2-.4 0-1 .1-3.4-.9-2.9-1.2-4.7-4.1-4.9-4.3-.1-.2-1.1-1.5-1.1-2.8 0-1.3.7-2 .9-2.2.2-.3.5-.3.7-.3h.5c.2 0 .4 0 .6.5l.8 2c.1.2.1.4 0 .5l-.4.6c-.2.2-.3.4-.1.7.2.3.8 1.3 1.7 2.1 1.2 1 2.1 1.4 2.4 1.5.2.1.4.1.6-.1l.8-1c.2-.2.4-.2.6-.1l1.9.9c.3.1.5.2.5.3.1.2.1.7-.1 1.2Z"/></svg>
+          Contactar por WhatsApp</a>
+        </sc-if>
+      </div>
+    </div>
+
+    <div style="margin-top:44px;display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:14px;max-width:900px;">
+      <sc-for list="{{ detailQuick }}" as="q" hint-placeholder-count="4">
+        <div style="border:1px solid #E8E8E2;background:#fff;padding:16px 18px;">
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#7a7a7a;letter-spacing:.06em;text-transform:uppercase;">{{ q.k }}</div>
+          <div style="margin-top:6px;font-size:17px;font-weight:700;color:#141414;">{{ q.v }}</div>
+        </div>
+      </sc-for>
+    </div>
+
+    <div style="margin-top:44px;max-width:900px;">
+      <div style="border-top:1px solid #E8E8E2;">
+        <button onClick="{{ detail.onToggleSpecs }}" style="width:100%;display:flex;align-items:center;justify-content:space-between;padding:22px 0;background:none;border:none;cursor:pointer;color:#141414;">
+          <span style="font-size:20px;font-weight:800;letter-spacing:-.01em;">Especificaciones técnicas</span>
+          <span style="font-size:26px;color:var(--accent,#F56007);font-weight:400;line-height:1;">{{ detail.specsIcon }}</span>
+        </button>
+        <sc-if value="{{ detail.specsOpen }}" hint-placeholder-val="{{ true }}">
+          <div style="padding-bottom:24px;display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:0 40px;">
+            <sc-for list="{{ detail.specs }}" as="s" hint-placeholder-count="8">
+              <div style="display:flex;align-items:center;justify-content:space-between;gap:16px;padding:12px 0;border-bottom:1px solid #ECECE6;">
+                <span style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:#8a8a8a;letter-spacing:.04em;">{{ s.k }}</span>
+                <span style="font-size:14.5px;font-weight:600;color:#141414;text-align:right;">{{ s.v }}</span>
+              </div>
+            </sc-for>
+          </div>
+        </sc-if>
+      </div>
+      <div style="border-top:1px solid #E8E8E2;">
+        <button onClick="{{ detail.onToggleHist }}" style="width:100%;display:flex;align-items:center;justify-content:space-between;padding:22px 0;background:none;border:none;cursor:pointer;color:#141414;">
+          <span style="font-size:20px;font-weight:800;letter-spacing:-.01em;">Historial y revisión en MOTORLAB</span>
+          <span style="font-size:26px;color:var(--accent,#F56007);font-weight:400;line-height:1;">{{ detail.histIcon }}</span>
+        </button>
+        <sc-if value="{{ detail.histOpen }}" hint-placeholder-val="{{ false }}">
+          <div style="padding-bottom:24px;">
+            <sc-for list="{{ detail.history }}" as="h" hint-placeholder-count="4">
+              <div style="display:flex;align-items:flex-start;gap:14px;padding:12px 0;border-bottom:1px solid #ECECE6;">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#F56007" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" style="flex:none;margin-top:3px;"><path d="M20 6 9 17l-5-5"/></svg>
+                <div style="flex:1;display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;">
+                  <span style="font-size:15px;color:#333;">{{ h.k }}</span>
+                  <span style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:#7a7a7a;">{{ h.v }}</span>
+                </div>
+              </div>
+            </sc-for>
+            <sc-if value="{{ detail.hasFlaws }}" hint-placeholder-val="{{ false }}">
+              <div style="margin-top:20px;padding-top:20px;border-top:1px solid #ECECE6;">
+                <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.06em;color:#8a8a82;text-transform:uppercase;margin-bottom:4px;">Imperfecciones detectadas</div>
+                <p style="margin:0 0 14px;font-size:13px;color:#8a8a82;line-height:1.5;">Transparencia total: te mostramos el estado real de la moto antes de comprar.</p>
+                <div style="display:flex;gap:16px;flex-wrap:wrap;">
+                  <sc-for list="{{ detail.flaws }}" as="f" hint-placeholder-count="2">
+                    <div style="width:200px;">
+                      <div onClick="{{ f.onOpen }}" style="width:200px;height:140px;background:#EFEFEB center/cover no-repeat;background-image: {{ f.css }};cursor:pointer;border:1px solid #E4E4DE;" style-hover="border-color:var(--accent,#F56007)"></div>
+                      <div style="margin-top:8px;font-size:13px;color:#5a5a5a;line-height:1.45;">{{ f.desc }}</div>
+                    </div>
+                  </sc-for>
+                </div>
+              </div>
+            </sc-if>
+          </div>
+        </sc-if>
+      </div>
+    </div>
+
+    <div style="margin-top:56px;display:grid;grid-template-columns:1.1fr 1fr;gap:24px;align-items:stretch;" class="detail-grid">
+      <div style="background:#fff;border:1px solid #E8E8E2;padding:34px;">
+        <h3 style="margin:0;font-size:24px;font-weight:800;letter-spacing:-.02em;color:#141414;">¿Tienes alguna duda sobre esta moto?</h3>
+        <p style="margin:10px 0 0;font-size:14px;color:#6a6a64;line-height:1.5;">Déjanos tus datos y te contamos todo lo que quieras saber, sin compromiso.</p>
+        <div style="margin-top:22px;display:flex;flex-direction:column;gap:12px;">
+          <input placeholder="Nombre" style="height:48px;background:#fff;border:1px solid #E0E0DA;border-radius:2px;padding:0 14px;font-size:15px;color:#141414;outline:none;" style-focus="border-color:#F56007"/>
+          <input placeholder="Teléfono" style="height:48px;background:#fff;border:1px solid #E0E0DA;border-radius:2px;padding:0 14px;font-size:15px;color:#141414;outline:none;" style-focus="border-color:#F56007"/>
+          <input placeholder="Email" style="height:48px;background:#fff;border:1px solid #E0E0DA;border-radius:2px;padding:0 14px;font-size:15px;color:#141414;outline:none;" style-focus="border-color:#F56007"/>
+          <a href="{{ detail.waHref }}" target="_blank" rel="noopener" style="height:52px;background:var(--accent,#F56007);color:#fff;border-radius:0;font-weight:700;font-size:15px;cursor:pointer;display:flex;align-items:center;justify-content:center;text-decoration:none;" style-hover="filter:brightness(1.1)">Enviar consulta</a>
+        </div>
+      </div>
+      <div style="border:1px solid #E8E8E2;overflow:hidden;position:relative;min-height:300px;background:repeating-linear-gradient(135deg,#F2F2EE,#F2F2EE 13px,#EBEBE5 13px,#EBEBE5 26px);display:flex;flex-direction:column;align-items:center;justify-content:center;">
+        <span style="width:16px;height:16px;background:var(--accent,#F56007);border-radius:50% 50% 50% 0;transform:rotate(-45deg);box-shadow:0 6px 16px rgba(245,96,7,.4);"></span>
+        <div style="margin-top:22px;font-family:'IBM Plex Mono',monospace;font-size:12px;color:#8a8a82;text-align:center;line-height:1.7;">C/ DEL MOTOR 14 · 28000<br>LUN–VIE 9:00–19:00 · SÁB 9:00–14:00</div>
+      </div>
+    </div>
+
+    <div style="margin-top:64px;">
+      <div style="display:flex;align-items:flex-end;justify-content:space-between;gap:20px;margin-bottom:26px;">
+        <h3 style="margin:0;font-size:clamp(24px,3vw,36px);font-weight:900;letter-spacing:-.02em;color:#141414;">También te puede interesar</h3>
+        <div style="display:flex;gap:10px;">
+          <button onClick="{{ onRelPrev }}" title="Anterior" style="width:48px;height:48px;border-radius:50%;border:1.5px solid #DADAD3;background:#fff;color:#141414;font-size:20px;cursor:pointer;" style-hover="border-color:#fff">‹</button>
+          <button onClick="{{ onRelNext }}" title="Siguiente" style="width:48px;height:48px;border-radius:50%;border:1.5px solid #DADAD3;background:#fff;color:#141414;font-size:20px;cursor:pointer;" style-hover="border-color:#fff">›</button>
+        </div>
+      </div>
+      <div id="rel-carousel" style="display:flex;gap:20px;overflow-x:auto;scroll-snap-type:x mandatory;scroll-behavior:smooth;padding-bottom:10px;cursor:grab;">
+        <sc-for list="{{ detail.related }}" as="r" hint-placeholder-count="4">
+          <div onClick="{{ r.onView }}" style="flex:0 0 clamp(280px,26vw,340px);scroll-snap-align:start;background:#fff;border:1px solid #E8E8E2;overflow:hidden;cursor:pointer;transition:box-shadow .2s,border-color .2s;" style-hover="box-shadow:0 12px 28px -16px rgba(0,0,0,.4);border-color:#DADAD3">
+            <div style="height:200px;background:#EFEFEB center/cover no-repeat;background-image: {{ r.bgCss }}"></div>
+            <div style="padding:20px;">
+              <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--accent,#F56007);letter-spacing:.08em;font-weight:600;">{{ r.brand }}</div>
+              <h4 style="margin:5px 0 0;font-size:20px;font-weight:800;letter-spacing:-.02em;color:#141414;">{{ r.model }}</h4>
+              <div style="margin-top:12px;">
+                <span style="font-size:20px;font-weight:900;color:#141414;">{{ r.price }}</span>
+              </div>
+            </div>
+          </div>
+        </sc-for>
+      </div>
+    </div>
+  </div>
+</div>
+</sc-if>
+
+<!-- ================= TAB · MERCHANDISING ================= -->
+<sc-if value="{{ isMerch }}" hint-placeholder-val="{{ false }}">
+<div style="animation:fadeIn .5s ease both;max-width:1400px;margin:0 auto;padding:72px 30px 110px;">
+  <div style="font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:.12em;color:var(--accent,#F56007);text-transform:uppercase;">Tienda · Merchandising</div>
+  <h2 style="margin:14px 0 0;font-size:clamp(38px,5vw,68px);font-weight:900;letter-spacing:-.03em;line-height:.98;">Llévate el taller contigo.</h2>
+  <p style="margin:18px 0 0;font-size:17px;color:#5e5e5e;max-width:56ch;line-height:1.55;">Ropa y accesorios de MOTORLAB. Diseño propio, tirada limitada.</p>
+  <div style="margin-top:56px;display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:44px 32px;">
+    <sc-for list="{{ merchView }}" as="p" hint-placeholder-count="8">
+      <div onClick="{{ p.onOpen }}" class="moto-card" style="cursor:pointer;display:flex;flex-direction:column;">
+        <div style="aspect-ratio:3/4;position:relative;background: {{ p.tileCss }};display:flex;align-items:center;justify-content:center;opacity: {{ p.imgOpacity }};overflow:hidden;">
+          <sc-if value="{{ p.hasOffer }}" hint-placeholder-val="{{ false }}">
+            <span style="position:absolute;top:14px;left:14px;z-index:2;font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:#fff;background:var(--accent,#F56007);padding:4px 9px;font-weight:700;">{{ p.pct }}</span>
+          </sc-if>
+          <sc-if value="{{ p.soldOut }}" hint-placeholder-val="{{ false }}">
+            <span style="position:absolute;top:14px;right:14px;z-index:2;font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:#fff;background:rgba(74,74,74,.9);padding:4px 9px;font-weight:700;">Sin stock</span>
+          </sc-if>
+          <button onClick="{{ p.onToggleSaved }}" title="Guardar" style="position:absolute;bottom:12px;right:12px;z-index:4;width:36px;height:36px;border:none;background:rgba(20,20,20,.4);backdrop-filter:blur(3px);border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;" style-hover="background:rgba(20,20,20,.65)">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="{{ p.heartFill }}" stroke="{{ p.heartStroke }}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="transition:all .2s;"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1-1.1a5.5 5.5 0 0 0-7.8 7.8l1 1.1L12 21l7.8-7.5 1-1.1a5.5 5.5 0 0 0 0-7.8z"/></svg>
+          </button>
+          <span style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:#C4C4BC;letter-spacing:.08em;">{{ p.tag }}</span>
+          <sc-if value="{{ p.gMulti }}" hint-placeholder-val="{{ false }}">
+            <button onClick="{{ p.onGalPrev }}" title="Anterior" class="moto-card-nav" style="position:absolute;top:50%;left:8px;transform:translateY(-50%);z-index:3;width:30px;height:30px;border:none;background:rgba(20,20,20,.45);backdrop-filter:blur(3px);color:#fff;border-radius:50%;font-size:15px;cursor:pointer;display:flex;align-items:center;justify-content:center;" style-hover="background:var(--accent,#F56007)">‹</button>
+            <button onClick="{{ p.onGalNext }}" title="Siguiente" class="moto-card-nav" style="position:absolute;top:50%;right:8px;transform:translateY(-50%);z-index:3;width:30px;height:30px;border:none;background:rgba(20,20,20,.45);backdrop-filter:blur(3px);color:#fff;border-radius:50%;font-size:15px;cursor:pointer;display:flex;align-items:center;justify-content:center;" style-hover="background:var(--accent,#F56007)">›</button>
+            <div style="position:absolute;bottom:10px;left:0;right:0;z-index:3;display:flex;gap:5px;justify-content:center;">
+              <sc-for list="{{ p.gDots }}" as="d" hint-placeholder-count="3">
+                <span style="width:6px;height:6px;border-radius:50%;background: {{ d.dotColor }};box-shadow:0 0 3px rgba(0,0,0,.35);"></span>
+              </sc-for>
+            </div>
+          </sc-if>
+        </div>
+        <div style="padding:14px 2px 0;">
+          <div style="font-size:15px;font-weight:600;letter-spacing:-.01em;line-height:1.3;">{{ p.name }}</div>
+          <div style="margin-top:5px;display:flex;align-items:baseline;gap:9px;font-family:'IBM Plex Mono',monospace;font-size:13px;">
+            <span style="color: {{ p.priceColor }};font-weight:700;">{{ p.price }}</span>
+            <sc-if value="{{ p.hasOffer }}" hint-placeholder-val="{{ false }}">
+              <span style="color:#a0a098;text-decoration:line-through;font-size:12px;">{{ p.priceOld }}</span>
+            </sc-if>
+          </div>
+        </div>
+      </div>
+    </sc-for>
+  </div>
+</div>
+</sc-if>
+
+<!-- ================= MERCH DETALLE PRODUCTO ================= -->
+<sc-if value="{{ isMerchDetail }}" hint-placeholder-val="{{ false }}">
+<div style="animation:fadeIn .5s ease both;max-width:1400px;margin:0 auto;padding:44px 30px 110px;">
+  <button onClick="{{ merchDetail.onBack }}" style="font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:.06em;color:#8a8a82;background:none;border:none;cursor:pointer;padding:0;display:flex;align-items:center;gap:7px;" style-hover="color:#141414">‹ Merchandising</button>
+  <div class="detail-grid" style="margin-top:24px;display:grid;grid-template-columns:1.1fr 1fr;gap:44px;align-items:start;">
+    <div>
+      <div class="gallery-wrap" style="aspect-ratio:1/1;background: {{ merchDetail.heroCss }};position:relative;display:flex;align-items:center;justify-content:center;overflow:hidden;">
+        <span style="position:absolute;top:16px;left:16px;width:10px;height:10px;background:var(--accent,#F56007);border-radius:50%;"></span>
+        <span style="font-family:'IBM Plex Mono',monospace;font-size:13px;color:#A8A8A0;letter-spacing:.08em;">{{ merchDetail.tag }}</span>
+        <div class="gallery-overlay" style="position:absolute;top:14px;left:14px;display:flex;gap:8px;z-index:4;">
+          <button onClick="{{ merchDetail.onToggleSaved }}" title="Guardar" style="width:38px;height:38px;border:none;background:rgba(20,20,20,.5);backdrop-filter:blur(3px);color:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;" style-hover="background:rgba(20,20,20,.75)">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="{{ merchDetail.heartFill }}" stroke="{{ merchDetail.heartStroke }}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="transition:all .2s;"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1-1.1a5.5 5.5 0 0 0-7.8 7.8l1 1.1L12 21l7.8-7.5 1-1.1a5.5 5.5 0 0 0 0-7.8z"/></svg>
+          </button>
+          <div style="position:relative;">
+            <button onClick="{{ merchDetail.onShare }}" title="Compartir" style="width:38px;height:38px;border:none;background:rgba(20,20,20,.5);backdrop-filter:blur(3px);color:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;" style-hover="background:rgba(20,20,20,.75)">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="M8.6 13.5l6.8 4M15.4 6.5l-6.8 4"/></svg>
+            </button>
+            <sc-if value="{{ merchDetail.shareOpen }}" hint-placeholder-val="{{ false }}">
+              <div style="position:absolute;top:46px;left:0;z-index:5;background:#fff;border:1px solid #E4E4DE;box-shadow:0 14px 34px -12px rgba(0,0,0,.35);min-width:180px;padding:6px;">
+                <button onClick="{{ merchDetail.onCopyLink }}" style="width:100%;display:flex;align-items:center;gap:10px;background:none;border:none;cursor:pointer;padding:10px 12px;font-size:13.5px;font-weight:600;color:#141414;text-align:left;" style-hover="background:#F3F3EE"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#141414" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7 0l3-3a5 5 0 0 0-7-7l-1 1"/><path d="M14 11a5 5 0 0 0-7 0l-3 3a5 5 0 0 0 7 7l1-1"/></svg>Copiar enlace</button>
+                <a href="{{ merchDetail.shareWa }}" target="_blank" rel="noopener" style="width:100%;display:flex;align-items:center;gap:10px;text-decoration:none;padding:10px 12px;font-size:13.5px;font-weight:600;color:#141414;" style-hover="background:#F3F3EE"><svg width="15" height="15" viewBox="0 0 24 24" fill="#25D366"><path d="M12 2a10 10 0 0 0-8.6 15l-1.3 4.7 4.8-1.3A10 10 0 1 0 12 2Z"/></svg>WhatsApp</a>
+                <a href="{{ merchDetail.shareMail }}" style="width:100%;display:flex;align-items:center;gap:10px;text-decoration:none;padding:10px 12px;font-size:13.5px;font-weight:600;color:#141414;" style-hover="background:#F3F3EE"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#141414" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="1"/><path d="m3 7 9 6 9-6"/></svg>Email</a>
+              </div>
+            </sc-if>
+          </div>
+        </div>
+        <sc-if value="{{ merchDetail.gMulti }}" hint-placeholder-val="{{ false }}">
+          <div class="gallery-overlay" style="position:absolute;top:14px;right:14px;font-family:'IBM Plex Mono',monospace;font-size:12px;color:#141414;background:rgba(255,255,255,.85);padding:4px 10px;">{{ merchDetail.counter }}</div>
+          <button onClick="{{ merchDetail.onGalPrev }}" title="Anterior" class="gallery-overlay" style="position:absolute;top:50%;left:14px;transform:translateY(-50%);width:44px;height:44px;border-radius:50%;border:1.5px solid rgba(20,20,20,.2);background:rgba(255,255,255,.85);color:#141414;font-size:19px;cursor:pointer;display:flex;align-items:center;justify-content:center;" style-hover="background:var(--accent,#F56007);color:#fff;border-color:var(--accent,#F56007)">‹</button>
+          <button onClick="{{ merchDetail.onGalNext }}" title="Siguiente" class="gallery-overlay" style="position:absolute;top:50%;right:14px;transform:translateY(-50%);width:44px;height:44px;border-radius:50%;border:1.5px solid rgba(20,20,20,.2);background:rgba(255,255,255,.85);color:#141414;font-size:19px;cursor:pointer;display:flex;align-items:center;justify-content:center;" style-hover="background:var(--accent,#F56007);color:#fff;border-color:var(--accent,#F56007)">›</button>
+        </sc-if>
+      </div>
+      <sc-if value="{{ merchDetail.gMulti }}" hint-placeholder-val="{{ false }}">
+        <div style="margin-top:12px;display:flex;gap:10px;flex-wrap:wrap;">
+          <sc-for list="{{ merchDetail.thumbs }}" as="t" hint-placeholder-count="3">
+            <div onClick="{{ t.onClick }}" style="width:74px;height:74px;background: {{ t.css }};border:2px solid {{ t.border }};cursor:pointer;transition:border-color .2s;"></div>
+          </sc-for>
+        </div>
+      </sc-if>
+    </div>
+    <div>
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:.1em;color:var(--accent,#F56007);text-transform:uppercase;">{{ merchDetail.tag }}</div>
+      <h1 style="margin:10px 0 0;font-size:clamp(30px,3.6vw,46px);font-weight:900;letter-spacing:-.03em;line-height:1.02;">{{ merchDetail.name }}</h1>
+      <div style="margin-top:16px;display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;">
+        <span style="font-size:clamp(28px,3.4vw,38px);font-weight:900;letter-spacing:-.02em;color: {{ merchDetail.priceColor }};">{{ merchDetail.priceLabel }}</span>
+        <sc-if value="{{ merchDetail.hasOffer }}" hint-placeholder-val="{{ false }}">
+          <span style="font-size:20px;color:#a0a098;text-decoration:line-through;">{{ merchDetail.priceOld }}</span>
+          <span style="font-family:'IBM Plex Mono',monospace;font-size:12px;font-weight:700;color:#fff;background:var(--accent,#F56007);padding:4px 9px;">{{ merchDetail.pct }}</span>
+        </sc-if>
+      </div>
+      <sc-if value="{{ merchDetail.hasSizes }}" hint-placeholder-val="{{ false }}">
+        <div style="margin-top:26px;">
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.08em;color:#8a8a82;text-transform:uppercase;margin-bottom:10px;">Talla</div>
+          <div style="display:flex;gap:9px;flex-wrap:wrap;">
+            <sc-for list="{{ merchDetail.sizes }}" as="z" hint-placeholder-count="5">
+              <button onClick="{{ z.onPick }}" style="min-width:52px;height:44px;padding:0 14px;border:1.5px solid {{ z.border }};background:{{ z.bg }};color:{{ z.color }};border-radius:0;font-weight:700;font-size:14px;cursor:pointer;text-decoration: {{ z.deco }};transition:all .18s;">{{ z.label }}</button>
+            </sc-for>
+          </div>
+        </div>
+      </sc-if>
+      <sc-if value="{{ merchDetail.hasColors }}" hint-placeholder-val="{{ false }}">
+        <div style="margin-top:22px;">
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.08em;color:#8a8a82;text-transform:uppercase;margin-bottom:10px;">Color <span style="color:#141414;">{{ merchDetail.selColorName }}</span></div>
+          <div style="display:flex;gap:12px;flex-wrap:wrap;">
+            <sc-for list="{{ merchDetail.colors }}" as="c" hint-placeholder-count="3">
+              <button onClick="{{ c.onPick }}" title="{{ c.name }}" style="width:36px;height:36px;border-radius:50%;background:{{ c.hex }};border:2px solid #fff;box-shadow:0 0 0 2px {{ c.ring }};cursor:pointer;opacity: {{ c.opacity }};transition:box-shadow .18s;"></button>
+            </sc-for>
+          </div>
+        </div>
+      </sc-if>
+      <sc-if value="{{ merchDetail.warn }}" hint-placeholder-val="{{ false }}">
+        <div style="margin-top:18px;display:flex;align-items:center;gap:8px;background:rgba(245,96,7,.1);border:1px solid rgba(245,96,7,.35);border-radius:2px;padding:11px 13px;font-size:13px;color:#B4470A;font-weight:600;"><span style="font-size:15px;">⚠</span>{{ merchDetail.warnMsg }} antes de añadir a la cesta.</div>
+      </sc-if>
+      <div style="margin-top:22px;display:flex;gap:14px;align-items:center;flex-wrap:wrap;">
+        <div style="display:flex;align-items:center;border:1.5px solid #DADAD3;">
+          <button onClick="{{ merchDetail.onDec }}" style="width:44px;height:52px;border:none;background:#fff;cursor:pointer;font-size:20px;line-height:1;color:#141414;">−</button>
+          <span style="min-width:44px;text-align:center;font-family:'IBM Plex Mono',monospace;font-size:16px;font-weight:600;">{{ merchDetail.qty }}</span>
+          <button onClick="{{ merchDetail.onInc }}" style="width:44px;height:52px;border:none;background:#fff;cursor:pointer;font-size:20px;line-height:1;color:#141414;">+</button>
+        </div>
+        <sc-if value="{{ merchDetail.soldOut }}" hint-placeholder-val="{{ false }}">
+          <button disabled="true" style="flex:1;min-width:180px;height:52px;background:#E8E8E4;color:#8a8a82;border:none;border-radius:0;font-weight:700;font-size:15px;cursor:not-allowed;">Agotado</button>
+          <button onClick="{{ merchDetail.onAlert }}" style="flex:1;min-width:180px;height:52px;background:transparent;border:1.5px solid var(--accent,#F56007);color:var(--accent,#F56007);border-radius:0;font-weight:700;font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;" style-hover="background:var(--accent,#F56007);color:#fff">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/></svg>
+            Avísame cuando esté disponible</button>
+        </sc-if>
+        <sc-if value="{{ merchDetail.canBuyView }}" hint-placeholder-val="{{ true }}">
+          <button onClick="{{ merchDetail.onAdd }}" style="flex:1;min-width:220px;height:52px;background:var(--accent,#F56007);color:#fff;border:none;border-radius:0;font-weight:700;font-size:15px;cursor:pointer;opacity: {{ merchDetail.addOpacity }};" style-hover="filter:brightness(1.1)">Añadir a la cesta</button>
+        </sc-if>
+      </div>
+      <sc-if value="{{ merchAdded }}" hint-placeholder-val="{{ false }}">
+        <div style="margin-top:14px;display:flex;align-items:center;gap:9px;background:rgba(245,96,7,.08);border:1px solid rgba(245,96,7,.35);padding:11px 14px;font-size:13.5px;font-weight:600;color:var(--accent,#F56007);">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+          Añadido a la cesta
+        </div>
+      </sc-if>
+      <div style="margin-top:30px;padding-top:24px;border-top:1px solid #ECECE6;">
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.08em;color:#8a8a82;text-transform:uppercase;margin-bottom:12px;">Detalles</div>
+        <p style="margin:0;font-size:14px;color:#6a6a64;line-height:1.6;max-width:52ch;">{{ merchDetail.desc }}</p>
+        <div style="margin-top:16px;display:flex;flex-direction:column;">
+          <sc-for list="{{ merchDetail.specs }}" as="s" hint-placeholder-count="4">
+            <div style="display:flex;align-items:center;justify-content:space-between;gap:16px;padding:10px 0;border-bottom:1px solid #F0F0EA;">
+              <span style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:#9a9a92;letter-spacing:.04em;">{{ s.k }}</span>
+              <span style="font-size:13.5px;font-weight:600;color:#3a3a3a;text-align:right;">{{ s.v }}</span>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div style="margin-top:72px;">
+    <h3 style="margin:0 0 26px;font-size:clamp(24px,3vw,36px);font-weight:900;letter-spacing:-.02em;">También te puede interesar</h3>
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:20px;">
+      <sc-for list="{{ merchDetail.related }}" as="r" hint-placeholder-count="4">
+        <div style="background:#fff;border:1px solid #E8E8E2;display:flex;flex-direction:column;">
+          <div onClick="{{ r.onOpen }}" style="height:180px;position:relative;background:repeating-linear-gradient(135deg,#F2F2EE,#F2F2EE 12px,#EBEBE5 12px,#EBEBE5 24px);display:flex;align-items:center;justify-content:center;cursor:pointer;">
+            <span style="position:absolute;top:12px;left:12px;width:9px;height:9px;background:var(--accent,#F56007);border-radius:50%;"></span>
+            <span style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:#A8A8A0;letter-spacing:.08em;">{{ r.tag }}</span>
+          </div>
+          <div style="padding:18px;">
+            <h4 onClick="{{ r.onOpen }}" style="margin:0;font-size:16px;font-weight:800;letter-spacing:-.01em;line-height:1.2;cursor:pointer;">{{ r.name }}</h4>
+            <div style="margin-top:8px;font-size:19px;font-weight:900;letter-spacing:-.02em;">{{ r.priceLabel }}</div>
+          </div>
+        </div>
+      </sc-for>
+    </div>
+  </div>
+</div>
+</sc-if>
+
+<!-- ================= TAB · NOSOTROS ================= -->
+<sc-if value="{{ isNosotros }}" hint-placeholder-val="{{ false }}">
+<div style="animation:fadeIn .5s ease both;max-width:1400px;margin:0 auto;padding:72px 30px 110px;">
+  <div style="font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:.12em;color:var(--accent,#F56007);text-transform:uppercase;">Sobre nosotros</div>
+  <h2 style="margin:16px 0 0;font-size:clamp(38px,5.4vw,76px);font-weight:900;letter-spacing:-.03em;line-height:.98;max-width:18ch;">No somos un taller de volumen. Somos un taller de criterio.</h2>
+  <p style="margin:28px 0 0;font-size:clamp(17px,1.6vw,21px);color:#4a4a4a;line-height:1.6;max-width:60ch;">Trabajamos cada moto con diagnóstico claro, piezas adecuadas y comunicación directa. Sabes qué se hace, por qué se hace y cuánto cuesta antes de tocar nada.</p>
+  <div style="margin-top:56px;display:grid;grid-template-columns:2fr 1fr 1fr;gap:16px;">
+    <div style="grid-column:1;grid-row:1/3;min-height:420px;border-radius:16px;background:#EFEFEB center/cover no-repeat;background-image:url('https://precision-moto-build.lovable.app/assets/workshop-Dpnf8Qa6.jpg');"></div>
+    <div style="min-height:200px;border-radius:16px;background:#EFEFEB center/cover no-repeat;background-image:url('https://precision-moto-build.lovable.app/assets/tools-Vh9ad4na.jpg');"></div>
+    <div style="min-height:200px;border-radius:16px;background:#EFEFEB center/cover no-repeat;background-image:url('https://precision-moto-build.lovable.app/assets/phase-engine-DWcbONOH.jpg');"></div>
+    <div style="grid-column:2/4;min-height:204px;border-radius:16px;background:var(--ink);color:#fff;padding:34px;display:flex;flex-direction:column;justify-content:center;">
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:.06em;color:rgba(255,255,255,.6);">EL COMPROMISO</div>
+      <div style="margin-top:12px;font-size:22px;font-weight:800;line-height:1.25;">Presupuesto antes de empezar · piezas con criterio · hablas con quien toca tu moto.</div>
+    </div>
+  </div>
+
+  <!-- SERVICE CAROUSEL (informativo) -->
+  <div style="margin-top:80px;display:flex;align-items:flex-end;justify-content:space-between;gap:24px;">
+    <div>
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:.12em;color:var(--accent,#F56007);text-transform:uppercase;">Lo que hacemos</div>
+      <h2 style="margin:12px 0 0;font-size:clamp(34px,4.4vw,60px);font-weight:900;letter-spacing:-.03em;line-height:1;">Todo lo que pasa en el taller.</h2>
+    </div>
+    <div style="display:flex;gap:12px;flex:none;">
+      <button onClick="{{ onCarPrev }}" title="Anterior" style="width:56px;height:56px;border-radius:50%;border:1.5px solid #DADAD3;background:#fff;cursor:pointer;font-size:22px;line-height:1;color:var(--ink);display:flex;align-items:center;justify-content:center;" style-hover="border-color:var(--ink);background:var(--ink);color:#fff">‹</button>
+      <button onClick="{{ onCarNext }}" title="Siguiente" style="width:56px;height:56px;border-radius:50%;border:1.5px solid #DADAD3;background:#fff;cursor:pointer;font-size:22px;line-height:1;color:var(--ink);display:flex;align-items:center;justify-content:center;" style-hover="border-color:var(--ink);background:var(--ink);color:#fff">›</button>
+    </div>
+  </div>
+  <div id="svc-carousel" style="margin:40px -30px 0;display:flex;gap:26px;overflow-x:auto;scroll-snap-type:x mandatory;padding:6px 30px 24px;cursor:grab;scroll-behavior:smooth;">
+    <sc-for list="{{ serviceCards }}" as="s" hint-placeholder-count="5">
+      <div onClick="{{ s.onToggle }}" onMouseEnter="{{ s.onEnter }}" onMouseLeave="{{ s.onLeave }}" style="flex:0 0 clamp(340px,44vw,560px);scroll-snap-align:center;">
+        <div style="height:clamp(300px,36vw,440px);border-radius:18px;background:#EFEFEB center/cover no-repeat;background-image: {{ s.bgCss }};position:relative;overflow:hidden;border:1px solid #E4E4DE;cursor:pointer;">
+          <div style="position:absolute;inset:0;background:linear-gradient(180deg,transparent 45%,rgba(0,0,0,.55) 100%);"></div>
+          <div style="position:absolute;top:16px;left:16px;z-index:3;font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.06em;color:#fff;background:rgba(20,20,20,.5);padding:5px 10px;border-radius:6px;">{{ s.code }}</div>
+          <div style="position:absolute;left:24px;right:24px;bottom:22px;z-index:2;">
+            <div style="color:#fff;font-size:clamp(23px,2.3vw,32px);font-weight:800;letter-spacing:-.02em;line-height:1.05;">{{ s.title }}</div>
+            <div style="margin-top:8px;color:rgba(255,255,255,.7);font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.08em;text-transform:uppercase;">{{ s.tagline }}</div>
+          </div>
+          <div style="position:absolute;inset:0;z-index:4;background:rgba(18,18,18,.9);opacity: {{ s.overlayOpacity }};transition:opacity .25s ease;padding:clamp(26px,3vw,40px);display:flex;flex-direction:column;justify-content:center;cursor:pointer;pointer-events:none;">
+            <div style="width:34px;height:2px;background:var(--accent,#F56007);margin-bottom:20px;"></div>
+            <div style="color:#fff;font-size:clamp(24px,2.5vw,34px);font-weight:800;letter-spacing:-.02em;line-height:1.05;">{{ s.title }}</div>
+            <p style="margin:14px 0 0;color:rgba(255,255,255,.82);font-size:clamp(14px,1.15vw,16px);line-height:1.55;max-width:42ch;">{{ s.summary }}</p>
+          </div>
+        </div>
+      </div>
+    </sc-for>
+  </div>
+</div>
+</sc-if>
+
+<!-- ================= TAB · CONTACTO ================= -->
+<sc-if value="{{ isContacto }}" hint-placeholder-val="{{ false }}">
+<div style="animation:fadeIn .5s ease both;max-width:1400px;margin:0 auto;padding:72px 30px 110px;display:grid;grid-template-columns:repeat(auto-fit,minmax(340px,1fr));gap:52px;">
+  <div>
+    <div style="font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:.12em;color:var(--accent,#F56007);text-transform:uppercase;">Contacto</div>
+    <h2 style="margin:14px 0 0;font-size:clamp(38px,5vw,72px);font-weight:900;letter-spacing:-.03em;line-height:.98;">Tráenos tu moto.</h2>
+    <div style="margin-top:36px;">
+      <div style="display:flex;justify-content:space-between;padding:20px 0;border-top:1px solid #ECECE6;"><span style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:#9a9a92;text-transform:uppercase;letter-spacing:.06em;">WhatsApp</span><a href="{{ waContact }}" target="_blank" rel="noopener" style="font-weight:700;color:var(--ink);text-decoration:none;font-size:16px;" style-hover="color:#25D366">+34 600 00 00 00</a></div>
+      <div style="display:flex;justify-content:space-between;padding:20px 0;border-top:1px solid #ECECE6;"><span style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:#9a9a92;text-transform:uppercase;letter-spacing:.06em;">Teléfono</span><a href="tel:+34600000000" style="font-weight:700;color:var(--ink);text-decoration:none;font-size:16px;">+34 600 00 00 00</a></div>
+      <div style="display:flex;justify-content:space-between;padding:20px 0;border-top:1px solid #ECECE6;"><span style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:#9a9a92;text-transform:uppercase;letter-spacing:.06em;">Email</span><a href="mailto:hola@taller.com" style="font-weight:700;color:var(--ink);text-decoration:none;font-size:16px;">hola@taller.com</a></div>
+      <div style="display:flex;justify-content:space-between;padding:20px 0;border-top:1px solid #ECECE6;"><span style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:#9a9a92;text-transform:uppercase;letter-spacing:.06em;">Dirección</span><span style="font-weight:700;font-size:16px;text-align:right;">C/ del Motor 14<br>28000 · Ciudad</span></div>
+      <div style="display:flex;justify-content:space-between;padding:20px 0;border-top:1px solid #ECECE6;border-bottom:1px solid #ECECE6;"><span style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:#9a9a92;text-transform:uppercase;letter-spacing:.06em;">Horario</span><span style="font-weight:700;font-size:16px;text-align:right;">Lun–Vie 9:00–19:00<br>Sáb 9:00–14:00</span></div>
+    </div>
+    <div style="margin-top:28px;display:flex;gap:12px;flex-wrap:wrap;">
+      <a href="https://maps.google.com" target="_blank" rel="noopener" style="height:52px;padding:0 24px;background:#fff;border:1.5px solid var(--ink);border-radius:0;display:inline-flex;align-items:center;font-weight:700;font-size:15px;text-decoration:none;color:var(--ink);" style-hover="background:var(--ink);color:#fff">Cómo llegar</a>
+      <button onClick="{{ openForm }}" style="height:52px;padding:0 24px;background:var(--accent,#F56007);color:#fff;border:none;border-radius:0;font-weight:700;font-size:15px;cursor:pointer;" style-hover="filter:brightness(1.08)">Pedir cita</button>
+    </div>
+  </div>
+  <div style="border-radius:0;overflow:hidden;border:1px solid #ECECE6;min-height:440px;background:repeating-linear-gradient(135deg,#F2F2EE,#F2F2EE 13px,#EBEBE5 13px,#EBEBE5 26px);display:flex;align-items:center;justify-content:center;position:relative;">
+    <span style="width:18px;height:18px;background:var(--accent,#F56007);border-radius:50% 50% 50% 0;transform:rotate(-45deg);box-shadow:0 6px 16px rgba(245,96,7,.4);"></span>
+    <span style="position:absolute;bottom:16px;left:16px;font-family:'IBM Plex Mono',monospace;font-size:12px;color:#A8A8A0;">mapa · embed-google-maps</span>
+  </div>
+</div>
+</sc-if>
+
+</div><!-- /padding-top -->
+
+<!-- ================= FLOATING WHATSAPP ================= -->
+<a href="{{ waContact }}" target="_blank" rel="noopener" title="WhatsApp" style="position:fixed;right:24px;bottom:24px;z-index:55;width:60px;height:60px;background:#25D366;border-radius:50%;display:flex;align-items:center;justify-content:center;text-decoration:none;box-shadow:0 8px 24px rgba(37,211,102,.4);animation:wa-pulse 2.4s infinite;" style-hover="filter:brightness(1.06)">
+  <svg width="29" height="29" viewBox="0 0 24 24" fill="#fff"><path d="M12 2a10 10 0 0 0-8.6 15l-1.3 4.7 4.8-1.3A10 10 0 1 0 12 2Zm5.6 14.1c-.2.6-1.2 1.2-1.7 1.2-.4 0-1 .1-3.4-.9-2.9-1.2-4.7-4.1-4.9-4.3-.1-.2-1.1-1.5-1.1-2.8 0-1.3.7-2 .9-2.2.2-.3.5-.3.7-.3h.5c.2 0 .4 0 .6.5l.8 2c.1.2.1.4 0 .5l-.4.6c-.2.2-.3.4-.1.7.2.3.8 1.3 1.7 2.1 1.2 1 2.1 1.4 2.4 1.5.2.1.4.1.6-.1l.8-1c.2-.2.4-.2.6-.1l1.9.9c.3.1.5.2.5.3.1.2.1.7-.1 1.2Z"/></svg>
+</a>
+
+<!-- ================= CESTA PANEL ================= -->
+<sc-if value="{{ cartOpen }}" hint-placeholder-val="{{ false }}">
+  <div style="position:fixed;inset:0;z-index:80;">
+    <div onClick="{{ closeCart }}" style="position:absolute;inset:0;background:rgba(20,20,20,.4);backdrop-filter:blur(2px);"></div>
+    <div style="position:absolute;top:0;right:0;height:100%;width:min(440px,94vw);background:#FFFFFF;box-shadow:-20px 0 50px rgba(0,0,0,.2);display:flex;flex-direction:column;">
+      <div style="padding:24px;border-bottom:1px solid #E8E8E2;display:flex;align-items:center;justify-content:space-between;">
+        <div><div style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--accent,#F56007);letter-spacing:.08em;text-transform:uppercase;">Tu compra</div><h3 style="margin:4px 0 0;font-size:23px;font-weight:900;letter-spacing:-.02em;">Cesta</h3></div>
+        <button onClick="{{ closeCart }}" style="width:36px;height:36px;border:1px solid #E0E0DA;background:#fff;border-radius:8px;cursor:pointer;font-size:18px;line-height:1;color:#555;">✕</button>
+      </div>
+      <div style="flex:1;overflow-y:auto;padding:20px 24px;">
+        <sc-if value="{{ hasCart }}" hint-placeholder-val="{{ true }}">
+          <div style="display:flex;flex-direction:column;gap:12px;">
+            <sc-for list="{{ cartItems }}" as="it" hint-placeholder-count="2">
+              <div style="display:flex;gap:12px;background:#fff;border:1px solid #E8E8E2;padding:12px;">
+                <div style="width:60px;height:60px;flex:none;background:repeating-linear-gradient(135deg,#F2F2EE,#F2F2EE 8px,#EBEBE5 8px,#EBEBE5 16px);"></div>
+                <div style="flex:1;min-width:0;">
+                  <div style="font-weight:700;font-size:14px;line-height:1.2;">{{ it.name }}</div>
+                  <div style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:#8a8a82;margin-top:3px;">{{ it.priceLabel }}</div>
+                  <div style="margin-top:8px;display:flex;align-items:center;gap:10px;">
+                    <div style="display:flex;align-items:center;border:1px solid #DADAD3;">
+                      <button onClick="{{ it.onDec }}" style="width:28px;height:28px;border:none;background:#fff;cursor:pointer;font-size:16px;line-height:1;color:#141414;">−</button>
+                      <span style="min-width:26px;text-align:center;font-family:'IBM Plex Mono',monospace;font-size:13px;font-weight:600;">{{ it.qty }}</span>
+                      <button onClick="{{ it.onInc }}" style="width:28px;height:28px;border:none;background:#fff;cursor:pointer;font-size:16px;line-height:1;color:#141414;">+</button>
+                    </div>
+                    <button onClick="{{ it.onRemove }}" style="background:none;border:none;cursor:pointer;font-family:'IBM Plex Mono',monospace;font-size:11px;color:#9a9a92;text-transform:uppercase;letter-spacing:.04em;" style-hover="color:var(--accent,#F56007)">Eliminar</button>
+                  </div>
+                </div>
+                <div style="font-weight:800;font-size:14px;white-space:nowrap;">{{ it.lineLabel }}</div>
+              </div>
+            </sc-for>
+          </div>
+        </sc-if>
+        <sc-if value="{{ emptyCart }}" hint-placeholder-val="{{ false }}">
+          <div style="text-align:center;padding:50px 20px;color:#9a9a92;">
+            <div style="width:54px;height:54px;border:2px dashed #D8D8D0;border-radius:50%;margin:0 auto 16px;display:flex;align-items:center;justify-content:center;color:#B4B4AC;"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="20" r="1.4"/><circle cx="18" cy="20" r="1.4"/><path d="M2 3h3l2.4 12.4a1.6 1.6 0 0 0 1.6 1.3h8.2a1.6 1.6 0 0 0 1.6-1.3L22 7H6"/></svg></div>
+            <div style="font-weight:700;color:#555;font-size:15px;">Tu cesta está vacía</div>
+            <div style="font-size:13.5px;margin-top:6px;line-height:1.5;">Añade productos desde Merchandising.</div>
+          </div>
+        </sc-if>
+      </div>
+      <sc-if value="{{ hasCart }}" hint-placeholder-val="{{ false }}">
+        <div style="padding:18px 24px;border-top:1px solid #E8E8E2;background:#fff;">
+          <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:14px;">
+            <span style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:#8a8a82;text-transform:uppercase;letter-spacing:.06em;">Subtotal</span>
+            <span style="font-size:24px;font-weight:900;letter-spacing:-.02em;">{{ subtotalLabel }}</span>
+          </div>
+          <button onClick="{{ openCheckout }}" style="width:100%;height:52px;background:var(--accent,#F56007);color:#fff;border:none;border-radius:0;font-weight:700;font-size:15px;cursor:pointer;" style-hover="filter:brightness(1.1)">Tramitar pedido</button>
+        </div>
+      </sc-if>
+    </div>
+  </div>
+</sc-if>
+
+<!-- ================= CHECKOUT ================= -->
+<sc-if value="{{ checkoutOpen }}" hint-placeholder-val="{{ false }}">
+  <div style="position:fixed;inset:0;z-index:92;overflow-y:auto;background:#FFFFFF;">
+    <div style="max-width:1100px;margin:0 auto;padding:34px 30px 80px;">
+      <div style="display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;">
+        <div style="display:flex;align-items:center;gap:16px;flex-wrap:wrap;">
+          <button onClick="{{ closeCheckout }}" style="height:40px;padding:0 16px;border:1.5px solid #DADAD3;background:#fff;border-radius:0;cursor:pointer;font-weight:700;font-size:13.5px;color:#141414;display:flex;align-items:center;gap:7px;" style-hover="border-color:#141414">‹ Volver a la cesta</button>
+          <button onClick="{{ goMerch }}" style="height:40px;padding:0 16px;border:none;background:none;cursor:pointer;font-weight:600;font-size:13.5px;color:#8a8a82;display:flex;align-items:center;gap:6px;" style-hover="color:#141414">Seguir comprando</button>
+        </div>
+      </div>
+      <h2 style="margin:24px 0 0;font-size:clamp(30px,4vw,52px);font-weight:900;letter-spacing:-.03em;line-height:1;">Enviar pedido</h2>
+      <p style="margin:14px 0 0;font-size:15px;color:#5e5e5e;max-width:60ch;line-height:1.55;">Déjanos tus datos de envío. Coordinamos el pago y la entrega contigo directamente (WhatsApp, transferencia o contra reembolso) — sin pasarela online.</p>
+
+      <div class="co-grid" style="margin-top:36px;display:grid;grid-template-columns:1.4fr 1fr;gap:40px;align-items:start;">
+        <!-- forms -->
+        <div>
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:.08em;color:var(--accent,#F56007);text-transform:uppercase;">Datos de envío</div>
+          <div style="margin-top:16px;display:grid;grid-template-columns:1fr 1fr;gap:14px;">
+            <input value="{{ coForm.name }}" onInput="{{ onCoName }}" placeholder="Nombre y apellidos" style="grid-column:1/3;height:48px;border:1px solid #E0E0DA;border-radius:2px;padding:0 14px;font-size:15px;background:#fff;outline:none;" style-focus="border-color:var(--ink)"/>
+            <input value="{{ coForm.phone }}" onInput="{{ onCoPhone }}" placeholder="Teléfono" style="height:48px;border:1px solid #E0E0DA;border-radius:2px;padding:0 14px;font-size:15px;background:#fff;outline:none;" style-focus="border-color:var(--ink)"/>
+            <input value="{{ coForm.email }}" onInput="{{ onCoEmail }}" placeholder="Email" style="height:48px;border:1px solid #E0E0DA;border-radius:2px;padding:0 14px;font-size:15px;background:#fff;outline:none;" style-focus="border-color:var(--ink)"/>
+            <input value="{{ coForm.address }}" onInput="{{ onCoAddress }}" placeholder="Dirección de envío" style="grid-column:1/3;height:48px;border:1px solid #E0E0DA;border-radius:2px;padding:0 14px;font-size:15px;background:#fff;outline:none;" style-focus="border-color:var(--ink)"/>
+            <input value="{{ coForm.city }}" onInput="{{ onCoCity }}" placeholder="Ciudad" style="height:48px;border:1px solid #E0E0DA;border-radius:2px;padding:0 14px;font-size:15px;background:#fff;outline:none;" style-focus="border-color:var(--ink)"/>
+            <input value="{{ coForm.zip }}" onInput="{{ onCoZip }}" placeholder="Código postal" style="height:48px;border:1px solid #E0E0DA;border-radius:2px;padding:0 14px;font-size:15px;background:#fff;outline:none;" style-focus="border-color:var(--ink)"/>
+            <textarea value="{{ coForm.notes }}" onInput="{{ onCoNotes }}" placeholder="Comentarios (opcional)" rows="3" style="grid-column:1/3;border:1px solid #E0E0DA;border-radius:2px;padding:12px 14px;font-size:15px;background:#fff;outline:none;resize:vertical;" style-focus="border-color:var(--ink)"></textarea>
+          </div>
+        </div>
+
+        <!-- summary -->
+        <div style="background:#fff;border:1px solid #E8E8E2;padding:26px;position:sticky;top:24px;">
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:.08em;color:#8a8a82;text-transform:uppercase;margin-bottom:16px;">Resumen del pedido</div>
+          <div style="display:flex;flex-direction:column;gap:12px;">
+            <sc-for list="{{ cartItems }}" as="it" hint-placeholder-count="2">
+              <div style="display:flex;align-items:center;gap:12px;font-size:14px;">
+                <div style="width:52px;height:52px;flex:none;border:1px solid #E8E8E2;background:repeating-linear-gradient(135deg,#F2F2EE,#F2F2EE 7px,#EBEBE5 7px,#EBEBE5 14px);position:relative;"><span style="position:absolute;top:5px;left:5px;width:6px;height:6px;background:var(--accent,#F56007);border-radius:50%;"></span></div>
+                <span style="flex:1;color:#444;line-height:1.35;">{{ it.qty }} × {{ it.name }}</span>
+                <span style="font-weight:700;white-space:nowrap;">{{ it.lineLabel }}</span>
+              </div>
+            </sc-for>
+          </div>
+          <div style="margin-top:16px;padding-top:16px;border-top:1px solid #ECECE6;display:flex;justify-content:space-between;align-items:baseline;">
+            <span style="font-weight:700;">Total</span><span style="font-size:26px;font-weight:900;letter-spacing:-.02em;">{{ subtotalLabel }}</span>
+          </div>
+          <sc-if value="{{ coErr }}" hint-placeholder-val="{{ false }}">
+            <div style="margin-top:16px;display:flex;align-items:center;gap:8px;background:#FDECEC;border:1px solid #F5C6C6;border-radius:2px;padding:11px 13px;font-size:13px;color:#B00020;font-weight:600;"><span style="font-size:15px;">⚠</span>Completa nombre, teléfono, email, dirección, ciudad y CP.</div>
+          </sc-if>
+          <button onClick="{{ onPayNow }}" style="margin-top:18px;width:100%;height:54px;background:var(--accent,#F56007);color:#fff;border:none;border-radius:0;font-weight:700;font-size:16px;cursor:pointer;" style-hover="filter:brightness(1.1)">Enviar pedido</button>
+          <div style="margin-top:12px;font-family:'IBM Plex Mono',monospace;font-size:11px;color:#A8A8A0;text-align:center;line-height:1.5;">El pago y el envío se coordinan directamente con MOTORLAB.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</sc-if>
+
+<!-- ================= CONFIRMACIÓN ================= -->
+<sc-if value="{{ orderDone }}" hint-placeholder-val="{{ false }}">
+  <div style="position:fixed;inset:0;z-index:96;background:#141414;color:#fff;display:flex;align-items:center;justify-content:center;padding:24px;">
+    <div style="text-align:center;max-width:520px;animation:fadeIn .5s ease both;">
+      <div style="width:88px;height:88px;border-radius:50%;background:var(--accent,#F56007);margin:0 auto;display:flex;align-items:center;justify-content:center;animation:pop .4s ease both;">
+        <svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+      </div>
+      <h2 style="margin:28px 0 0;font-size:clamp(32px,4.5vw,52px);font-weight:900;letter-spacing:-.03em;line-height:1;color:#fff;">¡Pedido recibido!</h2>
+      <p style="margin:18px 0 0;font-size:16px;color:rgba(255,255,255,.68);line-height:1.6;">Nos pondremos en contacto contigo para confirmar el envío y el pago (WhatsApp, transferencia o contra reembolso). Gracias por confiar en MOTORLAB.</p>
+      <div style="margin-top:24px;display:inline-block;border:1px solid #2C2C2C;background:#1B1B1B;padding:14px 24px;font-family:'IBM Plex Mono',monospace;font-size:13px;letter-spacing:.06em;color:rgba(255,255,255,.85);">Nº DE PEDIDO · {{ orderNum }}</div>
+      <div style="margin-top:32px;">
+        <button onClick="{{ onFinishOrder }}" style="height:54px;padding:0 32px;background:var(--accent,#F56007);color:#fff;border:none;border-radius:0;font-weight:700;font-size:15px;cursor:pointer;" style-hover="filter:brightness(1.1)">Seguir comprando</button>
+      </div>
+    </div>
+  </div>
+</sc-if>
+
+<!-- ================= LIGHTBOX IMPERFECCIÓN ================= -->
+<sc-if value="{{ imgLightbox }}" hint-placeholder-val="{{ false }}">
+  <div style="position:fixed;inset:0;z-index:98;background:rgba(10,10,10,.95);display:flex;align-items:center;justify-content:center;padding:40px;">
+    <div onClick="{{ closeImgLightbox }}" style="position:absolute;inset:0;"></div>
+    <button onClick="{{ closeImgLightbox }}" title="Cerrar" style="position:absolute;top:24px;right:24px;width:46px;height:46px;border:1.5px solid rgba(255,255,255,.4);background:transparent;color:#fff;border-radius:50%;font-size:20px;cursor:pointer;z-index:2;" style-hover="background:rgba(255,255,255,.15)">✕</button>
+    <div style="position:relative;width:min(900px,92vw);height:min(70vh,700px);background:center/contain no-repeat;background-image: {{ imgLightboxCss }};"></div>
+  </div>
+</sc-if>
+
+<!-- ================= LIGHTBOX GALERÍA ================= -->
+<sc-if value="{{ lightbox }}" hint-placeholder-val="{{ false }}">
+  <div style="position:fixed;inset:0;z-index:97;background:rgba(10,10,10,.95);display:flex;align-items:center;justify-content:center;padding:40px;">
+    <div onClick="{{ onCloseLightbox }}" style="position:absolute;inset:0;"></div>
+    <button onClick="{{ onCloseLightbox }}" title="Cerrar" style="position:absolute;top:24px;right:24px;width:46px;height:46px;border:1.5px solid rgba(255,255,255,.4);background:transparent;color:#fff;border-radius:50%;font-size:20px;cursor:pointer;z-index:2;" style-hover="background:rgba(255,255,255,.15)">✕</button>
+    <button onClick="{{ detail.onPrev }}" title="Anterior" style="position:absolute;left:24px;top:50%;transform:translateY(-50%);width:54px;height:54px;border:1.5px solid rgba(255,255,255,.4);background:transparent;color:#fff;border-radius:50%;font-size:24px;cursor:pointer;z-index:2;" style-hover="background:var(--accent,#F56007);border-color:var(--accent,#F56007)">‹</button>
+    <button onClick="{{ detail.onNext }}" title="Siguiente" style="position:absolute;right:24px;top:50%;transform:translateY(-50%);width:54px;height:54px;border:1.5px solid rgba(255,255,255,.4);background:transparent;color:#fff;border-radius:50%;font-size:24px;cursor:pointer;z-index:2;" style-hover="background:var(--accent,#F56007);border-color:var(--accent,#F56007)">›</button>
+    <div style="position:relative;width:min(1100px,92vw);height:min(76vh,760px);background:center/contain no-repeat;background-image: {{ detail.heroCss }};"></div>
+    <div style="position:absolute;bottom:28px;left:50%;transform:translateX(-50%);font-family:'IBM Plex Mono',monospace;font-size:13px;color:rgba(255,255,255,.85);letter-spacing:.06em;">{{ detail.counter }}</div>
+  </div>
+</sc-if>
+
+<!-- ================= MODAL CREAR ALERTA ================= -->
+<sc-if value="{{ alertOpen }}" hint-placeholder-val="{{ false }}">
+  <div style="position:fixed;inset:0;z-index:94;display:flex;align-items:center;justify-content:center;padding:20px;">
+    <div onClick="{{ closeAlert }}" style="position:absolute;inset:0;background:rgba(20,20,20,.5);backdrop-filter:blur(3px);"></div>
+    <div style="position:relative;width:min(500px,100%);max-height:92vh;overflow-y:auto;background:#FFFFFF;border-radius:4px;box-shadow:0 30px 70px rgba(0,0,0,.3);">
+      <div style="padding:24px 28px 16px;border-bottom:1px solid #E8E8E2;display:flex;align-items:flex-start;justify-content:space-between;">
+        <div><div style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--accent,#F56007);letter-spacing:.08em;text-transform:uppercase;">Alerta de stock</div><h3 style="margin:5px 0 0;font-size:23px;font-weight:900;letter-spacing:-.02em;">Crea una alerta y te avisamos.</h3></div>
+        <button onClick="{{ closeAlert }}" style="width:36px;height:36px;border:1px solid #E0E0DA;background:#fff;border-radius:2px;cursor:pointer;font-size:18px;line-height:1;color:#555;flex:none;">✕</button>
+      </div>
+      <div style="padding:22px 28px 28px;">
+        <sc-if value="{{ alertDone }}" hint-placeholder-val="{{ false }}">
+          <div style="text-align:center;padding:24px 10px;">
+            <div style="width:64px;height:64px;border-radius:50%;background:var(--accent,#F56007);margin:0 auto;display:flex;align-items:center;justify-content:center;">
+              <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+            </div>
+            <div style="margin-top:18px;font-size:20px;font-weight:800;letter-spacing:-.01em;">Alerta creada</div>
+            <p style="margin:8px 0 0;font-size:14px;color:#6a6a64;line-height:1.5;">Te escribiremos a <strong>{{ alertEmail }}</strong> en cuanto entre una moto que encaje.</p>
+            <button onClick="{{ closeAlert }}" style="margin-top:22px;height:46px;padding:0 24px;background:var(--ink);color:#fff;border:none;border-radius:0;font-weight:700;font-size:14px;cursor:pointer;">Entendido</button>
+          </div>
+        </sc-if>
+        <sc-if value="{{ alertShowForm }}" hint-placeholder-val="{{ true }}">
+        <div>
+          <p style="margin:0 0 16px;font-size:14px;color:#6a6a64;line-height:1.5;">{{ alertText }}</p>
+          <sc-if value="{{ alertHasFilters }}" hint-placeholder-val="{{ true }}">
+            <div style="margin-bottom:18px;">
+              <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.06em;color:#8a8a82;text-transform:uppercase;margin-bottom:9px;">{{ alertChipsTitle }}</div>
+              <div style="display:flex;gap:8px;flex-wrap:wrap;">
+                <sc-for list="{{ alertChips }}" as="c" hint-placeholder-count="3">
+                  <span style="height:30px;padding:0 12px;display:flex;align-items:center;background:rgba(245,96,7,.08);border:1px solid rgba(245,96,7,.35);color:var(--accent,#F56007);font-weight:600;font-size:12.5px;">{{ c }}</span>
+                </sc-for>
+              </div>
+            </div>
+          </sc-if>
+          <sc-if value="{{ alertNoFilters }}" hint-placeholder-val="{{ false }}">
+            <div style="margin-bottom:18px;display:flex;align-items:flex-start;gap:9px;background:#F3F3EE;border:1px solid #E4E4DE;padding:12px 14px;font-size:13px;color:#6a6a64;line-height:1.5;">
+              <span style="color:var(--accent,#F56007);font-size:15px;">✱</span>No has aplicado filtros. Aplica alguno (marca, precio, estilo…) para que la alerta te avise solo de lo que te interesa.
+            </div>
+          </sc-if>
+          <label style="display:flex;flex-direction:column;gap:6px;"><span style="font-size:12px;font-weight:700;color:#555;">Email <span style="color:var(--accent,#F56007);">*</span></span><input value="{{ alertEmail }}" onInput="{{ onAlertEmail }}" placeholder="tu@email.com" style="height:48px;border:1px solid #E0E0DA;border-radius:2px;padding:0 13px;font-size:15px;background:#fff;outline:none;" style-focus="border-color:var(--ink)"/></label>
+          <button onClick="{{ onAlertSubmit }}" style="margin-top:20px;width:100%;height:52px;background:var(--accent,#F56007);color:#fff;border:none;border-radius:0;font-weight:700;font-size:15px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:10px;opacity: {{ alertBtnOpacity }};" style-hover="filter:brightness(1.1)">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/></svg>
+            Crear alerta</button>
+        </div>
+        </sc-if>
+      </div>
+    </div>
+  </div>
+</sc-if>
+
+<!-- ================= MODAL VENDER MI MOTO ================= -->
+<sc-if value="{{ sellOpen }}" hint-placeholder-val="{{ false }}">
+  <div style="position:fixed;inset:0;z-index:93;display:flex;align-items:center;justify-content:center;padding:20px;">
+    <div onClick="{{ closeSell }}" style="position:absolute;inset:0;background:rgba(20,20,20,.5);backdrop-filter:blur(3px);"></div>
+    <div style="position:relative;width:min(520px,100%);max-height:92vh;overflow-y:auto;background:#FFFFFF;border-radius:4px;box-shadow:0 30px 70px rgba(0,0,0,.3);">
+      <div style="position:sticky;top:0;background:#FFFFFF;padding:24px 28px 16px;border-bottom:1px solid #E8E8E2;display:flex;align-items:flex-start;justify-content:space-between;">
+        <div><div style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--accent,#F56007);letter-spacing:.08em;text-transform:uppercase;">Vende tu moto</div><h3 style="margin:5px 0 0;font-size:23px;font-weight:900;letter-spacing:-.02em;">Cuéntanos tu moto</h3></div>
+        <button onClick="{{ closeSell }}" style="width:36px;height:36px;border:1px solid #E0E0DA;background:#fff;border-radius:2px;cursor:pointer;font-size:18px;line-height:1;color:#555;flex:none;">✕</button>
+      </div>
+      <div style="padding:22px 28px 28px;">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">
+          <input value="{{ sellForm.name }}" onInput="{{ onSellName }}" placeholder="Nombre" style="grid-column:1/3;height:46px;border:1px solid #E0E0DA;border-radius:2px;padding:0 13px;font-size:15px;background:#fff;outline:none;" style-focus="border-color:var(--ink)"/>
+          <input value="{{ sellForm.phone }}" onInput="{{ onSellPhone }}" placeholder="Teléfono" style="height:46px;border:1px solid #E0E0DA;border-radius:2px;padding:0 13px;font-size:15px;background:#fff;outline:none;" style-focus="border-color:var(--ink)"/>
+          <input value="{{ sellForm.email }}" onInput="{{ onSellEmail }}" placeholder="Email" style="height:46px;border:1px solid #E0E0DA;border-radius:2px;padding:0 13px;font-size:15px;background:#fff;outline:none;" style-focus="border-color:var(--ink)"/>
+          <input value="{{ sellForm.model }}" onInput="{{ onSellModel }}" placeholder="Marca y modelo" style="grid-column:1/3;height:46px;border:1px solid #E0E0DA;border-radius:2px;padding:0 13px;font-size:15px;background:#fff;outline:none;" style-focus="border-color:var(--ink)"/>
+          <input value="{{ sellForm.year }}" onInput="{{ onSellYear }}" placeholder="Año" inputmode="numeric" style="height:46px;border:1px solid #E0E0DA;border-radius:2px;padding:0 13px;font-size:15px;background:#fff;outline:none;" style-focus="border-color:var(--ink)"/>
+          <input value="{{ sellForm.km }}" onInput="{{ onSellKm }}" placeholder="Kilometraje" inputmode="numeric" style="height:46px;border:1px solid #E0E0DA;border-radius:2px;padding:0 13px;font-size:15px;background:#fff;outline:none;" style-focus="border-color:var(--ink)"/>
+        </div>
+        <a href="{{ sellWa }}" target="_blank" rel="noopener" style="margin-top:20px;height:52px;background:var(--accent,#F56007);color:#fff;border-radius:2px;display:flex;align-items:center;justify-content:center;text-decoration:none;font-weight:700;font-size:15px;" style-hover="filter:brightness(1.1)">Enviar y pedir tasación</a>
+        <div style="margin-top:12px;font-family:'IBM Plex Mono',monospace;font-size:11px;color:#A8A8A0;text-align:center;line-height:1.5;">Te respondemos con una valoración orientativa sin compromiso.</div>
+      </div>
+    </div>
+  </div>
+</sc-if>
+
+<!-- ================= MODAL RESERVA ================= -->
+<sc-if value="{{ resvOpen }}" hint-placeholder-val="{{ false }}">
+  <div style="position:fixed;inset:0;z-index:95;display:flex;align-items:center;justify-content:center;padding:20px;">
+    <div onClick="{{ closeResv }}" style="position:absolute;inset:0;background:rgba(0,0,0,.62);backdrop-filter:blur(3px);"></div>
+    <div style="position:relative;width:min(500px,100%);max-height:92vh;overflow-y:auto;background:#1B1B1B;border:1px solid #2C2C2C;border-radius:4px;box-shadow:0 30px 70px rgba(0,0,0,.5);color:#fff;">
+      <div style="padding:26px 28px 18px;border-bottom:1px solid #2C2C2C;display:flex;align-items:flex-start;justify-content:space-between;">
+        <div>
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--accent,#F56007);letter-spacing:.08em;text-transform:uppercase;">Reserva</div>
+          <h3 style="margin:6px 0 0;font-size:23px;font-weight:900;letter-spacing:-.02em;color:#fff;">Reserva esta moto</h3>
+          <div style="margin-top:4px;font-family:'IBM Plex Mono',monospace;font-size:12px;color:rgba(255,255,255,.5);">{{ detail.brand }} {{ detail.model }} · {{ detail.price }}</div>
+        </div>
+        <button onClick="{{ closeResv }}" style="width:36px;height:36px;border:1px solid #333;background:#141414;border-radius:2px;cursor:pointer;font-size:18px;line-height:1;color:#aaa;flex:none;">✕</button>
+      </div>
+      <div style="padding:22px 28px 28px;display:flex;flex-direction:column;gap:12px;">
+        <input value="{{ resvForm.name }}" onInput="{{ onResvName }}" placeholder="Nombre y apellidos" style="height:48px;background:#141414;border:1px solid #333;border-radius:2px;padding:0 14px;font-size:15px;color:#fff;outline:none;" style-focus="border-color:#F56007"/>
+        <input value="{{ resvForm.phone }}" onInput="{{ onResvPhone }}" placeholder="Teléfono" style="height:48px;background:#141414;border:1px solid #333;border-radius:2px;padding:0 14px;font-size:15px;color:#fff;outline:none;" style-focus="border-color:#F56007"/>
+        <input value="{{ resvForm.email }}" onInput="{{ onResvEmail }}" placeholder="Email" style="height:48px;background:#141414;border:1px solid #333;border-radius:2px;padding:0 14px;font-size:15px;color:#fff;outline:none;" style-focus="border-color:#F56007"/>
+        <button onClick="{{ onResvTerms }}" style="display:flex;align-items:center;gap:11px;background:none;border:none;cursor:pointer;padding:6px 0;text-align:left;">
+          <span style="flex:none;width:22px;height:22px;border-radius:3px;border:1.5px solid {{ resvTermsBorder }};background:{{ resvTermsBg }};display:flex;align-items:center;justify-content:center;transition:all .2s;">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round" style="opacity: {{ resvCheckOpacity }};"><path d="M20 6 9 17l-5-5"/></svg>
+          </span>
+          <span style="font-size:13px;color:rgba(255,255,255,.7);line-height:1.4;">Acepto que MOTORLAB me contacte y la política de privacidad.</span>
+        </button>
+        <sc-if value="{{ resvErr }}" hint-placeholder-val="{{ false }}">
+          <div style="display:flex;align-items:center;gap:8px;background:rgba(245,96,7,.12);border:1px solid rgba(245,96,7,.4);border-radius:2px;padding:11px 13px;font-size:13px;color:#F56007;font-weight:600;"><span style="font-size:15px;">⚠</span>Completa nombre, teléfono, email y acepta los términos.</div>
+        </sc-if>
+        <a href="{{ resvWa }}" target="_blank" rel="noopener" onClick="{{ onResvSend }}" style="margin-top:6px;height:54px;background:var(--accent,#F56007);color:#fff;border-radius:0;display:flex;align-items:center;justify-content:center;gap:10px;text-decoration:none;font-weight:700;font-size:15.5px;opacity: {{ resvOpacity }};" style-hover="filter:brightness(1.1)">Confirmar reserva</a>
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:rgba(255,255,255,.4);text-align:center;line-height:1.5;margin-top:4px;">Sin compromiso · te confirmamos disponibilidad en menos de 24h.</div>
+      </div>
+    </div>
+  </div>
+</sc-if>
+
+<!-- ================= FORMULARIO PEDIR CITA ================= -->
+<sc-if value="{{ formOpen }}" hint-placeholder-val="{{ false }}">
+  <div style="position:fixed;inset:0;z-index:90;display:flex;align-items:center;justify-content:center;padding:20px;">
+    <div onClick="{{ closeForm }}" style="position:absolute;inset:0;background:rgba(20,20,20,.5);backdrop-filter:blur(3px);"></div>
+    <div style="position:relative;width:min(560px,100%);max-height:92vh;overflow-y:auto;background:#FFFFFF;border-radius:18px;box-shadow:0 30px 70px rgba(0,0,0,.3);">
+      <div style="position:sticky;top:0;background:#FFFFFF;padding:24px 28px 16px;border-bottom:1px solid #E8E8E2;display:flex;align-items:flex-start;justify-content:space-between;z-index:2;">
+        <div><div style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--accent,#F56007);letter-spacing:.08em;text-transform:uppercase;">Solicitud de presupuesto</div><h3 style="margin:5px 0 0;font-size:24px;font-weight:900;letter-spacing:-.02em;">Cuéntanos de tu moto</h3></div>
+        <button onClick="{{ closeForm }}" style="width:36px;height:36px;border:1px solid #E0E0DA;background:#fff;border-radius:8px;cursor:pointer;font-size:18px;line-height:1;color:#555;flex:none;">✕</button>
+      </div>
+      <div style="padding:22px 28px 28px;">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">
+          <label style="display:flex;flex-direction:column;gap:6px;"><span style="font-size:12px;font-weight:700;color:#555;">Nombre y apellidos <span style="color:var(--accent,#F56007);">*</span></span><input value="{{ form.name }}" onInput="{{ onName }}" placeholder="Tu nombre y apellidos" style="height:46px;border:1px solid #E0E0DA;border-radius:9px;padding:0 13px;font-size:15px;background:#fff;outline:none;" style-focus="border-color:var(--ink)"/></label>
+          <label style="display:flex;flex-direction:column;gap:6px;"><span style="font-size:12px;font-weight:700;color:#555;">Teléfono <span style="color:var(--accent,#F56007);">*</span></span><input value="{{ form.phone }}" onInput="{{ onPhone }}" placeholder="600 00 00 00" style="height:46px;border:1px solid #E0E0DA;border-radius:9px;padding:0 13px;font-size:15px;background:#fff;outline:none;" style-focus="border-color:var(--ink)"/></label>
+          <label style="display:flex;flex-direction:column;gap:6px;"><span style="font-size:12px;font-weight:700;color:#555;">Email <span style="color:var(--accent,#F56007);">*</span></span><input value="{{ form.email }}" onInput="{{ onEmail }}" placeholder="tu@email.com" style="height:46px;border:1px solid #E0E0DA;border-radius:9px;padding:0 13px;font-size:15px;background:#fff;outline:none;" style-focus="border-color:var(--ink)"/></label>
+          <label style="display:flex;flex-direction:column;gap:6px;"><span style="font-size:12px;font-weight:700;color:#555;">Modelo de moto <span style="color:var(--accent,#F56007);">*</span></span><input value="{{ form.model }}" onInput="{{ onModel }}" placeholder="Ej. Yamaha MT-07" style="height:46px;border:1px solid #E0E0DA;border-radius:9px;padding:0 13px;font-size:15px;background:#fff;outline:none;" style-focus="border-color:var(--ink)"/></label>
+          <label style="display:flex;flex-direction:column;gap:6px;grid-column:1/3;"><span style="font-size:12px;font-weight:700;color:#555;">Número de bastidor / chasis <span style="color:var(--accent,#F56007);">*</span></span><input value="{{ form.plate }}" onInput="{{ onPlate }}" placeholder="17 caracteres alfanuméricos" style="height:46px;border:1px solid #E0E0DA;border-radius:9px;padding:0 13px;font-size:15px;background:#fff;outline:none;" style-focus="border-color:var(--ink)"/></label>
+        </div>
+        <div style="margin-top:18px;">
+          <span style="font-size:12px;font-weight:700;color:#555;">Método preferido de contacto</span>
+          <div style="margin-top:8px;display:flex;gap:9px;">
+            <button onClick="{{ onContactWa }}" style="flex:1;height:44px;border-radius:9px;cursor:pointer;font-weight:700;font-size:14px;border:1.5px solid {{ contact.waBorder }};background:{{ contact.waBg }};color:{{ contact.waColor }};transition:all .15s;">WhatsApp</button>
+            <button onClick="{{ onContactEmail }}" style="flex:1;height:44px;border-radius:9px;cursor:pointer;font-weight:700;font-size:14px;border:1.5px solid {{ contact.emBorder }};background:{{ contact.emBg }};color:{{ contact.emColor }};transition:all .15s;">Email</button>
+            <button onClick="{{ onContactPhone }}" style="flex:1;height:44px;border-radius:9px;cursor:pointer;font-weight:700;font-size:14px;border:1.5px solid {{ contact.phBorder }};background:{{ contact.phBg }};color:{{ contact.phColor }};transition:all .15s;">Teléfono</button>
+          </div>
+        </div>
+        <label style="display:flex;flex-direction:column;gap:6px;margin-top:18px;"><span style="font-size:12px;font-weight:700;color:#555;">Mensaje adicional <span style="color:#aaa;font-weight:500;">(opcional)</span></span><textarea value="{{ form.message }}" onInput="{{ onMessage }}" placeholder="Cuéntanos síntomas, ruidos, plazos…" rows="3" style="border:1px solid #E0E0DA;border-radius:9px;padding:12px 13px;font-size:15px;background:#fff;outline:none;resize:vertical;" style-focus="border-color:var(--ink)"></textarea></label>
+        <div style="margin-top:22px;display:flex;flex-direction:column;gap:10px;">
+          <sc-if value="{{ showErr }}" hint-placeholder-val="{{ false }}">
+            <div style="display:flex;align-items:center;gap:8px;background:#FDECEC;border:1px solid #F5C6C6;border-radius:9px;padding:11px 13px;font-size:13px;color:#B00020;font-weight:600;"><span style="font-size:15px;">⚠</span>Completa los campos obligatorios (*) antes de enviar.</div>
+          </sc-if>
+          <a href="{{ waHref }}" target="_blank" rel="noopener" onClick="{{ onSendGuard }}" style="height:52px;background:#25D366;color:#fff;border-radius:11px;display:flex;align-items:center;justify-content:center;gap:10px;text-decoration:none;font-weight:700;font-size:15.5px;opacity: {{ sendOpacity }};" style-hover="filter:brightness(1.05)">
+            <svg width="19" height="19" viewBox="0 0 24 24" fill="#fff"><path d="M12 2a10 10 0 0 0-8.6 15l-1.3 4.7 4.8-1.3A10 10 0 1 0 12 2Zm5.6 14.1c-.2.6-1.2 1.2-1.7 1.2-.4 0-1 .1-3.4-.9-2.9-1.2-4.7-4.1-4.9-4.3-.1-.2-1.1-1.5-1.1-2.8 0-1.3.7-2 .9-2.2.2-.3.5-.3.7-.3h.5c.2 0 .4 0 .6.5l.8 2c.1.2.1.4 0 .5l-.4.6c-.2.2-.3.4-.1.7.2.3.8 1.3 1.7 2.1 1.2 1 2.1 1.4 2.4 1.5.2.1.4.1.6-.1l.8-1c.2-.2.4-.2.6-.1l1.9.9c.3.1.5.2.5.3.1.2.1.7-.1 1.2Z"/></svg>
+            Enviar por WhatsApp</a>
+          <a href="{{ mailHref }}" onClick="{{ onSendGuard }}" style="height:52px;background:#fff;border:1.5px solid var(--ink);color:var(--ink);border-radius:11px;display:flex;align-items:center;justify-content:center;text-decoration:none;font-weight:700;font-size:15.5px;opacity: {{ sendOpacity }};" style-hover="background:var(--ink);color:#fff">Enviar por email</a>
+        </div>
+        <div style="margin-top:14px;font-family:'IBM Plex Mono',monospace;font-size:11px;color:#A8A8A0;text-align:center;line-height:1.5;">Te confirmamos el presupuesto antes de tocar nada.</div>
+        <div style="margin-top:6px;font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:#C0C0B8;text-align:center;line-height:1.5;">*Presupuesto sujeto a variaciones.</div>
+      </div>
+    </div>
+  </div>
+</sc-if>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:&quot;100%&quot;,&quot;height&quot;:&quot;100%&quot;},&quot;accentColor&quot;:{&quot;editor&quot;:&quot;color&quot;,&quot;default&quot;:&quot;#F56007&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Marca&quot;},&quot;tallerName&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;SOY DE MOTO&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Marca&quot;},&quot;whatsappNumber&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;34600000000&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Contacto&quot;}}">
+class Component extends DCLogic {
+  state = {
+    tab: 'inicio',
+    lang: 'es',
+    openCard: null,
+    hoverCard: null,
+    formOpen: false,
+    showErr: false,
+    form: { name:'', phone:'', email:'', model:'', plate:'', contact:'WhatsApp', message:'' },
+    detailIdx: null,
+    galleryIdx: 0,
+    openAcc: 'specs',
+    merchIdx: null,
+    merchQty: 1,
+    merchSize: null,
+    merchColor: null,
+    merchGal: 0,
+    merchWarn: false,
+    resvOpen: false,
+    resvForm: { name:'', phone:'', email:'', terms:false },
+    resvErr: false,
+    motoCat: null,
+    mf: { q:'', sort:'reco', conds:[], brands:[], styles:[], licenses:[], brandQ:'', priceMin:'', priceMax:'', ccMin:'', ccMax:'', kmMin:'', kmMax:'', yearMin:'', yearMax:'', oferta:false, km0:false },
+    gIdx: {},
+    shareOpen: false,
+    imgLightbox: null,
+    merchAdded: false,
+    sellOpen: false,
+    sellForm: { name:'', phone:'', email:'', model:'', year:'', km:'' },
+    cart: [],
+    cartOpen: false,
+    checkoutOpen: false,
+    orderDone: false,
+    orderNum: '',
+    coForm: { name:'', address:'', city:'', zip:'', phone:'', email:'', notes:'' },
+    coErr: false,
+    saved: [],
+    lightbox: false,
+    alertOpen: false,
+    alertEmail: '',
+    alertMoto: null,
+    alertDone: false
+  };
+
+  get accent() { return this.props.accentColor ?? '#F56007'; }
+  get taller() { return this.props.tallerName ?? 'SOY DE MOTO'; }
+  get waNum() { return (this.props.whatsappNumber ?? '34600000000').replace(/\D/g, ''); }
+  L(es, ca) { return this.state.lang === 'ca' ? ca : es; }
+
+  IMG = 'https://precision-moto-build.lovable.app/assets/';
+
+  fmt(n) { return n.toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' €'; }
+
+  carouselCards = [
+    {code:'A-01', title:'Mantenimiento', tagline:'Revisiones · aceite · a punto', img:'phase-engine-DWcbONOH.jpg',
+      summary:'Revisiones periódicas, cambios de aceite y filtros, y puesta a punto programada para que tu moto no falle cuando la necesitas.'},
+    {code:'A-02', title:'Diagnosis electrónica', tagline:'Centralita · sensores', img:'phase-diagnosis-DQUMnOc1.jpg',
+      summary:'Lectura de centralita, análisis de sensores y detección de fallos en banco. Sabemos qué falla antes de abrir nada.'},
+    {code:'A-03', title:'Frenos y seguridad', tagline:'Pastillas · discos · líquido', img:'phase-brakes-AI2atPTc.jpg',
+      summary:'Pastillas, discos, latiguillos y purgado del circuito. Lo que te mantiene pegado al asfalto, calibrado al milímetro.'},
+    {code:'A-04', title:'Neumáticos y suspensión', tagline:'Montaje · reglaje', img:'phase-fairing-DkWmpBy-.jpg',
+      summary:'Montaje y equilibrado de neumáticos según tu uso real, más reglaje de horquilla y amortiguador para un tacto preciso.'},
+    {code:'A-05', title:'Motor y transmisión', tagline:'Distribución · embrague', img:'hero-bike-DfqVmL4B.jpg',
+      summary:'Distribución, juntas, embrague, kit de arrastre y trabajos de motor mayores. Entrega de potencia como debe ser.'},
+    {code:'A-06', title:'Compraventa de motos', tagline:'Revisadas · con garantía', img:'bike-1-DZ28_UUy.jpg',
+      summary:'Compramos y vendemos motos de ocasión. Cada unidad pasa por nuestro banco, con historial revisado y garantía antes de salir.'},
+    {code:'A-07', title:'Reparación de piezas sueltas', tagline:'Por encargo · sin la moto', img:'tools-Vh9ad4na.jpg',
+      summary:'No hace falta traer la moto entera: aceptamos piezas individuales por encargo —horquillas, culatas, componentes— para repararlas.'}
+  ];
+
+  motos = [
+    {code:'ITEM_01', condition:'ocasion', brand:'KTM', model:'Super Duke R', year:'2023', cc:'1.301 cc', power:'180 CV', km:'4.200 km', price:'18.400 €', state:'En stock', img:'bike-1-DZ28_UUy.jpg',
+      gallery:['bike-1-DZ28_UUy.jpg','hero-bike-DfqVmL4B.jpg','phase-engine-DWcbONOH.jpg','phase-brakes-AI2atPTc.jpg','phase-fairing-DkWmpBy-.jpg'],
+      fuel:'Gasolina', license:'A', type:'Naked deportiva',
+      specs:[['Cilindrada','1.301 cc'],['Potencia','180 CV'],['Par motor','140 Nm'],['Peso','189 kg'],['Cambio','6 velocidades'],['Suspensión','WP Apex regulable'],['Frenos','Brembo Stylema · doble disco'],['Neumáticos','Bridgestone S22']],
+      history:[['Revisión completa en banco','Mar 2026'],['Aceite y filtros Motul 300V','Mar 2026'],['Pastillas y líquido de frenos nuevos','Mar 2026'],['Diagnosis ECU sin fallos','Mar 2026']]},
+    {code:'ITEM_02', condition:'ocasion', brand:'BMW', model:'K 1600 GT Sport', year:'2022', cc:'1.649 cc', power:'160 CV', km:'14.800 km', price:'16.900 €', state:'En stock', img:'bike-2-DaK6kqom.jpg',
+      gallery:['bike-2-DaK6kqom.jpg','hero-bike-DfqVmL4B.jpg','phase-engine-DWcbONOH.jpg','phase-brakes-AI2atPTc.jpg','phase-diagnosis-DQUMnOc1.jpg'],
+      fuel:'Gasolina', license:'A', type:'Gran turismo',
+      specs:[['Cilindrada','1.649 cc'],['Potencia','160 CV'],['Par motor','175 Nm'],['Peso','343 kg'],['Cambio','6 velocidades'],['Suspensión','Duolever / Paralever ESA'],['Frenos','Doble disco · ABS Pro'],['Neumáticos','Michelin Road 6']],
+      history:[['Revisión completa en banco','Feb 2026'],['Cambio de aceite y bujías','Feb 2026'],['Actualización de software','Feb 2026'],['Neumáticos nuevos','Feb 2026']],
+      flaws:[['phase-brakes-AI2atPTc.jpg','Pequeño desgaste en pinza de freno delantera']]},
+    {code:'ITEM_03', condition:'ocasion', brand:'YAMAHA', model:'YZF-R6 Race', year:'2020', cc:'599 cc', power:'118 CV', km:'8.200 km', price:'12.200 €', state:'Reservada', img:'bike-3-D9oWF1O8.jpg',
+      gallery:['bike-3-D9oWF1O8.jpg','hero-bike-DfqVmL4B.jpg','phase-brakes-AI2atPTc.jpg','phase-fairing-DkWmpBy-.jpg','phase-engine-DWcbONOH.jpg'],
+      fuel:'Gasolina', license:'A2 / A', type:'Deportiva circuito',
+      specs:[['Cilindrada','599 cc'],['Potencia','118 CV'],['Par motor','61,7 Nm'],['Peso','190 kg'],['Cambio','6 velocidades · quickshifter'],['Suspensión','KYB invertida regulable'],['Frenos','Doble disco 320 mm'],['Neumáticos','Pirelli Supercorsa']],
+      history:[['Revisión completa en banco','Ene 2026'],['Puesta a punto de suspensión','Ene 2026'],['Kit de arrastre nuevo','Ene 2026'],['Reglaje de válvulas','Ene 2026']]},
+    {code:'ITEM_04', condition:'ocasion', brand:'HONDA', model:'Africa Twin Adv.', year:'2023', cc:'1.084 cc', power:'102 CV', km:'2.100 km', price:'18.450 €', state:'Recién llegada', img:'bike-4-CiONy3Sa.jpg',
+      gallery:['bike-4-CiONy3Sa.jpg','hero-bike-DfqVmL4B.jpg','phase-engine-DWcbONOH.jpg','phase-fairing-DkWmpBy-.jpg','workshop-Dpnf8Qa6.jpg'],
+      fuel:'Gasolina', license:'A', type:'Trail / Adventure',
+      specs:[['Cilindrada','1.084 cc'],['Potencia','102 CV'],['Par motor','105 Nm'],['Peso','238 kg'],['Cambio','6 vel · DCT opcional'],['Suspensión','Showa larga regulable'],['Frenos','Doble disco · ABS off-road'],['Neumáticos','Metzeler Karoo']],
+      history:[['Revisión de entrega en banco','Jun 2026'],['Aceite y filtros','Jun 2026'],['Inspección de transmisión','Jun 2026'],['Diagnosis ECU sin fallos','Jun 2026']]},
+    {code:'ITEM_05', condition:'ocasion', brand:'TRIUMPH', model:'Bonneville Café', year:'2019', cc:'900 cc', power:'65 CV', km:'11.500 km', price:'7.900 €', priceOld:'8.900 €', state:'En oferta', img:'bike-5-CSUOAkNu.jpg',
+      gallery:['bike-5-CSUOAkNu.jpg','hero-bike-DfqVmL4B.jpg','phase-engine-DWcbONOH.jpg','phase-brakes-AI2atPTc.jpg','tools-Vh9ad4na.jpg'],
+      fuel:'Gasolina', license:'A2 / A', type:'Clásica / Café racer',
+      specs:[['Cilindrada','900 cc'],['Potencia','65 CV'],['Par motor','80 Nm'],['Peso','223 kg'],['Cambio','5 velocidades'],['Suspensión','Horquilla 41 mm'],['Frenos','Disco Nissin · ABS'],['Neumáticos','Pirelli Phantom']],
+      history:[['Revisión completa en banco','Dic 2025'],['Cambio de aceite y filtros','Dic 2025'],['Sustitución de batería','Dic 2025'],['Ajuste de embrague','Dic 2025']],
+      flaws:[['tools-Vh9ad4na.jpg','Rozadura leve en carenado lateral izquierdo'],['phase-fairing-DkWmpBy-.jpg','Marca de uso en el asiento']]},
+    {code:'ITEM_06', condition:'ocasion', brand:'KYMCO', model:'X-Town 300', year:'2024', cc:'275 cc', power:'23 CV', km:'600 km', price:'4.800 €', state:'Vendida', img:'bike-6-vricXnLe.jpg',
+      gallery:['bike-6-vricXnLe.jpg','hero-bike-DfqVmL4B.jpg','phase-brakes-AI2atPTc.jpg','workshop-Dpnf8Qa6.jpg','tools-Vh9ad4na.jpg'],
+      fuel:'Gasolina', license:'A2 / B (125 equiv.)', type:'Scooter GT',
+      specs:[['Cilindrada','275 cc'],['Potencia','23 CV'],['Par motor','25,7 Nm'],['Peso','176 kg'],['Cambio','Automático CVT'],['Suspensión','Telescópica / doble amort.'],['Frenos','Doble disco · ABS'],['Neumáticos','Maxxis']],
+      history:[['Revisión de entrega en banco','Jun 2026'],['Aceite de motor y transmisión','Jun 2026'],['Comprobación de frenos','Jun 2026'],['Diagnosis sin incidencias','Jun 2026']]},
+    {code:'NEW_01', condition:'nueva', brand:'KTM', model:'1390 Super Duke R Evo', year:'2026', cc:'1.350 cc', power:'190 CV', km:'0 km', price:'21.900 €', state:'Nueva', img:'bike-1-DZ28_UUy.jpg',
+      gallery:['bike-1-DZ28_UUy.jpg','hero-bike-DfqVmL4B.jpg','phase-engine-DWcbONOH.jpg','phase-brakes-AI2atPTc.jpg'],
+      fuel:'Gasolina', license:'A', type:'Naked hiperdeportiva',
+      specs:[['Cilindrada','1.350 cc'],['Potencia','190 CV'],['Par motor','145 Nm'],['Peso','200 kg'],['Cambio','6 vel · quickshifter'],['Suspensión','WP Apex semiactiva'],['Frenos','Brembo Hypure'],['Neumáticos','Michelin Power 6']],
+      history:[['Preentrega (PDI) en banco','2026'],['Puesta a cero de electrónica','2026'],['Garantía oficial 24 meses','2026'],['Primer mantenimiento incluido','2026']]},
+    {code:'NEW_02', condition:'nueva', brand:'HONDA', model:'CB750 Hornet', year:'2026', cc:'755 cc', power:'92 CV', km:'0 km', price:'8.700 €', state:'Nueva', img:'bike-4-CiONy3Sa.jpg',
+      gallery:['bike-4-CiONy3Sa.jpg','hero-bike-DfqVmL4B.jpg','phase-engine-DWcbONOH.jpg','phase-fairing-DkWmpBy-.jpg'],
+      fuel:'Gasolina', license:'A2 / A', type:'Naked media',
+      specs:[['Cilindrada','755 cc'],['Potencia','92 CV'],['Par motor','75 Nm'],['Peso','190 kg'],['Cambio','6 velocidades'],['Suspensión','Showa SFF-BP'],['Frenos','Doble disco radial'],['Neumáticos','Dunlop Sportmax']],
+      history:[['Preentrega (PDI) en banco','2026'],['Configuración de modos de conducción','2026'],['Garantía oficial 24 meses','2026'],['Primer mantenimiento incluido','2026']]},
+    {code:'NEW_03', condition:'nueva', brand:'YAMAHA', model:'MT-09 SP', year:'2026', cc:'890 cc', power:'119 CV', km:'0 km', price:'11.500 €', state:'Nueva', img:'bike-3-D9oWF1O8.jpg',
+      gallery:['bike-3-D9oWF1O8.jpg','hero-bike-DfqVmL4B.jpg','phase-brakes-AI2atPTc.jpg','phase-engine-DWcbONOH.jpg'],
+      fuel:'Gasolina', license:'A', type:'Naked deportiva',
+      specs:[['Cilindrada','890 cc'],['Potencia','119 CV'],['Par motor','93 Nm'],['Peso','193 kg'],['Cambio','6 vel · quickshifter'],['Suspensión','KYB / Öhlins SP'],['Frenos','Brembo radial'],['Neumáticos','Bridgestone S23']],
+      history:[['Preentrega (PDI) en banco','2026'],['Calibración de suspensión Öhlins','2026'],['Garantía oficial 24 meses','2026'],['Primer mantenimiento incluido','2026']]},
+    {code:'NEW_04', condition:'nueva', brand:'KYMCO', model:'AK550', year:'2026', cc:'550 cc', power:'51 CV', km:'0 km', price:'9.900 €', state:'Nueva', img:'bike-6-vricXnLe.jpg',
+      gallery:['bike-6-vricXnLe.jpg','hero-bike-DfqVmL4B.jpg','workshop-Dpnf8Qa6.jpg','tools-Vh9ad4na.jpg'],
+      fuel:'Gasolina', license:'A2 / A', type:'Maxiscooter',
+      specs:[['Cilindrada','550 cc'],['Potencia','51 CV'],['Par motor','55 Nm'],['Peso','226 kg'],['Cambio','Automático CVT'],['Suspensión','Horquilla invertida'],['Frenos','Doble disco · ABS'],['Neumáticos','Maxxis']],
+      history:[['Preentrega (PDI) en banco','2026'],['Configuración de pantalla TFT','2026'],['Garantía oficial 24 meses','2026'],['Primer mantenimiento incluido','2026']]}
+  ];
+
+  merch = [
+    {id:'mer-1', name:'Camiseta SOY DE MOTO', tag:'Textil', price:24.90, offer:{old:34.90,pct:'-29%'}, frames:3, desc:'Camiseta de algodón orgánico 180 g/m² con el logo bordado en el pecho. Corte regular.', sizes:['S','M','L','XL','XXL'], outSizes:['XXL'], colors:[{n:'Negro',h:'#141414'},{n:'Hueso',h:'#EDE9E0'},{n:'Naranja',h:'#F56007'}], specs:[['Material','100% algodón orgánico'],['Gramaje','180 g/m²'],['Tallas','S · M · L · XL · XXL'],['Cuidado','Lavado a 30°']]},
+    {id:'mer-2', name:'Sudadera Taller', tag:'Textil', price:44.90, offer:{old:54.90,pct:'-18%'}, frames:3, desc:'Sudadera con capucha, interior perchado y bolsillo canguro. Estampado técnico en la espalda.', sizes:['S','M','L','XL','XXL'], outSizes:[], colors:[{n:'Negro',h:'#141414'},{n:'Gris',h:'#6b6b6b'}], specs:[['Material','80% algodón · 20% poliéster'],['Gramaje','320 g/m²'],['Tallas','S · M · L · XL · XXL'],['Cuidado','Lavado a 30°']]},
+    {id:'mer-3', name:'Gorra bordada', tag:'Accesorio', price:19.90, frames:2, desc:'Gorra estructurada de 6 paneles con cierre metálico ajustable y logo bordado en relieve.', sizes:['Única'], colors:[{n:'Negro',h:'#141414'},{n:'Naranja',h:'#F56007'}], outColors:['Naranja'], specs:[['Material','Sarga de algodón'],['Cierre','Hebilla metálica'],['Talla','Única ajustable'],['Color','Negro / naranja']]},
+    {id:'mer-4', name:'Taza Banco de Pruebas', tag:'Hogar', price:12.90, desc:'Taza de cerámica de 350 ml con escala de par motor serigrafiada. Apta para lavavajillas.', sizes:[], colors:[{n:'Blanco',h:'#f2f2ee'},{n:'Negro',h:'#141414'}], specs:[['Material','Cerámica'],['Capacidad','350 ml'],['Apta','Lavavajillas y microondas'],['Diseño','Escala de par motor']]},
+    {id:'mer-5', name:'Llavero Pistón', tag:'Accesorio', price:8.90, desc:'Llavero macizo mecanizado en aluminio con forma de pistón y anilla reforzada. Pieza pequeña, acabado premium.', sizes:[], colors:[{n:'Plata',h:'#c8c8c8'},{n:'Negro',h:'#141414'}], specs:[['Material','Aluminio mecanizado'],['Medidas','6 × 2,5 cm'],['Peso','45 g'],['Acabado','Anodizado']]},
+    {id:'mer-6', name:'Bolsa de herramientas', tag:'Taller', price:34.90, desc:'Bolsa enrollable de lona encerada con 12 compartimentos para llaves y destornilladores.', sizes:[], colors:[], specs:[['Material','Lona encerada'],['Compartimentos','12'],['Cierre','Correa de cuero'],['Uso','Herramienta hasta 30 cm']]},
+    {id:'mer-7', name:'Guantes de taller', tag:'Taller', price:16.90, desc:'Guantes de nitrilo reforzado con agarre en la palma. Protección y tacto para trabajo de precisión.', sizes:['M','L','XL'], colors:[], specs:[['Material','Nitrilo reforzado'],['Tallas','M · L · XL'],['Agarre','Palma texturizada'],['Uso','Mecánica general']]},
+    {id:'mer-8', name:'Pack de pegatinas', tag:'Accesorio', price:5.90, soldOut:true, desc:'Set de 10 pegatinas de vinilo resistente al agua y a los rayos UV. Ideales para casco, depósito o maletín.', sizes:[], colors:[], specs:[['Material','Vinilo laminado'],['Unidades','10 pegatinas'],['Resistencia','Agua y UV'],['Tamaños','Variados']]}
+  ];
+
+  componentDidMount() {
+    try { if (window.matchMedia && window.matchMedia('(hover: none)').matches) document.body.classList.add('is-touch'); } catch (e) {}
+    this.ensureHandlers();
+  }
+  componentDidUpdate() { this.ensureHandlers(); }
+
+  bindDrag(el) {
+    if (!el || el._drag) return;
+    el._drag = true;
+    let down = false, sx = 0, sl = 0, moved = 0;
+    el.addEventListener('pointerdown', (e) => { down = true; moved = 0; sx = e.clientX; sl = el.scrollLeft; el.style.cursor = 'grabbing'; });
+    el.addEventListener('pointermove', (e) => { if (!down) return; const dx = e.clientX - sx; moved += Math.abs(dx); el.scrollLeft = sl - dx; });
+    const up = () => { down = false; el.style.cursor = 'grab'; };
+    el.addEventListener('pointerup', up);
+    el.addEventListener('pointerleave', up);
+    el.addEventListener('click', (e) => { if (moved > 8) { e.preventDefault(); e.stopPropagation(); } }, true);
+  }
+
+  ensureHandlers() {
+    this.bindDrag(document.getElementById('svc-carousel'));
+    this.bindDrag(document.getElementById('rel-carousel'));
+  }
+
+  setTab(t) { this.setState({ tab: t, detailIdx: null, motoCat: null, merchIdx: null, checkoutOpen: false, cartOpen: false }); try { window.scrollTo(0, 0); } catch (e) {} }
+
+  styleOf(m) {
+    const t = (m.type || '').toLowerCase();
+    if (t.includes('scooter') || t.includes('maxiscooter')) return 'Scooter';
+    if (t.includes('trail') || t.includes('adventure')) return 'Trail';
+    if (t.includes('deportiva') || t.includes('circuito') || t.includes('hiperdeportiva')) return 'Deportiva';
+    if (t.includes('turismo') || t.includes('touring')) return 'Touring';
+    if (t.includes('clásica') || t.includes('café') || t.includes('custom')) return 'Custom';
+    return 'Naked';
+  }
+  licenseTokens(m) {
+    const l = (m.license || '').toUpperCase();
+    const out = [];
+    if (l.includes('AM')) out.push('AM');
+    if (l.includes('A1')) out.push('A1');
+    if (l.includes('A2')) out.push('A2');
+    if (/\bA\b/.test(l) || l.includes('/ A') || l === 'A') out.push('A');
+    if (l.includes('B')) out.push('A2');
+    return out.length ? out : ['A'];
+  }
+  num(s) { return parseInt(String(s).replace(/[^\d]/g, ''), 10) || 0; }
+  setMf(k, v) { this.setState(s => ({ mf: { ...s.mf, [k]: v } })); }
+  toggleMf(k, v) {
+    this.setState(s => {
+      const arr = s.mf[k];
+      const next = arr.includes(v) ? arr.filter(x => x !== v) : [...arr, v];
+      return { mf: { ...s.mf, [k]: next } };
+    });
+  }
+  clearFilters() { this.setState({ mf: { q:'', sort:'reco', conds:[], brands:[], styles:[], licenses:[], brandQ:'', priceMin:'', priceMax:'', ccMin:'', ccMax:'', kmMin:'', kmMax:'', yearMin:'', yearMax:'', oferta:false, km0:false } }); }
+  toggleMfBool(k) { this.setState(s => ({ mf: { ...s.mf, [k]: !s.mf[k] } })); }
+  cardGalTo(code, n, len, ev) { if (ev && ev.stopPropagation) ev.stopPropagation(); this.setState(s => ({ gIdx: { ...s.gIdx, [code]: (n + len) % len } })); }
+  toggleSaved(code, ev) { if (ev && ev.stopPropagation) ev.stopPropagation(); this.setState(s => ({ saved: s.saved.includes(code) ? s.saved.filter(x => x !== code) : [...s.saved, code] })); }
+  openAlert(motoCode) { this.setState({ alertOpen: true, alertDone: false, alertMoto: motoCode || null }); }
+  closeAlert() { this.setState({ alertOpen: false }); }
+  submitAlert() { if (!this.state.alertEmail.trim()) return; this.setState({ alertDone: true }); }
+  openSell() { this.setState({ sellOpen: true }); }
+  closeSell() { this.setState({ sellOpen: false }); }
+  setSell(k, v) { this.setState(s => ({ sellForm: { ...s.sellForm, [k]: v } })); }
+
+  openDetail(i) { this.setState({ tab: 'motos', detailIdx: i, galleryIdx: 0, openAcc: 'specs' }); try { window.scrollTo(0, 0); } catch (e) {} }
+  galleryTo(n, len) { this.setState({ galleryIdx: (n + len) % len }); }
+  toggleAcc(k) { this.setState(s => ({ openAcc: s.openAcc === k ? null : k })); }
+  openResv() { this.setState({ resvOpen: true, resvErr: false }); }
+  closeResv() { this.setState({ resvOpen: false }); }
+  setResv(k, v) { this.setState(s => ({ resvForm: { ...s.resvForm, [k]: v }, resvErr: false })); }
+
+  // cart
+  addToCart(p) {
+    this.setState(s => {
+      const ex = s.cart.find(x => x.id === p.id);
+      const cart = ex
+        ? s.cart.map(x => x.id === p.id ? { ...x, qty: x.qty + 1 } : x)
+        : [...s.cart, { id: p.id, name: p.name, price: p.price, qty: 1 }];
+      return { cart };
+    });
+  }
+  incQty(id) { this.setState(s => ({ cart: s.cart.map(x => x.id === id ? { ...x, qty: x.qty + 1 } : x) })); }
+  decQty(id) { this.setState(s => ({ cart: s.cart.map(x => x.id === id ? { ...x, qty: Math.max(1, x.qty - 1) } : x) })); }
+  removeItem(id) { this.setState(s => ({ cart: s.cart.filter(x => x.id !== id) })); }
+  setCo(k, v) { this.setState(s => ({ coForm: { ...s.coForm, [k]: v }, coErr: false })); }
+  openMerch(i) { this.setState({ merchIdx: i, merchQty: 1, merchSize: null, merchColor: null, merchGal: 0, merchWarn: false }); try { window.scrollTo(0, 0); } catch (e) {} }
+  closeMerch() { this.setState({ merchIdx: null }); try { window.scrollTo(0, 0); } catch (e) {} }
+  incMerchQty() { this.setState(s => ({ merchQty: s.merchQty + 1 })); }
+  decMerchQty() { this.setState(s => ({ merchQty: Math.max(1, s.merchQty - 1) })); }
+  addToCartQty(p, q) {
+    this.setState(s => {
+      const ex = s.cart.find(x => x.id === p.id);
+      const cart = ex
+        ? s.cart.map(x => x.id === p.id ? { ...x, qty: x.qty + q } : x)
+        : [...s.cart, { id: p.id, name: p.name, price: p.price, qty: q }];
+      return { cart };
+    });
+  }
+
+  renderVals() {
+    const acc = this.accent;
+    const tab = this.state.tab;
+    const di = this.state.detailIdx;
+    const isDetail = tab === 'motos' && di !== null && di !== undefined;
+
+    const tabDefs = [
+      { id:'inicio', label: this.L('Inicio','Inici') },
+      { id:'nosotros', label: this.L('Nosotros','Nosaltres') },
+      { id:'motos', label: this.L('Motos','Motos') },
+      { id:'merch', label: this.L('Merchandising','Marxandatge') },
+      { id:'contacto', label: this.L('Contacto','Contacte') }
+    ];
+    const tabs = tabDefs.map(t => {
+      const active = tab === t.id;
+      return { label: t.label, active, inactive: !active, onClick: () => this.setTab(t.id) };
+    });
+
+    // INICIO carousel
+    const serviceCards = this.carouselCards.map((c, i) => ({
+      code: c.code, title: c.title, tagline: c.tagline, summary: c.summary,
+      bgCss: 'url("' + this.IMG + c.img + '")',
+      overlayOpacity: (this.state.hoverCard === i || this.state.openCard === i) ? '1' : '0',
+      onEnter: () => this.setState({ hoverCard: i }),
+      onLeave: () => this.setState(s => ({ hoverCard: s.hoverCard === i ? null : s.hoverCard })),
+      onToggle: () => this.setState(s => ({ openCard: s.openCard === i ? null : i }))
+    }));
+    const onCarPrev = () => { const el = document.getElementById('svc-carousel'); if (el) el.scrollBy({ left: -Math.round(el.clientWidth * 0.62), behavior:'smooth' }); };
+    const onCarNext = () => { const el = document.getElementById('svc-carousel'); if (el) el.scrollBy({ left: Math.round(el.clientWidth * 0.62), behavior:'smooth' }); };
+
+    // MOTOS
+    const motos = this.motos.map((m, mi) => {
+      const isNew = m.condition === 'nueva';
+      const sold = m.state === 'Vendida';
+      const oferta = m.state === 'En oferta';
+      const km0 = m.condition === 'nueva' && this.num(m.km) === 0;
+      // el cuadro sobre la imagen nunca muestra "Nueva" ni "En stock" (redundante); solo estados puntuales
+      const showableStates = ['Reservada','Recién llegada','En oferta','Vendida','Km 0'];
+      const cardState = showableStates.includes(m.state) ? m.state : '';
+      const gal = m.gallery || [m.img];
+      const gi = (this.state.gIdx[m.code] || 0) % gal.length;
+      const msg = 'Hola, me interesa la ' + m.brand + ' ' + m.model + ' (' + m.year + ', ' + m.price + '). ¿Sigue disponible?';
+      const stBg = sold ? '#4a4a4a' : oferta ? acc : 'rgba(20,20,20,.72)';
+      return {
+        ...m, idx: mi,
+        bgCss: 'url("' + this.IMG + gal[gi] + '")',
+        imgOpacity: sold ? '.5' : '1',
+        imgGray: sold ? 'grayscale(1)' : 'none',
+        showState: !!cardState, state: cardState,
+        stateBg: stBg,
+        gCount: gal.length, gMulti: gal.length > 1, gActive: gi,
+        gDots: gal.map((_, di) => ({ dotColor: di === gi ? acc : 'rgba(255,255,255,.55)' })),
+        onGalPrev: (ev) => this.cardGalTo(m.code, gi - 1, gal.length, ev),
+        onGalNext: (ev) => this.cardGalTo(m.code, gi + 1, gal.length, ev),
+        condLabel: isNew ? 'Nueva' : 'Ocasión',
+        hasOld: !!m.priceOld, priceOld: m.priceOld || '',
+        priceColor: oferta ? acc : '#141414',
+        sold,
+        cardCursor: 'pointer',
+        stat1k: isNew ? 'CILINDRADA' : 'AÑO', stat1v: isNew ? m.cc : m.year,
+        stat2k: isNew ? 'POTENCIA' : 'KM', stat2v: isNew ? m.power : m.km,
+        waHref: 'https://wa.me/' + this.waNum + '?text=' + encodeURIComponent(msg),
+        saved: this.state.saved.includes(m.code),
+        heartFill: this.state.saved.includes(m.code) ? acc : 'none',
+        heartStroke: this.state.saved.includes(m.code) ? acc : '#fff',
+        onToggleSaved: (ev) => this.toggleSaved(m.code, ev),
+        onView: () => this.openDetail(mi)
+      };
+    });
+    // ===== FILTROS =====
+    const mf = this.state.mf;
+    const styleList = ['Naked','Deportiva','Trail','Scooter','Custom','Touring'];
+    const licenseList = ['AM','A1','A2','A'];
+    const allBrands = [...new Set(this.motos.map(m => m.brand))].sort();
+    const brandOptions = allBrands
+      .filter(b => !mf.brandQ.trim() || b.toLowerCase().includes(mf.brandQ.trim().toLowerCase()))
+      .map(b => {
+        const on = mf.brands.includes(b);
+        return { name: b, check: on ? '1' : '0', boxBorder: on ? acc : '#C4C4BC', boxBg: on ? acc : '#fff', onToggle: () => this.toggleMf('brands', b) };
+      });
+    const styleOptions = styleList.map(st => {
+      const on = mf.styles.includes(st);
+      return { name: st, check: on ? '1' : '0', boxBorder: on ? acc : '#C4C4BC', boxBg: on ? acc : '#fff', onToggle: () => this.toggleMf('styles', st) };
+    });
+    const licenseOptions = licenseList.map(lc => {
+      const on = mf.licenses.includes(lc);
+      return { name: lc, border: on ? acc : '#DADAD3', bg: on ? acc : '#fff', color: on ? '#fff' : '#141414', onToggle: () => this.toggleMf('licenses', lc) };
+    });
+    const cSel = (k) => mf.conds.includes(k);
+    const fc = {
+      ocaBorder: cSel('ocasion') ? acc : '#DADAD3', ocaBg: cSel('ocasion') ? acc : '#fff', ocaColor: cSel('ocasion') ? '#fff' : '#141414',
+      nueBorder: cSel('nueva') ? acc : '#DADAD3', nueBg: cSel('nueva') ? acc : '#fff', nueColor: cSel('nueva') ? '#fff' : '#141414'
+    };
+
+    const nmin = (v) => v.trim() === '' ? -Infinity : this.num(v);
+    const nmax = (v) => v.trim() === '' ? Infinity : this.num(v);
+    let filtered = this.motos.map((m, i) => ({ m, i })).filter(({ m }) => {
+      if (mf.conds.length && !mf.conds.includes(m.condition)) return false;
+      if (mf.oferta && m.state !== 'En oferta') return false;
+      if (mf.km0 && !(m.condition === 'nueva' && this.num(m.km) === 0)) return false;
+      if (mf.brands.length && !mf.brands.includes(m.brand)) return false;
+      if (mf.styles.length && !mf.styles.includes(this.styleOf(m))) return false;
+      if (mf.licenses.length && !this.licenseTokens(m).some(t => mf.licenses.includes(t))) return false;
+      const price = this.num(m.price), cc = this.num(m.cc), km = this.num(m.km), yr = this.num(m.year);
+      if (price < nmin(mf.priceMin) || price > nmax(mf.priceMax)) return false;
+      if (cc < nmin(mf.ccMin) || cc > nmax(mf.ccMax)) return false;
+      if (km < nmin(mf.kmMin) || km > nmax(mf.kmMax)) return false;
+      if (yr < nmin(mf.yearMin) || yr > nmax(mf.yearMax)) return false;
+      if (mf.q.trim()) {
+        const hay = (m.brand + ' ' + m.model + ' ' + m.type + ' ' + this.styleOf(m)).toLowerCase();
+        if (!hay.includes(mf.q.trim().toLowerCase())) return false;
+      }
+      return true;
+    });
+    if (mf.sort === 'priceAsc') filtered.sort((a, b) => this.num(a.m.price) - this.num(b.m.price));
+    else if (mf.sort === 'priceDesc') filtered.sort((a, b) => this.num(b.m.price) - this.num(a.m.price));
+    else if (mf.sort === 'yearDesc') filtered.sort((a, b) => this.num(b.m.year) - this.num(a.m.year));
+    else if (mf.sort === 'kmAsc') filtered.sort((a, b) => this.num(a.m.km) - this.num(b.m.km));
+    // vendidas siempre al final, conservando el orden relativo
+    filtered.sort((a, b) => (a.m.state === 'Vendida' ? 1 : 0) - (b.m.state === 'Vendida' ? 1 : 0));
+    const motosView = filtered.map(({ i }) => motos[i]);
+
+    // active chips
+    const activeChips = [];
+    mf.conds.forEach(c => activeChips.push({ label: c === 'ocasion' ? 'Ocasión' : 'Nueva', onRemove: () => this.toggleMf('conds', c) }));
+    mf.brands.forEach(b => activeChips.push({ label: b, onRemove: () => this.toggleMf('brands', b) }));
+    mf.styles.forEach(s2 => activeChips.push({ label: s2, onRemove: () => this.toggleMf('styles', s2) }));
+    mf.licenses.forEach(l => activeChips.push({ label: 'Carnet ' + l, onRemove: () => this.toggleMf('licenses', l) }));
+    if (mf.priceMin.trim() || mf.priceMax.trim()) activeChips.push({ label: 'Precio ' + (mf.priceMin || '0') + '–' + (mf.priceMax || '∞'), onRemove: () => this.setState(s => ({ mf: { ...s.mf, priceMin:'', priceMax:'' } })) });
+    if (mf.ccMin.trim() || mf.ccMax.trim()) activeChips.push({ label: 'cc ' + (mf.ccMin || '0') + '–' + (mf.ccMax || '∞'), onRemove: () => this.setState(s => ({ mf: { ...s.mf, ccMin:'', ccMax:'' } })) });
+    if (mf.kmMin.trim() || mf.kmMax.trim()) activeChips.push({ label: 'km ' + (mf.kmMin || '0') + '–' + (mf.kmMax || '∞'), onRemove: () => this.setState(s => ({ mf: { ...s.mf, kmMin:'', kmMax:'' } })) });
+    if (mf.yearMin.trim() || mf.yearMax.trim()) activeChips.push({ label: 'Año ' + (mf.yearMin || '0') + '–' + (mf.yearMax || '∞'), onRemove: () => this.setState(s => ({ mf: { ...s.mf, yearMin:'', yearMax:'' } })) });
+    if (mf.q.trim()) activeChips.push({ label: '"' + mf.q.trim() + '"', onRemove: () => this.setMf('q', '') });
+    if (mf.oferta) activeChips.push({ label: 'En oferta', onRemove: () => this.toggleMfBool('oferta') });
+    if (mf.km0) activeChips.push({ label: 'Km 0', onRemove: () => this.toggleMfBool('km0') });
+
+    // DETAIL
+    let detail = null;
+    if (isDetail) {
+      const m = this.motos[di];
+      const gal = (m.gallery || [m.img]);
+      const gi = this.state.galleryIdx % gal.length;
+      const dmsg = 'Hola, me interesa la ' + m.brand + ' ' + m.model + ' (' + m.year + ', ' + m.price + '). ¿Sigue disponible?';
+      const isNew = m.condition === 'nueva';
+      const sold = m.state === 'Vendida';
+      detail = {
+        brand: m.brand, model: m.model, price: m.price, state: m.state, code: m.code,
+        year: m.year, km: m.km, cc: m.cc, fuel: m.fuel, license: m.license, type: m.type,
+        heroCss: 'url("' + this.IMG + gal[gi] + '")',
+        counter: (gi + 1) + ' / ' + gal.length,
+        waHref: 'https://wa.me/' + this.waNum + '?text=' + encodeURIComponent(dmsg),
+        thumbs: gal.map((g, idx) => ({ css: 'url("' + this.IMG + g + '")', border: idx === gi ? acc : '#2C2C2C', onClick: () => this.setState({ galleryIdx: idx }) })),
+        onPrev: () => this.galleryTo(gi - 1, gal.length),
+        onNext: () => this.galleryTo(gi + 1, gal.length),
+        specs: m.specs.map(s => ({ k: s[0], v: s[1] })),
+        history: m.history.map(h => ({ k: h[0], v: h[1] })),
+        hasFlaws: !!(m.flaws && m.flaws.length),
+        flaws: (m.flaws || []).map(fl => ({ css: 'url("' + this.IMG + fl[0] + '")', desc: fl[1], onOpen: () => this.setState({ imgLightbox: this.IMG + fl[0] }) })),
+        specsOpen: this.state.openAcc === 'specs', specsIcon: this.state.openAcc === 'specs' ? '−' : '+', onToggleSpecs: () => this.toggleAcc('specs'),
+        histOpen: this.state.openAcc === 'hist', histIcon: this.state.openAcc === 'hist' ? '−' : '+', onToggleHist: () => this.toggleAcc('hist'),
+        onReserve: () => this.openResv(),
+        onBack: () => this.setState({ detailIdx: null }),
+        heartFill: this.state.saved.includes(m.code) ? acc : 'none',
+        heartStroke: this.state.saved.includes(m.code) ? acc : '#fff',
+        heartBg: this.state.saved.includes(m.code) ? 'rgba(20,20,20,.55)' : 'rgba(20,20,20,.45)',
+        onToggleSaved: () => this.toggleSaved(m.code),
+        onAlert: () => this.openAlert(m.code),
+        onShare: () => this.setState(s => ({ shareOpen: !s.shareOpen })),
+        sold, notSold: !sold,
+        shareOpen: this.state.shareOpen,
+        shareWa: 'https://wa.me/?text=' + encodeURIComponent('Mira esta ' + m.brand + ' ' + m.model + ' en SOY DE MOTO: '),
+        shareMail: 'mailto:?subject=' + encodeURIComponent(m.brand + ' ' + m.model + ' · SOY DE MOTO') + '&body=' + encodeURIComponent('Mira esta moto: ' + m.brand + ' ' + m.model + ' (' + m.price + ')'),
+        onCopyLink: () => { try { navigator.clipboard && navigator.clipboard.writeText(window.location.href); } catch(e){} this.setState({ shareOpen: false }); },
+        isNew,
+        related: this.motos.map((rm, ri) => ({ rm, ri })).filter(o => o.ri !== di).map(o => ({
+          brand: o.rm.brand, model: o.rm.model, price: o.rm.price,
+          bgCss: 'url("' + this.IMG + o.rm.img + '")',
+          onView: () => this.openDetail(o.ri)
+        }))
+      };
+    }
+    const detailQuick = isDetail ? (detail.isNew ? [
+      { k:'Estado', v:'Nueva · km 0' }, { k:'Cilindrada', v: detail.cc }, { k:'Carnet', v: detail.license }, { k:'Combustible', v: detail.fuel }
+    ] : [
+      { k:'Año', v: detail.year }, { k:'Kilómetros', v: detail.km }, { k:'Carnet', v: detail.license }, { k:'Combustible', v: detail.fuel }
+    ]) : [];
+
+    // RESERVA
+    const rf = this.state.resvForm;
+    const resvValid = !!(rf.name.trim() && rf.phone.trim() && rf.email.trim() && rf.terms);
+    const resvMsg = isDetail ? ('Hola, soy ' + (rf.name.trim() || '(nombre)') + '. Quiero reservar la ' + this.motos[di].brand + ' ' + this.motos[di].model + ' (' + this.motos[di].price + ').' + (rf.phone.trim() ? ' Tel: ' + rf.phone.trim() + '.' : '')) : '';
+    const resvWa = 'https://wa.me/' + this.waNum + '?text=' + encodeURIComponent(resvMsg);
+    const onResvSend = (ev) => { if (!resvValid) { ev.preventDefault(); this.setState({ resvErr: true }); } };
+
+    // MERCH
+    const merchFrameCss = (p, frameIdx, colorHex) => {
+      // placeholder "photo" that tints with the selected color and varies by frame
+      const tint = colorHex || '#EBEBE5';
+      const shift = 6 + (frameIdx % 3) * 5;
+      return 'repeating-linear-gradient(' + (120 + frameIdx * 15) + 'deg,#F2F2EE,#F2F2EE ' + shift + 'px,' + tint + ' ' + shift + 'px,' + tint + ' ' + (shift + 10) + 'px)';
+    };
+    const merchView = this.merch.map((p, i) => {
+      const frames = p.frames || 1;
+      const gi = (this.state.gIdx['m' + p.id] || 0) % frames;
+      const dots = Array.from({ length: frames }, (_, di) => ({ dotColor: di === gi ? acc : 'rgba(20,20,20,.28)' }));
+      return {
+        name: p.name, tag: p.tag,
+        price: this.fmt(p.price),
+        hasOffer: !!p.offer, priceOld: p.offer ? this.fmt(p.offer.old) : '', pct: p.offer ? p.offer.pct : '',
+        priceColor: p.offer ? acc : '#141414',
+        soldOut: !!p.soldOut, imgOpacity: p.soldOut ? '.55' : '1',
+        saved: this.state.saved.includes('merch-' + p.id),
+        heartFill: this.state.saved.includes('merch-' + p.id) ? acc : 'none',
+        heartStroke: this.state.saved.includes('merch-' + p.id) ? acc : '#fff',
+        onToggleSaved: (ev) => this.toggleSaved('merch-' + p.id, ev),
+        tileCss: merchFrameCss(p, gi, null),
+        gMulti: frames > 1, gDots: dots,
+        onGalPrev: (ev) => { if (ev) ev.stopPropagation(); this.setState(s => ({ gIdx: { ...s.gIdx, ['m' + p.id]: (gi - 1 + frames) % frames } })); },
+        onGalNext: (ev) => { if (ev) ev.stopPropagation(); this.setState(s => ({ gIdx: { ...s.gIdx, ['m' + p.id]: (gi + 1) % frames } })); },
+        onOpen: () => this.openMerch(i)
+      };
+    });
+    const mIdx = this.state.merchIdx;
+    const isMerchDetail = tab === 'merch' && mIdx !== null && mIdx !== undefined;
+    let merchDetail = null;
+    if (isMerchDetail) {
+      const p = this.merch[mIdx];
+      const hasSizes = (p.sizes || []).length > 0;
+      const hasColors = (p.colors || []).length > 0;
+      const soldOut = !!p.soldOut;
+      const outSizes = p.outSizes || [];
+      const outColors = p.outColors || [];
+      const selColorObj = (p.colors || []).find(c => c.n === this.state.merchColor);
+      const frames = p.frames || 1;
+      const dgi = (this.state.merchGal || 0) % frames;
+      const needsSel = hasSizes || hasColors;
+      const selOk = (!hasSizes || this.state.merchSize) && (!hasColors || this.state.merchColor);
+      const canBuy = !soldOut && (!needsSel || selOk);
+      merchDetail = {
+        name: p.name, tag: p.tag, desc: p.desc, priceLabel: this.fmt(p.price),
+        hasOffer: !!p.offer, priceOld: p.offer ? this.fmt(p.offer.old) : '', pct: p.offer ? p.offer.pct : '',
+        priceColor: p.offer ? acc : '#141414',
+        soldOut,
+        heroCss: merchFrameCss(p, dgi, selColorObj ? selColorObj.h : null),
+        counter: frames > 1 ? (dgi + 1) + ' / ' + frames : '',
+        gMulti: frames > 1,
+        thumbs: Array.from({ length: frames }, (_, ti) => ({
+          css: merchFrameCss(p, ti, selColorObj ? selColorObj.h : null),
+          border: ti === dgi ? acc : '#E4E4DE',
+          onClick: () => this.setState({ merchGal: ti })
+        })),
+        onGalPrev: () => this.setState({ merchGal: (dgi - 1 + frames) % frames }),
+        onGalNext: () => this.setState({ merchGal: (dgi + 1) % frames }),
+        qty: this.state.merchQty,
+        specs: p.specs.map(x => ({ k: x[0], v: x[1] })),
+        hasSizes, hasColors,
+        sizes: (p.sizes || []).map(sz => {
+          const out = outSizes.includes(sz);
+          const on = this.state.merchSize === sz;
+          return { label: sz, out, border: out ? '#E8E8E2' : (on ? acc : '#DADAD3'), bg: out ? '#F5F5F1' : (on ? 'rgba(245,96,7,.08)' : '#fff'), color: out ? '#c0c0b8' : (on ? acc : '#141414'), deco: out ? 'line-through' : 'none', onPick: out ? (() => {}) : (() => this.setState({ merchSize: sz, merchWarn: false })) };
+        }),
+        colors: (p.colors || []).map(cl => {
+          const out = outColors.includes(cl.n);
+          const on = this.state.merchColor === cl.n;
+          return { name: cl.n, hex: cl.h, out, opacity: out ? '.4' : '1', ring: on ? acc : 'transparent', onPick: out ? (() => {}) : (() => this.setState({ merchColor: cl.n, merchWarn: false, merchGal: 0 })) };
+        }),
+        selColorName: this.state.merchColor || '',
+        warn: this.state.merchWarn,
+        warnMsg: (hasSizes && hasColors) ? 'Elige talla y color' : hasSizes ? 'Elige una talla' : 'Elige un color',
+        canBuy, canBuyView: !soldOut, addOpacity: canBuy ? '1' : '.55',
+        onInc: () => this.incMerchQty(),
+        onDec: () => this.decMerchQty(),
+        onAdd: () => {
+          if (soldOut) return;
+          if (needsSel && !selOk) { this.setState({ merchWarn: true }); return; }
+          const suffix = [this.state.merchSize, this.state.merchColor].filter(Boolean).join(' · ');
+          const item = { id: p.id + (suffix ? '|' + suffix : ''), name: p.name + (suffix ? ' (' + suffix + ')' : ''), price: p.price };
+          this.addToCartQty(item, this.state.merchQty);
+          this.setState({ merchAdded: true });
+          clearTimeout(this._addT);
+          this._addT = setTimeout(() => this.setState({ merchAdded: false }), 2200);
+        },
+        onBack: () => this.closeMerch(),
+        saved: this.state.saved.includes('merch-' + p.id),
+        heartFill: this.state.saved.includes('merch-' + p.id) ? acc : 'none',
+        heartStroke: this.state.saved.includes('merch-' + p.id) ? acc : '#fff',
+        onToggleSaved: () => this.toggleSaved('merch-' + p.id),
+        onAlert: () => this.openAlert('merch-' + p.id),
+        onShare: () => this.setState(s => ({ shareOpen: !s.shareOpen })),
+        shareOpen: this.state.shareOpen,
+        shareWa: 'https://wa.me/?text=' + encodeURIComponent('Mira este producto de SOY DE MOTO: ' + p.name),
+        shareMail: 'mailto:?subject=' + encodeURIComponent(p.name + ' · SOY DE MOTO') + '&body=' + encodeURIComponent('Mira este producto: ' + p.name),
+        onCopyLink: () => { try { navigator.clipboard && navigator.clipboard.writeText(window.location.href); } catch(e){} this.setState({ shareOpen: false }); },
+        related: this.merch.map((rp, ri) => ({ rp, ri })).filter(o => o.ri !== mIdx).slice(0, 4).map(o => ({
+          name: o.rp.name, tag: o.rp.tag, priceLabel: this.fmt(o.rp.price),
+          onOpen: () => this.openMerch(o.ri)
+        }))
+      };
+    }
+
+    // CART
+    const cart = this.state.cart;
+    const cartCount = cart.reduce((a, x) => a + x.qty, 0);
+    const subtotal = cart.reduce((a, x) => a + x.price * x.qty, 0);
+    const cartItems = cart.map(x => ({
+      name: x.name, qty: x.qty, priceLabel: this.fmt(x.price), lineLabel: this.fmt(x.price * x.qty),
+      onInc: () => this.incQty(x.id), onDec: () => this.decQty(x.id), onRemove: () => this.removeItem(x.id)
+    }));
+
+    // CHECKOUT
+    const cf = this.state.coForm;
+    const coValid = !!(cf.name.trim() && cf.address.trim() && cf.city.trim() && cf.zip.trim() && cf.phone.trim() && cf.email.trim());
+    const onPayNow = () => {
+      if (!coValid) { this.setState({ coErr: true }); return; }
+      const num = 'ML-' + Math.floor(100000 + Math.random() * 900000);
+      this.setState({ checkoutOpen: false, orderDone: true, orderNum: num });
+    };
+
+    // PEDIR CITA FORM
+    const f = this.state.form;
+    const formValid = !!(f.name.trim() && f.phone.trim() && f.email.trim() && f.model.trim() && f.plate.trim());
+    const onSendGuard = (ev) => { if (!formValid) { ev.preventDefault(); this.setState({ showErr: true }); } };
+    const nm = f.name.trim() || '(tu nombre)';
+    const md = f.model.trim() || 'mi moto';
+    let msg = 'Hola, soy ' + nm + '. Quiero solicitar presupuesto para mi ' + md + '.';
+    if (f.plate.trim()) msg += ' Nº bastidor: ' + f.plate.trim() + '.';
+    if (f.message.trim()) msg += ' ' + f.message.trim();
+    if (f.phone.trim()) msg += ' Mi teléfono: ' + f.phone.trim() + '.';
+    const waHref = 'https://wa.me/' + this.waNum + '?text=' + encodeURIComponent(msg);
+    const mailHref = 'mailto:hola@taller.com?subject=' + encodeURIComponent('Solicitud de presupuesto · ' + md)
+      + '&body=' + encodeURIComponent(msg + (f.email.trim() ? ('\n\nEmail: ' + f.email.trim()) : '') + '\nContacto preferido: ' + f.contact);
+    const cm = (k) => ({ Border: f.contact === k ? acc : '#E0E0DA', Bg: f.contact === k ? acc : '#fff', Color: f.contact === k ? '#fff' : '#141414' });
+    const w = cm('WhatsApp'), e = cm('Email'), p = cm('Teléfono');
+    const setField = (k) => (ev) => { const v = ev.target.value; this.setState(s => ({ form: { ...s.form, [k]: v }, showErr: false })); };
+
+    return {
+      accent: acc,
+      taller: this.taller,
+      waContact: 'https://wa.me/' + this.waNum + '?text=' + encodeURIComponent('Hola, quiero pedir cita en el taller.'),
+      tabs,
+      lang: this.state.lang,
+      langEsActive: this.state.lang === 'es',
+      langCaActive: this.state.lang === 'ca',
+      onLangEs: () => this.setState({ lang: 'es' }),
+      onLangCa: () => this.setState({ lang: 'ca' }),
+      langEsBg: this.state.lang === 'es' ? acc : 'transparent',
+      langEsColor: this.state.lang === 'es' ? '#fff' : '#8a8a82',
+      langCaBg: this.state.lang === 'ca' ? acc : 'transparent',
+      langCaColor: this.state.lang === 'ca' ? '#fff' : '#8a8a82',
+      t: {
+        heroKicker: this.L('MOTORLAB · Mecánica de precisión','MOTORLAB · Mecànica de precisió'),
+        heroTitle: this.L('Mecánica de precisión para motos que importan.','Mecànica de precisió per a motos que importen.'),
+        heroSub: this.L('Diagnosis, mantenimiento y puesta a punto en banco. Presupuesto claro antes de tocar nada.','Diagnosi, manteniment i posada a punt en banc. Pressupost clar abans de tocar res.'),
+        pedirCita: this.L('Pedir cita','Demanar cita'),
+        compraMoto: this.L('Compra tu moto','Compra la teva moto'),
+        vendeMoto: this.L('Vende tu moto','Ven la teva moto'),
+        videoTaller: this.L('Vídeo · Taller en marcha','Vídeo · Taller en marxa'),
+        cesta: this.L('Cesta','Cistella')
+      },
+      isInicio: tab === 'inicio',
+      isMotosHome: tab === 'motos' && !isDetail,
+      isDetail,
+      isMerch: tab === 'merch' && !isMerchDetail,
+      isMerchDetail,
+      merchDetail,
+      merchAdded: this.state.merchAdded,
+      isNosotros: tab === 'nosotros',
+      isContacto: tab === 'contacto',
+      serviceCards, onCarPrev, onCarNext,
+      motosView,
+      resultCount: motosView.length, hasResults: motosView.length > 0, noResults: motosView.length === 0,
+      mf, fc, brandOptions, styleOptions, licenseOptions,
+      activeChips, hasActiveChips: activeChips.length > 0,
+      onSearch: (e) => this.setMf('q', e.target.value),
+      onSort: (e) => this.setMf('sort', e.target.value),
+      onBrandQ: (e) => this.setMf('brandQ', e.target.value),
+      onPriceMin: (e) => this.setMf('priceMin', e.target.value),
+      onPriceMax: (e) => this.setMf('priceMax', e.target.value),
+      onCcMin: (e) => this.setMf('ccMin', e.target.value),
+      onCcMax: (e) => this.setMf('ccMax', e.target.value),
+      onKmMin: (e) => this.setMf('kmMin', e.target.value),
+      onKmMax: (e) => this.setMf('kmMax', e.target.value),
+      onYearMin: (e) => this.setMf('yearMin', e.target.value),
+      onYearMax: (e) => this.setMf('yearMax', e.target.value),
+      onCondOcasion: () => this.toggleMf('conds', 'ocasion'),
+      onCondNueva: () => this.toggleMf('conds', 'nueva'),
+      ofertaOn: mf.oferta, km0On: mf.km0,
+      ofertaKnob: mf.oferta ? '#fff' : '#fff', ofertaTrack: mf.oferta ? acc : '#DADAD3', ofertaX: mf.oferta ? '20px' : '2px',
+      km0Track: mf.km0 ? acc : '#DADAD3', km0X: mf.km0 ? '20px' : '2px',
+      onToggleOferta: () => this.toggleMfBool('oferta'),
+      onToggleKm0: () => this.toggleMfBool('km0'),
+      onClearFilters: () => this.clearFilters(),
+      imgLightbox: this.state.imgLightbox,
+      imgLightboxCss: this.state.imgLightbox ? 'url("' + this.state.imgLightbox + '")' : 'none',
+      closeImgLightbox: () => this.setState({ imgLightbox: null }),
+      alertLabel: 'Crear alerta',
+      onCreateAlert: () => this.openAlert(null),
+      alertOpen: this.state.alertOpen,
+      alertDone: this.state.alertDone,
+      alertEmail: this.state.alertEmail,
+      alertHasFilters: activeChips.length > 0 || !!this.state.alertMoto,
+      alertNoFilters: activeChips.length === 0 && !this.state.alertMoto,
+      alertIsProduct: !!(this.state.alertMoto && String(this.state.alertMoto).indexOf('merch-') === 0),
+      alertText: (this.state.alertMoto && String(this.state.alertMoto).indexOf('merch-') === 0)
+        ? 'Te avisamos por email en cuanto este producto vuelva a tener stock.'
+        : (this.state.alertMoto
+            ? 'Te avisamos por email si entra otra unidad que encaje con esta moto.'
+            : 'Guardamos tu búsqueda y te avisamos por email cuando llegue una moto que cumpla estos criterios.'),
+      alertChips: (this.state.alertMoto && String(this.state.alertMoto).indexOf('merch-') === 0)
+        ? (() => { const pr = this.merch.find(x => 'merch-' + x.id === this.state.alertMoto); const parts = []; if (pr) parts.push(pr.name); if (this.state.merchSize) parts.push('Talla ' + this.state.merchSize); if (this.state.merchColor) parts.push(this.state.merchColor); return parts; })()
+        : (this.state.alertMoto
+            ? (isDetail ? [detail.brand, detail.model, detail.type].filter(Boolean) : [])
+            : activeChips.map(c => c.label)),
+      alertIsMoto: !!this.state.alertMoto,
+      alertShowForm: !this.state.alertDone,
+      alertChipsTitle: (this.state.alertMoto && String(this.state.alertMoto).indexOf('merch-') === 0) ? 'Alerta para este producto' : (this.state.alertMoto ? 'Alerta para esta moto' : 'Filtros guardados'),
+      alertEmailOk: this.state.alertEmail.trim().length > 0,
+      alertBtnOpacity: this.state.alertEmail.trim().length > 0 ? '1' : '.55',
+      onAlertEmail: (e) => this.setState({ alertEmail: e.target.value }),
+      onAlertSubmit: () => this.submitAlert(),
+      closeAlert: () => this.closeAlert(),
+      openSell: () => this.openSell(),
+      sellOpen: this.state.sellOpen,
+      closeSell: () => this.closeSell(),
+      sellForm: this.state.sellForm,
+      sellWa: 'https://wa.me/' + this.waNum + '?text=' + encodeURIComponent('Hola, quiero vender mi moto: ' + (this.state.sellForm.model.trim() || '(marca y modelo)') + (this.state.sellForm.year.trim() ? ', ' + this.state.sellForm.year.trim() : '') + (this.state.sellForm.km.trim() ? ', ' + this.state.sellForm.km.trim() + ' km' : '') + '. Soy ' + (this.state.sellForm.name.trim() || '(nombre)') + '.'),
+      onSellName: (e) => this.setSell('name', e.target.value),
+      onSellPhone: (e) => this.setSell('phone', e.target.value),
+      onSellEmail: (e) => this.setSell('email', e.target.value),
+      onSellModel: (e) => this.setSell('model', e.target.value),
+      onSellYear: (e) => this.setSell('year', e.target.value),
+      onSellKm: (e) => this.setSell('km', e.target.value),
+      detail, detailQuick,
+      lightbox: this.state.lightbox && isDetail,
+      onOpenLightbox: () => { if (isDetail) this.setState({ lightbox: true }); },
+      onCloseLightbox: () => this.setState({ lightbox: false }),
+      certList: [
+        'Revisión completa en banco de pruebas',
+        'Garantía incluida por escrito',
+        'Historial de mantenimiento verificado',
+        'Aceptamos tu moto actual como parte del pago'
+      ],
+      onRelPrev: () => { const el = document.getElementById('rel-carousel'); if (el) el.scrollBy({ left: -Math.round(el.clientWidth * 0.7), behavior:'smooth' }); },
+      onRelNext: () => { const el = document.getElementById('rel-carousel'); if (el) el.scrollBy({ left: Math.round(el.clientWidth * 0.7), behavior:'smooth' }); },
+      merchView,
+      // cart
+      cartItems, cartCount, hasCart: cart.length > 0, emptyCart: cart.length === 0,
+      subtotalLabel: this.fmt(subtotal),
+      cartOpen: this.state.cartOpen,
+      openCart: () => this.setState({ cartOpen: true }),
+      closeCart: () => this.setState({ cartOpen: false }),
+      openCheckout: () => this.setState({ cartOpen: false, checkoutOpen: true, coErr: false }),
+      checkoutOpen: this.state.checkoutOpen,
+      closeCheckout: () => this.setState({ checkoutOpen: false, cartOpen: true }),
+      coForm: this.state.coForm, coErr: this.state.coErr,
+      onCoName: (e) => this.setCo('name', e.target.value),
+      onCoAddress: (e) => this.setCo('address', e.target.value),
+      onCoCity: (e) => this.setCo('city', e.target.value),
+      onCoZip: (e) => this.setCo('zip', e.target.value),
+      onCoPhone: (e) => this.setCo('phone', e.target.value),
+      onCoEmail: (e) => this.setCo('email', e.target.value),
+      onCoNotes: (e) => this.setCo('notes', e.target.value),
+      onPayNow,
+      orderDone: this.state.orderDone, orderNum: this.state.orderNum,
+      onFinishOrder: () => this.setState({ orderDone: false, cart: [], coForm: { name:'', address:'', city:'', zip:'', phone:'', email:'', notes:'' }, tab: 'merch' }),
+      // reserva
+      resvOpen: this.state.resvOpen, resvForm: this.state.resvForm, resvErr: this.state.resvErr,
+      resvWa, resvOpacity: resvValid ? '1' : '.55', onResvSend,
+      onResvName: (e) => this.setResv('name', e.target.value),
+      onResvPhone: (e) => this.setResv('phone', e.target.value),
+      onResvEmail: (e) => this.setResv('email', e.target.value),
+      onResvTerms: () => this.setState(s => ({ resvForm: { ...s.resvForm, terms: !s.resvForm.terms }, resvErr: false })),
+      resvTermsBg: this.state.resvForm.terms ? acc : '#fff',
+      resvTermsBorder: this.state.resvForm.terms ? acc : '#C4C4BC',
+      resvCheckOpacity: this.state.resvForm.terms ? '1' : '0',
+      closeResv: () => this.closeResv(),
+      // pedir cita
+      goInicio: () => this.setTab('inicio'),
+      goMerch: () => this.setState({ checkoutOpen: false, cartOpen: false, tab: 'merch', merchIdx: null }),
+      goMotos: () => this.setTab('motos'),
+      form: this.state.form, formOpen: this.state.formOpen,
+      openForm: () => this.setState({ formOpen:true, cartOpen:false, showErr:false }),
+      closeForm: () => this.setState({ formOpen:false, showErr:false }),
+      showErr: this.state.showErr, sendOpacity: formValid ? '1' : '.55',
+      onSendGuard, waHref, mailHref,
+      contact: { waBorder:w.Border, waBg:w.Bg, waColor:w.Color, emBorder:e.Border, emBg:e.Bg, emColor:e.Color, phBorder:p.Border, phBg:p.Bg, phColor:p.Color },
+      onName:setField('name'), onPhone:setField('phone'), onEmail:setField('email'),
+      onModel:setField('model'), onPlate:setField('plate'), onMessage:setField('message'),
+      onContactWa: () => this.setState(s => ({ form:{...s.form, contact:'WhatsApp'} })),
+      onContactEmail: () => this.setState(s => ({ form:{...s.form, contact:'Email'} })),
+      onContactPhone: () => this.setState(s => ({ form:{...s.form, contact:'Teléfono'} }))
+    };
+  }
+}
+</script>
+</body>
+</html>
