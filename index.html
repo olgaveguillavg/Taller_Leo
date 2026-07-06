@@ -32,6 +32,9 @@ body.is-touch .moto-card-nav,body.is-touch .gallery-overlay{opacity:1!important}
 @keyframes sweep{0%{transform:translateX(-140%) skewX(-18deg)}100%{transform:translateX(240%) skewX(-18deg)}}
 @keyframes wa-pulse{0%,100%{box-shadow:0 0 0 0 rgba(37,211,102,0)}50%{box-shadow:0 0 0 12px rgba(37,211,102,.12)}}
 @keyframes pop{0%{transform:scale(.7);opacity:0}100%{transform:scale(1);opacity:1}}
+@keyframes drawerIn{from{transform:translateX(100%)}to{transform:none}}
+.nav-burger{transition:border-color .15s,background .15s}
+.nav-burger:hover{border-color:#fff!important}
 @media (max-width:940px){
   #tab-strip{overflow-x:auto;justify-content:flex-start!important}
   .logo-img{height:44px!important}
@@ -43,25 +46,23 @@ body.is-touch .moto-card-nav,body.is-touch .gallery-overlay{opacity:1!important}
   .ns-grid{grid-template-columns:1fr 1fr!important}
   .ns-grid>div{grid-column:auto!important;grid-row:auto!important;min-height:180px!important}
 }
-/* Cabecera responsive: la nav pasa a una segunda fila desplazable en horizontal */
+/* Cabecera móvil: menú hamburguesa (drawer lateral). La nav superior, el
+   selector de idioma, la cesta y "Pedir cita" se mueven al drawer. */
 @media (max-width:760px){
-  header{height:104px!important}
-  .hdr-bar{flex-wrap:wrap!important;gap:8px 10px!important;padding:0 14px!important;align-content:center}
-  .logo-plate{height:auto!important;margin-right:2px!important}
-  .logo-img{height:34px!important}
-  #tab-strip{order:5;flex:1 0 100%!important;min-width:100%!important;width:100%!important;justify-content:flex-start!important;gap:4px!important;height:38px!important}
-  .hdr-actions{gap:6px!important;margin-left:auto}
-  header + div{padding-top:104px!important}
+  .hdr-bar{padding:0 18px!important;gap:12px!important}
+  .logo-plate{height:auto!important;margin-right:0!important}
+  .logo-img{height:38px!important}
+  #tab-strip{display:none!important}
+  .hdr-actions{margin-left:auto!important}
+  .lang-switch{display:none!important}
+  .cesta-btn{display:none!important}
+  .cta-cita{display:none!important}
+  .nav-burger{display:flex!important}
 }
 @media (max-width:560px){
   .ns-grid{grid-template-columns:1fr!important}
   .motos-results{grid-template-columns:1fr!important}
-}
-@media (max-width:430px){
-  .logo-img{height:30px!important}
-  .cart-label{display:none!important}
-  .hdr-actions{gap:5px!important}
-  .hdr-actions>button{padding-left:11px!important;padding-right:11px!important}
+  .logo-img{height:34px!important}
 }
 </style>
 </helmet>
@@ -84,21 +85,77 @@ body.is-touch .moto-card-nav,body.is-touch .gallery-overlay{opacity:1!important}
       </sc-for>
     </nav>
     <div class="hdr-actions" style="flex:none;display:flex;align-items:center;gap:10px;">
-      <div style="display:flex;align-items:center;border:1.5px solid #3a3a3a;border-radius:0;overflow:hidden;margin-right:2px;">
+      <div class="lang-switch" style="display:flex;align-items:center;border:1.5px solid #3a3a3a;border-radius:0;overflow:hidden;margin-right:2px;">
         <button onClick="{{ onLangEs }}" title="Castellano" style="height:40px;padding:0 11px;border:none;cursor:pointer;font-size:12px;font-weight:700;font-family:'IBM Plex Mono',monospace;background: {{ langEsBg }};color: {{ langEsColor }};">ES</button>
         <button onClick="{{ onLangCa }}" title="Català" style="height:40px;padding:0 11px;border:none;cursor:pointer;font-size:12px;font-weight:700;font-family:'IBM Plex Mono',monospace;background: {{ langCaBg }};color: {{ langCaColor }};">CA</button>
       </div>
-      <button onClick="{{ openCart }}" title="{{ t.cesta }}" style="position:relative;height:40px;padding:0 13px;border:1.5px solid #3a3a3a;border-radius:0;background:transparent;color:#e8e8e2;display:flex;align-items:center;gap:8px;cursor:pointer;font-weight:600;font-size:13px;" style-hover="border-color:#e8e8e2">
+      <button onClick="{{ openCart }}" title="{{ t.cesta }}" class="cesta-btn" style="position:relative;height:40px;padding:0 13px;border:1.5px solid #3a3a3a;border-radius:0;background:transparent;color:#e8e8e2;display:flex;align-items:center;gap:8px;cursor:pointer;font-weight:600;font-size:13px;" style-hover="border-color:#e8e8e2">
         <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#e8e8e2" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="20" r="1.4"/><circle cx="18" cy="20" r="1.4"/><path d="M2 3h3l2.4 12.4a1.6 1.6 0 0 0 1.6 1.3h8.2a1.6 1.6 0 0 0 1.6-1.3L22 7H6"/></svg>
         <span class="cart-label">{{ t.cesta }}</span>
         <sc-if value="{{ hasCart }}" hint-placeholder-val="{{ false }}">
           <span style="min-width:19px;height:19px;padding:0 5px;background:var(--accent,#F56007);color:#fff;border-radius:0;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;font-family:'IBM Plex Mono',monospace;">{{ cartCount }}</span>
         </sc-if>
       </button>
-      <button onClick="{{ openForm }}" style="height:40px;padding:0 18px;border:none;border-radius:0;background:var(--accent,#F56007);color:#fff;font-weight:700;font-size:13px;cursor:pointer;" style-hover="filter:brightness(1.08)">{{ t.pedirCita }}</button>
+      <button onClick="{{ openForm }}" class="cta-cita" style="height:40px;padding:0 18px;border:none;border-radius:0;background:var(--accent,#F56007);color:#fff;font-weight:700;font-size:13px;cursor:pointer;" style-hover="filter:brightness(1.08)">{{ t.pedirCita }}</button>
+      <button onClick="{{ onToggleNav }}" class="nav-burger" title="Menú" aria-label="Menú" style="display:none;width:46px;height:42px;border:1.5px solid #3a3a3a;border-radius:0;background:transparent;cursor:pointer;align-items:center;justify-content:center;padding:0;">
+        <sc-if value="{{ navOpen }}">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>
+        </sc-if>
+        <sc-if value="{{ navClosed }}">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+        </sc-if>
+      </button>
     </div>
   </div>
 </header>
+
+<!-- ================= MENÚ MÓVIL (HAMBURGUESA) ================= -->
+<sc-if value="{{ navOpen }}">
+<div class="nav-drawer" style="position:fixed;inset:0;z-index:75;">
+  <div onClick="{{ closeNav }}" style="position:absolute;inset:0;background:rgba(8,8,8,.55);backdrop-filter:blur(3px);animation:fadeIn .25s ease both;"></div>
+  <nav style="position:absolute;top:0;right:0;height:100%;width:min(370px,88vw);background:#141414;box-shadow:-24px 0 60px rgba(0,0,0,.55);display:flex;flex-direction:column;overflow-y:auto;animation:drawerIn .3s cubic-bezier(.22,.61,.36,1) both;">
+    <div style="position:absolute;inset:0;background:repeating-linear-gradient(115deg,rgba(255,255,255,.014) 0px,rgba(255,255,255,.014) 2px,transparent 2px,transparent 26px);pointer-events:none;"></div>
+    <div style="position:relative;display:flex;align-items:center;justify-content:space-between;padding:20px 22px;border-bottom:1px solid #262626;">
+      <img src="/img/logo-v2.png" alt="{{ taller }}" style="height:34px;width:auto;display:block;"/>
+      <button onClick="{{ closeNav }}" aria-label="Cerrar" style="width:42px;height:42px;border:1.5px solid #3a3a3a;border-radius:0;background:transparent;color:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;" style-hover="border-color:#fff">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>
+      </button>
+    </div>
+    <div style="position:relative;padding:22px 24px 4px;display:flex;align-items:center;gap:12px;font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.14em;color:rgba(255,255,255,.42);text-transform:uppercase;">
+      <span style="width:24px;height:2px;background:var(--accent,#F56007);"></span>Navegación
+    </div>
+    <div style="position:relative;display:flex;flex-direction:column;padding:8px 14px 6px;">
+      <sc-for list="{{ tabs }}" as="t">
+        <button onClick="{{ t.onClick }}" style="display:flex;align-items:center;gap:16px;background:none;border:none;border-bottom:1px solid #202020;cursor:pointer;padding:15px 10px;text-align:left;" style-hover="background:rgba(255,255,255,.03)">
+          <span style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--accent,#F56007);width:22px;flex:none;">{{ t.num }}</span>
+          <span style="font-size:25px;font-weight:800;letter-spacing:-.02em;color: {{ t.navColor }};">{{ t.label }}</span>
+        </button>
+      </sc-for>
+    </div>
+    <div style="position:relative;padding:16px 24px 6px;display:flex;align-items:center;gap:12px;">
+      <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.1em;color:rgba(255,255,255,.42);text-transform:uppercase;">Idioma</span>
+      <div style="display:flex;border:1.5px solid #3a3a3a;">
+        <button onClick="{{ onLangEs }}" style="height:38px;padding:0 18px;border:none;cursor:pointer;font-family:'IBM Plex Mono',monospace;font-size:12px;font-weight:700;background: {{ langEsBg }};color: {{ langEsColor }};">ES</button>
+        <button onClick="{{ onLangCa }}" style="height:38px;padding:0 18px;border:none;cursor:pointer;font-family:'IBM Plex Mono',monospace;font-size:12px;font-weight:700;background: {{ langCaBg }};color: {{ langCaColor }};">CA</button>
+      </div>
+    </div>
+    <div style="position:relative;margin-top:auto;padding:18px 24px 26px;display:flex;flex-direction:column;gap:11px;border-top:1px solid #262626;">
+      <button onClick="{{ openCart }}" style="position:relative;height:50px;border:1.5px solid #3a3a3a;border-radius:0;background:transparent;color:#fff;font-weight:700;font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:10px;" style-hover="border-color:#fff">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="20" r="1.4"/><circle cx="18" cy="20" r="1.4"/><path d="M2 3h3l2.4 12.4a1.6 1.6 0 0 0 1.6 1.3h8.2a1.6 1.6 0 0 0 1.6-1.3L22 7H6"/></svg>
+        {{ t.cesta }}
+        <sc-if value="{{ hasCart }}">
+          <span style="min-width:20px;height:20px;padding:0 6px;background:var(--accent,#F56007);color:#fff;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;font-family:'IBM Plex Mono',monospace;">{{ cartCount }}</span>
+        </sc-if>
+      </button>
+      <button onClick="{{ openForm }}" style="height:54px;border:none;border-radius:0;background:var(--accent,#F56007);color:#fff;font-weight:700;font-size:15px;cursor:pointer;" style-hover="filter:brightness(1.08)">{{ t.pedirCita }}</button>
+      <a href="{{ waContact }}" target="_blank" rel="noopener" style="height:50px;border:1.5px solid #25D366;color:#25D366;text-decoration:none;font-weight:700;font-size:14px;display:flex;align-items:center;justify-content:center;gap:10px;" style-hover="background:#25D366;color:#fff">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 0 0-8.6 15l-1.3 4.7 4.8-1.3A10 10 0 1 0 12 2Zm5.6 14.1c-.2.6-1.2 1.2-1.7 1.2-.4 0-1 .1-3.4-.9-2.9-1.2-4.7-4.1-4.9-4.3-.1-.2-1.1-1.5-1.1-2.8 0-1.3.7-2 .9-2.2.2-.3.5-.3.7-.3h.5c.2 0 .4 0 .6.5l.8 2c.1.2.1.4 0 .5l-.4.6c-.2.2-.3.4-.1.7.2.3.8 1.3 1.7 2.1 1.2 1 2.1 1.4 2.4 1.5.2.1.4.1.6-.1l.8-1c.2-.2.4-.2.6-.1l1.9.9c.3.1.5.2.5.3.1.2.1.7-.1 1.2Z"/></svg>
+        WhatsApp
+      </a>
+    </div>
+  </nav>
+</div>
+</sc-if>
 
 <div style="padding-top:88px;">
 
@@ -1088,6 +1145,7 @@ body.is-touch .moto-card-nav,body.is-touch .gallery-overlay{opacity:1!important}
 class Component extends DCLogic {
   state = {
     tab: 'inicio',
+    navOpen: false,
     lang: 'es',
     openCard: null,
     hoverCard: null,
@@ -1244,7 +1302,7 @@ class Component extends DCLogic {
     this.bindDrag(document.getElementById('rel-carousel'));
   }
 
-  setTab(t) { this.setState({ tab: t, detailIdx: null, motoCat: null, merchIdx: null, checkoutOpen: false, cartOpen: false }); try { window.scrollTo(0, 0); } catch (e) {} }
+  setTab(t) { this.setState({ tab: t, detailIdx: null, motoCat: null, merchIdx: null, checkoutOpen: false, cartOpen: false, navOpen: false }); try { window.scrollTo(0, 0); } catch (e) {} }
 
   styleOf(m) {
     const t = (m.type || '').toLowerCase();
@@ -1333,9 +1391,9 @@ class Component extends DCLogic {
       { id:'merch', label: this.L('Merchandising','Marxandatge') },
       { id:'contacto', label: this.L('Contacto','Contacte') }
     ];
-    const tabs = tabDefs.map(t => {
+    const tabs = tabDefs.map((t, i) => {
       const active = tab === t.id;
-      return { label: t.label, active, inactive: !active, onClick: () => this.setTab(t.id) };
+      return { label: t.label, active, inactive: !active, onClick: () => this.setTab(t.id), num: String(i + 1).padStart(2, '0'), navColor: active ? 'var(--accent,#F56007)' : '#fff' };
     });
 
     // INICIO carousel
@@ -1769,7 +1827,7 @@ class Component extends DCLogic {
       cartItems, cartCount, hasCart: cart.length > 0, emptyCart: cart.length === 0,
       subtotalLabel: this.fmt(subtotal),
       cartOpen: this.state.cartOpen,
-      openCart: () => this.setState({ cartOpen: true }),
+      openCart: () => this.setState({ cartOpen: true, navOpen: false }),
       closeCart: () => this.setState({ cartOpen: false }),
       openCheckout: () => this.setState({ cartOpen: false, checkoutOpen: true, coErr: false }),
       checkoutOpen: this.state.checkoutOpen,
@@ -1796,12 +1854,17 @@ class Component extends DCLogic {
       resvTermsBorder: this.state.resvForm.terms ? acc : '#C4C4BC',
       resvCheckOpacity: this.state.resvForm.terms ? '1' : '0',
       closeResv: () => this.closeResv(),
+      // menú móvil (hamburguesa)
+      navOpen: this.state.navOpen,
+      navClosed: !this.state.navOpen,
+      onToggleNav: () => this.setState(s => ({ navOpen: !s.navOpen })),
+      closeNav: () => this.setState({ navOpen: false }),
       // pedir cita
       goInicio: () => this.setTab('inicio'),
       goMerch: () => this.setState({ checkoutOpen: false, cartOpen: false, tab: 'merch', merchIdx: null }),
       goMotos: () => this.setTab('motos'),
       form: this.state.form, formOpen: this.state.formOpen,
-      openForm: () => this.setState({ formOpen:true, cartOpen:false, showErr:false }),
+      openForm: () => this.setState({ formOpen:true, cartOpen:false, showErr:false, navOpen:false }),
       closeForm: () => this.setState({ formOpen:false, showErr:false }),
       showErr: this.state.showErr, sendOpacity: formValid ? '1' : '.55',
       onSendGuard, waHref, mailHref,
