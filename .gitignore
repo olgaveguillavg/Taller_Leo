@@ -7,4 +7,5 @@ taller-motos-opci-n-1/
 
 # Dependencias / build
 node_modules/
+dist/
 .vercel/

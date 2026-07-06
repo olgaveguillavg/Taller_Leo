@@ -3,7 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<script src="./support.js"></script>
+<title>Taller Motos · SOY DE MOTO</title>
+<script type="module" src="/src/main.js"></script>
 </head>
 <body>
 <x-dc>
@@ -50,7 +51,7 @@ body.is-touch .moto-card-nav,body.is-touch .gallery-overlay{opacity:1!important}
 <header style="position:fixed;top:0;left:0;right:0;z-index:70;height:88px;background:#141414;overflow:hidden;">
   <div style="position:relative;z-index:1;max-width:1400px;height:100%;margin:0 auto;padding:0 30px;display:flex;align-items:center;gap:24px;">
     <button onClick="{{ goInicio }}" title="{{ taller }}" class="logo-plate" style="position:relative;flex:none;display:flex;align-items:center;height:100%;background:none;border:none;cursor:pointer;padding:0;margin-right:6px;">
-      <img src="img/logo-v2.png" alt="{{ taller }}" class="logo-img" style="height:70px;width:auto;display:block;"/>
+      <img src="/img/logo-v2.png" alt="{{ taller }}" class="logo-img" style="height:70px;width:auto;display:block;"/>
     </button>
     <nav id="tab-strip" style="flex:1;display:flex;align-items:center;justify-content:center;gap:4px;min-width:0;">
       <sc-for list="{{ tabs }}" as="t" hint-placeholder-count="5">
@@ -87,7 +88,7 @@ body.is-touch .moto-card-nav,body.is-touch .gallery-overlay{opacity:1!important}
   <!-- HERO -->
   <section style="position:relative;height:calc(100vh - 88px);min-height:580px;overflow:hidden;background:#141414;">
     <div style="position:absolute;top:6%;right:3%;width:min(42%,520px);display:flex;align-items:flex-start;justify-content:flex-end;pointer-events:none;">
-      <img src="img/logo-v2.png" alt="" aria-hidden="true" style="width:100%;opacity:1;transform:rotate(-7deg);"/>
+      <img src="/img/logo-v2.png" alt="" aria-hidden="true" style="width:100%;opacity:1;transform:rotate(-7deg);"/>
     </div>
     <div style="position:absolute;inset:0;background:linear-gradient(120deg,rgba(20,20,20,.82) 0%,rgba(20,20,20,.55) 55%,rgba(20,20,20,.35) 100%);"></div>
     <div style="position:absolute;inset:0;background:repeating-linear-gradient(115deg,rgba(255,255,255,.015) 0px,rgba(255,255,255,.015) 2px,transparent 2px,transparent 26px);"></div>

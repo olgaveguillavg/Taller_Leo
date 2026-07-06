@@ -1,36 +1,42 @@
 # Taller Motos — SOY DE MOTO
 
 Web del taller de motos (versión "Taller Motos v2"), generada a partir de un
-handoff de [Claude Design](https://claude.ai/design).
+handoff de [Claude Design](https://claude.ai/design) y empaquetada como
+proyecto **Vite + React**.
 
-Es un **sitio estático**: no necesita build ni servidor de aplicaciones.
+## Cómo funciona
 
-## Estructura
+- `index.html` — la app (plantilla `<x-dc>` + lógica en el DSL de Claude Design).
+- `src/main.js` — punto de entrada: inyecta **React y ReactDOM locales**
+  (empaquetados desde `node_modules`, sin CDN) en `window` y arranca el runtime.
+- `src/support.js` — runtime que interpreta la plantilla y monta la app con React.
+- `public/img/` — logos y assets (servidos en la raíz, p. ej. `/img/logo-v2.png`).
 
-- `index.html` — la app (plantilla + lógica en el DSL de Claude Design).
-- `support.js` — runtime que interpreta la plantilla y monta la app con React.
-- `img/` — logos y assets.
+React ya no depende de ninguna CDN: Vite lo empaqueta en el build. Las tipografías
+(Google Fonts) y algunas imágenes de la sección *Nosotros* sí se cargan de forma
+remota.
 
-React y Babel se cargan automáticamente desde una CDN (unpkg) en el navegador,
-por eso la primera carga necesita conexión a internet.
-
-## Ver en local
-
-Al usar `fetch`/módulos, ábrelo con un servidor estático (no con doble clic):
+## Desarrollo
 
 ```bash
-npx serve .
+npm install
+npm run dev      # servidor de desarrollo (http://localhost:5173)
 ```
 
-Y abre la dirección que indique (p. ej. http://localhost:3000).
+## Build de producción
+
+```bash
+npm run build    # genera dist/
+npm run preview  # sirve dist/ para probar el build
+```
 
 ## Despliegue en Vercel
 
-Es un sitio estático sin build, así que se despliega **sin configuración**:
+Es un proyecto Vite estándar, así que Vercel lo detecta automáticamente:
 
-1. Vercel → **Add New → Project** → importa este repositorio de GitHub.
-2. **Framework Preset:** *Other*.
-3. **Build Command:** vacío · **Output Directory:** `.` (raíz).
+1. Vercel → **Add New → Project** → importa este repositorio.
+2. **Framework Preset:** *Vite* (autodetectado).
+3. **Build Command:** `npm run build` · **Output Directory:** `dist` (autodetectado).
 4. **Deploy.**
 
-Vercel servirá `index.html` en la raíz. No hace falta ninguna modificación.
+No hace falta ninguna configuración adicional.
