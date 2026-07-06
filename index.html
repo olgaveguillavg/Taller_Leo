@@ -45,6 +45,12 @@ body.is-touch .moto-card-nav,body.is-touch .gallery-overlay{opacity:1!important}
   .motos-layout{grid-template-columns:1fr!important}
   .ns-grid{grid-template-columns:1fr 1fr!important}
   .ns-grid>div{grid-column:auto!important;grid-row:auto!important;min-height:180px!important}
+  /* Filtros como panel deslizante tras el botón "Filtros" */
+  .filters-toggle{display:flex!important}
+  .motos-filters{position:fixed!important;top:0!important;left:0!important;height:100%!important;width:min(340px,90vw)!important;z-index:82!important;overflow-y:auto!important;transform:translateX(-100%);transition:transform .3s cubic-bezier(.22,.61,.36,1);box-shadow:24px 0 60px rgba(0,0,0,.4);border:none!important;border-right:1px solid #ECECE6!important;padding-bottom:40px!important}
+  .motos-filters.is-open{transform:none}
+  .filters-close{display:flex!important}
+  .filters-apply{display:block!important}
 }
 /* Cabecera móvil: menú hamburguesa (drawer lateral). La nav superior, el
    selector de idioma, la cesta y "Pedir cita" se mueven al drawer. */
@@ -207,6 +213,13 @@ body.is-touch .moto-card-nav,body.is-touch .gallery-overlay{opacity:1!important}
 
   <!-- top bar -->
   <div style="margin-top:36px;display:flex;gap:14px;flex-wrap:wrap;align-items:center;">
+    <button onClick="{{ onToggleFilters }}" class="filters-toggle" style="display:none;height:50px;padding:0 18px;background:#141414;color:#fff;border:none;border-radius:0;font-weight:700;font-size:13.5px;cursor:pointer;align-items:center;gap:9px;flex:none;order:-1;">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h16M7 12h10M10 18h4"/></svg>
+      Filtros
+      <sc-if value="{{ hasActiveChips }}">
+        <span style="min-width:19px;height:19px;padding:0 5px;background:var(--accent,#F56007);color:#fff;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;font-family:'IBM Plex Mono',monospace;">{{ activeCount }}</span>
+      </sc-if>
+    </button>
     <div style="flex:1;min-width:240px;position:relative;">
       <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#9a9a92" stroke-width="2" stroke-linecap="round" style="position:absolute;left:14px;top:50%;transform:translateY(-50%);"><circle cx="11" cy="11" r="7"/><path d="m20 20-3-3"/></svg>
       <input value="{{ mf.q }}" onInput="{{ onSearch }}" placeholder="Buscar por marca, modelo, estilo..." style="width:100%;height:50px;border:1px solid #E0E0DA;border-radius:2px;padding:0 14px 0 40px;font-size:15px;background:#fff;outline:none;" style-focus="border-color:var(--ink)"/>
@@ -224,11 +237,19 @@ body.is-touch .moto-card-nav,body.is-touch .gallery-overlay{opacity:1!important}
   </div>
 
   <div class="motos-layout" style="margin-top:24px;display:grid;grid-template-columns:266px 1fr;gap:36px;align-items:start;">
-    <!-- filters sidebar -->
-    <aside class="motos-filters" style="border:1px solid #ECECE6;background:#fff;padding:22px 20px;">
-      <div style="display:flex;align-items:baseline;justify-content:space-between;">
+    <sc-if value="{{ filtersOpen }}">
+      <div onClick="{{ closeFilters }}" class="filters-backdrop" style="position:fixed;inset:0;z-index:81;background:rgba(8,8,8,.5);backdrop-filter:blur(2px);animation:fadeIn .25s ease both;"></div>
+    </sc-if>
+    <!-- filters sidebar / panel deslizante en móvil -->
+    <aside class="motos-filters {{ filtersOpenClass }}" style="border:1px solid #ECECE6;background:#fff;padding:22px 20px;">
+      <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;">
         <div style="font-size:17px;font-weight:800;letter-spacing:-.01em;">Filtros</div>
-        <button onClick="{{ onClearFilters }}" style="background:none;border:none;cursor:pointer;font-family:'IBM Plex Mono',monospace;font-size:11px;color:#9a9a92;letter-spacing:.04em;" style-hover="color:var(--accent,#F56007)">Limpiar</button>
+        <div style="display:flex;align-items:center;gap:14px;">
+          <button onClick="{{ onClearFilters }}" style="background:none;border:none;cursor:pointer;font-family:'IBM Plex Mono',monospace;font-size:11px;color:#9a9a92;letter-spacing:.04em;" style-hover="color:var(--accent,#F56007)">Limpiar</button>
+          <button onClick="{{ closeFilters }}" class="filters-close" aria-label="Cerrar filtros" style="display:none;width:36px;height:36px;border:1px solid #E0E0DA;background:#fff;border-radius:0;cursor:pointer;align-items:center;justify-content:center;color:#141414;">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>
+          </button>
+        </div>
       </div>
 
       <!-- Condición -->
@@ -336,6 +357,7 @@ body.is-touch .moto-card-nav,body.is-touch .gallery-overlay{opacity:1!important}
         <p style="margin:8px 0 0;font-size:12.5px;color:#8a8a82;line-height:1.5;">La tasamos y te hacemos una oferta sin compromiso.</p>
         <button onClick="{{ openSell }}" style="margin-top:12px;width:100%;height:42px;background:#fff;border:1.5px solid var(--accent,#F56007);color:var(--accent,#F56007);border-radius:0;font-weight:700;font-size:13px;cursor:pointer;" style-hover="background:var(--accent,#F56007);color:#fff">Vender mi moto</button>
       </div>
+      <button onClick="{{ closeFilters }}" class="filters-apply" style="display:none;margin-top:22px;width:100%;height:52px;background:var(--accent,#F56007);color:#fff;border:none;border-radius:0;font-weight:700;font-size:15px;cursor:pointer;">Ver {{ resultCount }} motos</button>
     </aside>
 
     <!-- results -->
@@ -1146,6 +1168,7 @@ class Component extends DCLogic {
   state = {
     tab: 'inicio',
     navOpen: false,
+    filtersOpen: false,
     lang: 'es',
     openCard: null,
     hoverCard: null,
@@ -1750,7 +1773,7 @@ class Component extends DCLogic {
       motosView,
       resultCount: motosView.length, hasResults: motosView.length > 0, noResults: motosView.length === 0,
       mf, fc, brandOptions, styleOptions, licenseOptions,
-      activeChips, hasActiveChips: activeChips.length > 0,
+      activeChips, hasActiveChips: activeChips.length > 0, activeCount: activeChips.length,
       onSearch: (e) => this.setMf('q', e.target.value),
       onSort: (e) => this.setMf('sort', e.target.value),
       onBrandQ: (e) => this.setMf('brandQ', e.target.value),
@@ -1859,6 +1882,11 @@ class Component extends DCLogic {
       navClosed: !this.state.navOpen,
       onToggleNav: () => this.setState(s => ({ navOpen: !s.navOpen })),
       closeNav: () => this.setState({ navOpen: false }),
+      // filtros móvil (panel deslizante)
+      filtersOpen: this.state.filtersOpen,
+      filtersOpenClass: this.state.filtersOpen ? 'is-open' : '',
+      onToggleFilters: () => this.setState(s => ({ filtersOpen: !s.filtersOpen })),
+      closeFilters: () => this.setState({ filtersOpen: false }),
       // pedir cita
       goInicio: () => this.setTab('inicio'),
       goMerch: () => this.setState({ checkoutOpen: false, cartOpen: false, tab: 'merch', merchIdx: null }),
