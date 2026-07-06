@@ -39,9 +39,29 @@ body.is-touch .moto-card-nav,body.is-touch .gallery-overlay{opacity:1!important}
   .detail-grid{grid-template-columns:1fr!important}
   .cat-grid{grid-template-columns:1fr!important}
   .co-grid{grid-template-columns:1fr!important}
+  .motos-layout{grid-template-columns:1fr!important}
+  .ns-grid{grid-template-columns:1fr 1fr!important}
+  .ns-grid>div{grid-column:auto!important;grid-row:auto!important;min-height:180px!important}
+}
+/* Cabecera responsive: la nav pasa a una segunda fila desplazable en horizontal */
+@media (max-width:760px){
+  header{height:104px!important}
+  .hdr-bar{flex-wrap:wrap!important;gap:8px 10px!important;padding:0 14px!important;align-content:center}
+  .logo-plate{height:auto!important;margin-right:2px!important}
+  .logo-img{height:34px!important}
+  #tab-strip{order:5;flex:1 0 100%!important;min-width:100%!important;width:100%!important;justify-content:flex-start!important;gap:4px!important;height:38px!important}
+  .hdr-actions{gap:6px!important;margin-left:auto}
+  header + div{padding-top:104px!important}
 }
 @media (max-width:560px){
-  .logo-img{height:40px!important}
+  .ns-grid{grid-template-columns:1fr!important}
+  .motos-results{grid-template-columns:1fr!important}
+}
+@media (max-width:430px){
+  .logo-img{height:30px!important}
+  .cart-label{display:none!important}
+  .hdr-actions{gap:5px!important}
+  .hdr-actions>button{padding-left:11px!important;padding-right:11px!important}
 }
 </style>
 </helmet>
@@ -49,7 +69,7 @@ body.is-touch .moto-card-nav,body.is-touch .gallery-overlay{opacity:1!important}
 
 <!-- ================= TOP TAB BAR ================= -->
 <header style="position:fixed;top:0;left:0;right:0;z-index:70;height:88px;background:#141414;overflow:hidden;">
-  <div style="position:relative;z-index:1;max-width:1400px;height:100%;margin:0 auto;padding:0 30px;display:flex;align-items:center;gap:24px;">
+  <div class="hdr-bar" style="position:relative;z-index:1;max-width:1400px;height:100%;margin:0 auto;padding:0 30px;display:flex;align-items:center;gap:24px;">
     <button onClick="{{ goInicio }}" title="{{ taller }}" class="logo-plate" style="position:relative;flex:none;display:flex;align-items:center;height:100%;background:none;border:none;cursor:pointer;padding:0;margin-right:6px;">
       <img src="/img/logo-v2.png" alt="{{ taller }}" class="logo-img" style="height:70px;width:auto;display:block;"/>
     </button>
@@ -63,14 +83,14 @@ body.is-touch .moto-card-nav,body.is-touch .gallery-overlay{opacity:1!important}
         </sc-if>
       </sc-for>
     </nav>
-    <div style="flex:none;display:flex;align-items:center;gap:10px;">
+    <div class="hdr-actions" style="flex:none;display:flex;align-items:center;gap:10px;">
       <div style="display:flex;align-items:center;border:1.5px solid #3a3a3a;border-radius:0;overflow:hidden;margin-right:2px;">
         <button onClick="{{ onLangEs }}" title="Castellano" style="height:40px;padding:0 11px;border:none;cursor:pointer;font-size:12px;font-weight:700;font-family:'IBM Plex Mono',monospace;background: {{ langEsBg }};color: {{ langEsColor }};">ES</button>
         <button onClick="{{ onLangCa }}" title="Català" style="height:40px;padding:0 11px;border:none;cursor:pointer;font-size:12px;font-weight:700;font-family:'IBM Plex Mono',monospace;background: {{ langCaBg }};color: {{ langCaColor }};">CA</button>
       </div>
       <button onClick="{{ openCart }}" title="{{ t.cesta }}" style="position:relative;height:40px;padding:0 13px;border:1.5px solid #3a3a3a;border-radius:0;background:transparent;color:#e8e8e2;display:flex;align-items:center;gap:8px;cursor:pointer;font-weight:600;font-size:13px;" style-hover="border-color:#e8e8e2">
         <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#e8e8e2" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="20" r="1.4"/><circle cx="18" cy="20" r="1.4"/><path d="M2 3h3l2.4 12.4a1.6 1.6 0 0 0 1.6 1.3h8.2a1.6 1.6 0 0 0 1.6-1.3L22 7H6"/></svg>
-        <span>{{ t.cesta }}</span>
+        <span class="cart-label">{{ t.cesta }}</span>
         <sc-if value="{{ hasCart }}" hint-placeholder-val="{{ false }}">
           <span style="min-width:19px;height:19px;padding:0 5px;background:var(--accent,#F56007);color:#fff;border-radius:0;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;font-family:'IBM Plex Mono',monospace;">{{ cartCount }}</span>
         </sc-if>
@@ -693,7 +713,7 @@ body.is-touch .moto-card-nav,body.is-touch .gallery-overlay{opacity:1!important}
   <div style="font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:.12em;color:var(--accent,#F56007);text-transform:uppercase;">Sobre nosotros</div>
   <h2 style="margin:16px 0 0;font-size:clamp(38px,5.4vw,76px);font-weight:900;letter-spacing:-.03em;line-height:.98;max-width:18ch;">No somos un taller de volumen. Somos un taller de criterio.</h2>
   <p style="margin:28px 0 0;font-size:clamp(17px,1.6vw,21px);color:#4a4a4a;line-height:1.6;max-width:60ch;">Trabajamos cada moto con diagnóstico claro, piezas adecuadas y comunicación directa. Sabes qué se hace, por qué se hace y cuánto cuesta antes de tocar nada.</p>
-  <div style="margin-top:56px;display:grid;grid-template-columns:2fr 1fr 1fr;gap:16px;">
+  <div class="ns-grid" style="margin-top:56px;display:grid;grid-template-columns:2fr 1fr 1fr;gap:16px;">
     <div style="grid-column:1;grid-row:1/3;min-height:420px;border-radius:16px;background:#EFEFEB center/cover no-repeat;background-image:url('https://precision-moto-build.lovable.app/assets/workshop-Dpnf8Qa6.jpg');"></div>
     <div style="min-height:200px;border-radius:16px;background:#EFEFEB center/cover no-repeat;background-image:url('https://precision-moto-build.lovable.app/assets/tools-Vh9ad4na.jpg');"></div>
     <div style="min-height:200px;border-radius:16px;background:#EFEFEB center/cover no-repeat;background-image:url('https://precision-moto-build.lovable.app/assets/phase-engine-DWcbONOH.jpg');"></div>
@@ -743,8 +763,8 @@ body.is-touch .moto-card-nav,body.is-touch .gallery-overlay{opacity:1!important}
     <div style="font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:.12em;color:var(--accent,#F56007);text-transform:uppercase;">Contacto</div>
     <h2 style="margin:14px 0 0;font-size:clamp(38px,5vw,72px);font-weight:900;letter-spacing:-.03em;line-height:.98;">Tráenos tu moto.</h2>
     <div style="margin-top:36px;">
-      <div style="display:flex;justify-content:space-between;padding:20px 0;border-top:1px solid #ECECE6;"><span style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:#9a9a92;text-transform:uppercase;letter-spacing:.06em;">WhatsApp</span><a href="{{ waContact }}" target="_blank" rel="noopener" style="font-weight:700;color:var(--ink);text-decoration:none;font-size:16px;" style-hover="color:#25D366">+34 600 00 00 00</a></div>
-      <div style="display:flex;justify-content:space-between;padding:20px 0;border-top:1px solid #ECECE6;"><span style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:#9a9a92;text-transform:uppercase;letter-spacing:.06em;">Teléfono</span><a href="tel:+34600000000" style="font-weight:700;color:var(--ink);text-decoration:none;font-size:16px;">+34 600 00 00 00</a></div>
+      <div style="display:flex;justify-content:space-between;padding:20px 0;border-top:1px solid #ECECE6;"><span style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:#9a9a92;text-transform:uppercase;letter-spacing:.06em;">WhatsApp</span><a href="{{ waContact }}" target="_blank" rel="noopener" style="font-weight:700;color:var(--ink);text-decoration:none;font-size:16px;" style-hover="color:#25D366">+34 666 66 66 66</a></div>
+      <div style="display:flex;justify-content:space-between;padding:20px 0;border-top:1px solid #ECECE6;"><span style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:#9a9a92;text-transform:uppercase;letter-spacing:.06em;">Teléfono</span><a href="tel:+34666666666" style="font-weight:700;color:var(--ink);text-decoration:none;font-size:16px;">+34 666 66 66 66</a></div>
       <div style="display:flex;justify-content:space-between;padding:20px 0;border-top:1px solid #ECECE6;"><span style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:#9a9a92;text-transform:uppercase;letter-spacing:.06em;">Email</span><a href="mailto:hola@taller.com" style="font-weight:700;color:var(--ink);text-decoration:none;font-size:16px;">hola@taller.com</a></div>
       <div style="display:flex;justify-content:space-between;padding:20px 0;border-top:1px solid #ECECE6;"><span style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:#9a9a92;text-transform:uppercase;letter-spacing:.06em;">Dirección</span><span style="font-weight:700;font-size:16px;text-align:right;">C/ del Motor 14<br>28000 · Ciudad</span></div>
       <div style="display:flex;justify-content:space-between;padding:20px 0;border-top:1px solid #ECECE6;border-bottom:1px solid #ECECE6;"><span style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:#9a9a92;text-transform:uppercase;letter-spacing:.06em;">Horario</span><span style="font-weight:700;font-size:16px;text-align:right;">Lun–Vie 9:00–19:00<br>Sáb 9:00–14:00</span></div>
@@ -1064,7 +1084,7 @@ body.is-touch .moto-card-nav,body.is-touch .gallery-overlay{opacity:1!important}
 
 </div>
 </x-dc>
-<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:&quot;100%&quot;,&quot;height&quot;:&quot;100%&quot;},&quot;accentColor&quot;:{&quot;editor&quot;:&quot;color&quot;,&quot;default&quot;:&quot;#F56007&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Marca&quot;},&quot;tallerName&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;SOY DE MOTO&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Marca&quot;},&quot;whatsappNumber&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;34600000000&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Contacto&quot;}}">
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:&quot;100%&quot;,&quot;height&quot;:&quot;100%&quot;},&quot;accentColor&quot;:{&quot;editor&quot;:&quot;color&quot;,&quot;default&quot;:&quot;#F56007&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Marca&quot;},&quot;tallerName&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;SOY DE MOTO&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Marca&quot;},&quot;whatsappNumber&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;34666666666&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Contacto&quot;}}">
 class Component extends DCLogic {
   state = {
     tab: 'inicio',
@@ -1111,7 +1131,7 @@ class Component extends DCLogic {
 
   get accent() { return this.props.accentColor ?? '#F56007'; }
   get taller() { return this.props.tallerName ?? 'SOY DE MOTO'; }
-  get waNum() { return (this.props.whatsappNumber ?? '34600000000').replace(/\D/g, ''); }
+  get waNum() { return (this.props.whatsappNumber ?? '34666666666').replace(/\D/g, ''); }
   L(es, ca) { return this.state.lang === 'ca' ? ca : es; }
 
   IMG = 'https://precision-moto-build.lovable.app/assets/';
