@@ -1071,16 +1071,22 @@ body.is-touch .moto-card-nav,body.is-touch .gallery-overlay{opacity:1!important}
 
 <!-- ================= LIGHTBOX GALERÍA ================= -->
 <sc-if value="{{ lightbox }}" hint-placeholder-val="{{ false }}">
-  <div style="position:fixed;inset:0;z-index:97;background:rgba(8,8,8,.97);">
+  <div class="lb-overlay" style="position:fixed;inset:0;z-index:97;background:rgba(8,8,8,.97);">
     <div onClick="{{ onCloseLightbox }}" style="position:absolute;inset:0;z-index:1;"></div>
-    <div style="position:absolute;top:54px;left:8px;right:8px;bottom:54px;z-index:1;background:center/contain no-repeat;background-image: {{ detail.heroCss }};pointer-events:none;"></div>
-    <!-- navegación por los lados, sin flechas -->
-    <button onClick="{{ detail.onPrev }}" aria-label="Anterior" title="Anterior" style="position:absolute;left:0;top:54px;bottom:54px;width:34%;background:transparent;border:none;cursor:pointer;z-index:2;"></button>
-    <button onClick="{{ detail.onNext }}" aria-label="Siguiente" title="Siguiente" style="position:absolute;right:0;top:54px;bottom:54px;width:34%;background:transparent;border:none;cursor:pointer;z-index:2;"></button>
-    <button onClick="{{ onCloseLightbox }}" title="Cerrar" style="position:absolute;top:16px;right:16px;width:44px;height:44px;border:1.5px solid rgba(255,255,255,.4);background:rgba(0,0,0,.35);color:#fff;border-radius:50%;font-size:20px;cursor:pointer;z-index:4;display:flex;align-items:center;justify-content:center;" style-hover="background:rgba(255,255,255,.18)">✕</button>
-    <div style="position:absolute;bottom:20px;left:0;right:0;z-index:3;display:flex;gap:8px;justify-content:center;pointer-events:none;">
+    <div style="position:absolute;top:54px;left:8px;right:8px;bottom:120px;z-index:1;background:center/contain no-repeat;background-image: {{ detail.heroCss }};pointer-events:none;"></div>
+    <!-- navegación por los lados, sin flechas (además del swipe y los thumbnails) -->
+    <button onClick="{{ detail.onPrev }}" aria-label="Anterior" title="Anterior" style="position:absolute;left:0;top:54px;bottom:120px;width:34%;background:transparent;border:none;cursor:pointer;z-index:2;"></button>
+    <button onClick="{{ detail.onNext }}" aria-label="Siguiente" title="Siguiente" style="position:absolute;right:0;top:54px;bottom:120px;width:34%;background:transparent;border:none;cursor:pointer;z-index:2;"></button>
+    <button onClick="{{ onCloseLightbox }}" title="Cerrar" style="position:absolute;top:16px;right:16px;width:44px;height:44px;border:1.5px solid rgba(255,255,255,.4);background:rgba(0,0,0,.35);color:#fff;border-radius:50%;font-size:20px;cursor:pointer;z-index:5;display:flex;align-items:center;justify-content:center;" style-hover="background:rgba(255,255,255,.18)">✕</button>
+    <div style="position:absolute;bottom:80px;left:0;right:0;z-index:3;display:flex;gap:7px;justify-content:center;pointer-events:none;">
       <sc-for list="{{ detail.gDots }}" as="d" hint-placeholder-count="4">
-        <span style="width:8px;height:8px;border-radius:50%;background: {{ d.dotColor }};"></span>
+        <span style="width:7px;height:7px;border-radius:50%;background: {{ d.dotColor }};"></span>
+      </sc-for>
+    </div>
+    <!-- thumbnails -->
+    <div style="position:absolute;bottom:16px;left:0;right:0;z-index:4;display:flex;gap:8px;justify-content:center;overflow-x:auto;padding:0 12px;">
+      <sc-for list="{{ detail.lbThumbs }}" as="t" hint-placeholder-count="4">
+        <div onClick="{{ t.onClick }}" style="flex:0 0 auto;width:56px;height:42px;background:#222 center/cover no-repeat;background-image: {{ t.css }};border:2px solid {{ t.border }};cursor:pointer;border-radius:3px;"></div>
       </sc-for>
     </div>
     <div style="position:absolute;top:24px;left:50%;transform:translateX(-50%);z-index:3;font-family:'IBM Plex Mono',monospace;font-size:13px;color:rgba(255,255,255,.85);letter-spacing:.06em;pointer-events:none;">{{ detail.counter }}</div>
@@ -1444,6 +1450,27 @@ class Component extends DCLogic {
 
   openDetail(i) { this.setState({ tab: 'motos', detailIdx: i, galleryIdx: 0, openAcc: 'specs' }); try { window.scrollTo(0, 0); } catch (e) {} }
   galleryTo(n, len) { this.setState({ galleryIdx: (n + len) % len }); }
+  lbNav(dir) { const m = this.motos[this.state.detailIdx]; if (!m) return; const len = (m.gallery || [m.img]).length; this.galleryTo(this.state.galleryIdx + dir, len); }
+  bindLightboxSwipe() {
+    const ov = document.querySelector('.lb-overlay');
+    if (!ov || ov.__lbBound) return;
+    ov.__lbBound = true;
+    ov.addEventListener('wheel', (e) => {
+      if (Math.abs(e.deltaX) <= Math.abs(e.deltaY) || Math.abs(e.deltaX) < 12) return;
+      e.preventDefault();
+      const now = Date.now();
+      if (now - (this._lbWheelT || 0) < 450) return;
+      this._lbWheelT = now;
+      this.lbNav(e.deltaX > 0 ? 1 : -1);
+    }, { passive: false });
+    ov.addEventListener('touchstart', (e) => { this._lbTX = e.touches[0].clientX; }, { passive: true });
+    ov.addEventListener('touchend', (e) => {
+      if (this._lbTX == null) return;
+      const dx = e.changedTouches[0].clientX - this._lbTX;
+      this._lbTX = null;
+      if (Math.abs(dx) > 45) this.lbNav(dx < 0 ? 1 : -1);
+    }, { passive: true });
+  }
   scrollDetailGal(idx) { try { const sc = document.querySelector('.gallery-scroller'); if (sc) sc.scrollLeft = idx * sc.clientWidth; } catch (e) {} }
   heroSet(i) { if (i !== this.state.heroSlide) this.setState({ heroSlide: i }); }
   heroTo(i) { this.heroSet(i); }
@@ -1562,6 +1589,7 @@ class Component extends DCLogic {
 
   renderVals() {
     this.ensureHero();
+    this.bindLightboxSwipe();
     const acc = this.accent;
     const tab = this.state.tab;
     const di = this.state.detailIdx;
@@ -1717,6 +1745,7 @@ class Component extends DCLogic {
         counter: (gi + 1) + ' / ' + gal.length,
         waHref: 'https://wa.me/' + this.waNum + '?text=' + encodeURIComponent(dmsg),
         thumbs: gal.map((g, idx) => ({ css: 'url("' + this.IMG + g + '")', border: '#E0E0DA', onClick: () => this.scrollDetailGal(idx) })),
+        lbThumbs: gal.map((g, idx) => ({ css: 'url("' + this.IMG + g + '")', border: idx === gi ? acc : 'rgba(255,255,255,.25)', onClick: () => this.galleryTo(idx, gal.length) })),
         onPrev: () => this.galleryTo(gi - 1, gal.length),
         onNext: () => this.galleryTo(gi + 1, gal.length),
         specs: m.specs.map(s => ({ k: s[0], v: s[1] })),
