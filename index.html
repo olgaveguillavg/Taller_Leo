@@ -49,7 +49,7 @@ body.is-touch .moto-card-nav,body.is-touch .gallery-overlay{opacity:1!important}
   .ns-grid>div{grid-column:auto!important;grid-row:auto!important;min-height:180px!important}
   /* Filtros como panel deslizante tras el botón "Filtros" */
   .filters-toggle{display:flex!important}
-  .motos-filters{position:fixed!important;top:0!important;right:0!important;left:auto!important;height:100%!important;width:min(340px,90vw)!important;z-index:82!important;overflow-y:auto!important;transform:translateX(100%);transition:transform .3s cubic-bezier(.22,.61,.36,1);box-shadow:-24px 0 60px rgba(0,0,0,.4);border:none!important;border-left:1px solid #ECECE6!important;padding-bottom:40px!important}
+  .motos-filters{position:fixed!important;top:0!important;right:0!important;left:auto!important;height:100%!important;width:min(340px,90vw)!important;z-index:82!important;overflow-y:auto!important;overscroll-behavior:contain!important;transform:translateX(100%);transition:transform .3s cubic-bezier(.22,.61,.36,1);box-shadow:-24px 0 60px rgba(0,0,0,.4);border:none!important;border-left:1px solid #ECECE6!important;padding-bottom:40px!important}
   .motos-filters.is-open{transform:translateX(0)!important}
   .filters-close{display:flex!important}
   .filters-apply{display:block!important}
@@ -79,6 +79,9 @@ body.is-touch .moto-card-nav,body.is-touch .gallery-overlay{opacity:1!important}
   .ns-grid{grid-template-columns:1fr!important}
   .motos-results{grid-template-columns:1fr!important}
   .logo-img{height:34px!important}
+  /* Modal "Pedir cita" responsive */
+  .cita-modal > div{padding-left:18px!important;padding-right:18px!important}
+  .cita-modal h3{font-size:21px!important}
 }
 </style>
 </helmet>
@@ -433,9 +436,9 @@ body.is-touch .moto-card-nav,body.is-touch .gallery-overlay{opacity:1!important}
                   </sc-if>
                 </div>
                 <sc-if value="{{ m.gMulti }}" hint-placeholder-val="{{ false }}">
-                  <div style="position:absolute;bottom:10px;left:0;right:0;z-index:3;display:flex;gap:6px;justify-content:center;pointer-events:none;">
+                  <div class="card-dots" style="position:absolute;bottom:10px;left:0;right:0;z-index:3;display:flex;gap:6px;justify-content:center;pointer-events:none;">
                     <sc-for list="{{ m.gDots }}" as="d" hint-placeholder-count="3">
-                      <span style="width:6px;height:6px;border-radius:50%;background: {{ d.dotColor }};box-shadow:0 0 3px rgba(0,0,0,.4);"></span>
+                      <span class="card-dot" style="width:6px;height:6px;border-radius:50%;background: {{ d.dotColor }};box-shadow:0 0 3px rgba(0,0,0,.4);"></span>
                     </sc-for>
                   </div>
                 </sc-if>
@@ -490,7 +493,7 @@ body.is-touch .moto-card-nav,body.is-touch .gallery-overlay{opacity:1!important}
         <div class="gallery-wrap" style="position:relative;width:100%;aspect-ratio:4/3;border:1px solid #E8E8E2;overflow:hidden;background:#EFEFEB;">
           <div class="gallery-scroller" style="display:flex;height:100%;overflow-x:auto;overflow-y:hidden;scroll-snap-type:x mandatory;">
             <sc-for list="{{ detail.galleryList }}" as="g" hint-placeholder-count="1">
-              <div style="flex:0 0 100%;height:100%;scroll-snap-align:center;background:#EFEFEB center/cover no-repeat;background-image: {{ g.css }};"></div>
+              <div onClick="{{ g.onOpen }}" title="Ver a pantalla completa" style="flex:0 0 100%;height:100%;scroll-snap-align:center;background:#EFEFEB center/cover no-repeat;background-image: {{ g.css }};cursor:zoom-in;"></div>
             </sc-for>
           </div>
           <sc-if value="{{ detail.gMulti }}" hint-placeholder-val="{{ true }}">
@@ -1182,18 +1185,18 @@ body.is-touch .moto-card-nav,body.is-touch .gallery-overlay{opacity:1!important}
 <sc-if value="{{ formOpen }}" hint-placeholder-val="{{ false }}">
   <div style="position:fixed;inset:0;z-index:90;display:flex;align-items:center;justify-content:center;padding:20px;">
     <div onClick="{{ closeForm }}" style="position:absolute;inset:0;background:rgba(20,20,20,.5);backdrop-filter:blur(3px);"></div>
-    <div style="position:relative;width:min(560px,100%);max-height:92vh;overflow-y:auto;background:#FFFFFF;border-radius:18px;box-shadow:0 30px 70px rgba(0,0,0,.3);">
+    <div class="cita-modal" style="position:relative;width:min(560px,100%);max-height:92vh;overflow-y:auto;background:#FFFFFF;border-radius:18px;box-shadow:0 30px 70px rgba(0,0,0,.3);">
       <div style="position:sticky;top:0;background:#FFFFFF;padding:24px 28px 16px;border-bottom:1px solid #E8E8E2;display:flex;align-items:flex-start;justify-content:space-between;z-index:2;">
         <div><div style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--accent,#F56007);letter-spacing:.08em;text-transform:uppercase;">Solicitud de presupuesto</div><h3 style="margin:5px 0 0;font-size:24px;font-weight:900;letter-spacing:-.02em;">Cuéntanos de tu moto</h3></div>
         <button onClick="{{ closeForm }}" style="width:36px;height:36px;border:1px solid #E0E0DA;background:#fff;border-radius:8px;cursor:pointer;font-size:18px;line-height:1;color:#555;flex:none;">✕</button>
       </div>
       <div style="padding:22px 28px 28px;">
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">
+        <div class="cita-grid" style="display:grid;gap:14px;grid-template-columns: {{ citaCols }};">
           <label style="display:flex;flex-direction:column;gap:6px;"><span style="font-size:12px;font-weight:700;color:#555;">Nombre y apellidos <span style="color:var(--accent,#F56007);">*</span></span><input value="{{ form.name }}" onInput="{{ onName }}" placeholder="Tu nombre y apellidos" style="height:46px;border:1px solid #E0E0DA;border-radius:9px;padding:0 13px;font-size:15px;background:#fff;outline:none;" style-focus="border-color:var(--ink)"/></label>
           <label style="display:flex;flex-direction:column;gap:6px;"><span style="font-size:12px;font-weight:700;color:#555;">Teléfono <span style="color:var(--accent,#F56007);">*</span></span><input value="{{ form.phone }}" onInput="{{ onPhone }}" placeholder="600 00 00 00" style="height:46px;border:1px solid #E0E0DA;border-radius:9px;padding:0 13px;font-size:15px;background:#fff;outline:none;" style-focus="border-color:var(--ink)"/></label>
           <label style="display:flex;flex-direction:column;gap:6px;"><span style="font-size:12px;font-weight:700;color:#555;">Email <span style="color:var(--accent,#F56007);">*</span></span><input value="{{ form.email }}" onInput="{{ onEmail }}" placeholder="tu@email.com" style="height:46px;border:1px solid #E0E0DA;border-radius:9px;padding:0 13px;font-size:15px;background:#fff;outline:none;" style-focus="border-color:var(--ink)"/></label>
           <label style="display:flex;flex-direction:column;gap:6px;"><span style="font-size:12px;font-weight:700;color:#555;">Modelo de moto <span style="color:var(--accent,#F56007);">*</span></span><input value="{{ form.model }}" onInput="{{ onModel }}" placeholder="Ej. Yamaha MT-07" style="height:46px;border:1px solid #E0E0DA;border-radius:9px;padding:0 13px;font-size:15px;background:#fff;outline:none;" style-focus="border-color:var(--ink)"/></label>
-          <label style="display:flex;flex-direction:column;gap:6px;grid-column:1/3;"><span style="font-size:12px;font-weight:700;color:#555;">Número de bastidor / chasis <span style="color:var(--accent,#F56007);">*</span></span><input value="{{ form.plate }}" onInput="{{ onPlate }}" placeholder="17 caracteres alfanuméricos" style="height:46px;border:1px solid #E0E0DA;border-radius:9px;padding:0 13px;font-size:15px;background:#fff;outline:none;" style-focus="border-color:var(--ink)"/></label>
+          <label style="display:flex;flex-direction:column;gap:6px;grid-column: {{ citaSpan }};"><span style="font-size:12px;font-weight:700;color:#555;">Número de bastidor / chasis <span style="color:var(--accent,#F56007);">*</span></span><input value="{{ form.plate }}" onInput="{{ onPlate }}" placeholder="17 caracteres alfanuméricos" style="height:46px;border:1px solid #E0E0DA;border-radius:9px;padding:0 13px;font-size:15px;background:#fff;outline:none;" style-focus="border-color:var(--ink)"/></label>
         </div>
         <div style="margin-top:18px;">
           <span style="font-size:12px;font-weight:700;color:#555;">Método preferido de contacto</span>
@@ -1432,7 +1435,8 @@ class Component extends DCLogic {
   heroSet(i) { if (i !== this.state.heroSlide) this.setState({ heroSlide: i }); }
   heroTo(i) { this.heroSet(i); }
   heroNav(dir) { this.heroSet((this.state.heroSlide + dir + 3) % 3); }
-  heroTick() { if (this._heroHover || this.state.tab !== 'inicio') return; this.heroSet((this.state.heroSlide + 1) % 3); }
+  heroTick() { if (this._heroHover || this.state.tab !== 'inicio') return; if (typeof window !== 'undefined' && window.innerWidth <= 760) return; this.heroSet((this.state.heroSlide + 1) % 3); }
+  lockScroll(on) { try { document.body.style.overflow = on ? 'hidden' : ''; } catch (e) {} }
   bindHeroSwipe() {
     const sec = document.querySelector('.hero-sec');
     if (!sec || sec.__heroBound) return;
@@ -1457,6 +1461,7 @@ class Component extends DCLogic {
   }
   ensureHero() {
     this.bindHeroSwipe();
+    this.ensureCardDots();
     window.__heroComp = this;
     if (this._heroInit) return;
     this._heroInit = true;
@@ -1465,6 +1470,21 @@ class Component extends DCLogic {
     if (!window.__heroInterval) {
       window.__heroInterval = setInterval(() => { const c = window.__heroComp; if (c) c.heroTick(); }, 5000);
     }
+  }
+  ensureCardDots() {
+    if (this._cardDotsInit) return;
+    this._cardDotsInit = true;
+    // los puntitos de cada tarjeta/galería siguen a la foto visible al hacer swipe
+    document.addEventListener('scroll', (e) => {
+      const el = e.target;
+      if (!el || !el.classList || !el.classList.contains('card-scroller')) return;
+      const idx = Math.round(el.scrollLeft / (el.clientWidth || 1));
+      const dc = el.parentElement && el.parentElement.querySelector('.card-dots');
+      if (!dc) return;
+      Array.prototype.forEach.call(dc.querySelectorAll('.card-dot'), (d, i) => {
+        d.style.background = i === idx ? 'var(--accent,#F56007)' : 'rgba(255,255,255,.6)';
+      });
+    }, true);
   }
   toggleAcc(k) { this.setState(s => ({ openAcc: s.openAcc === k ? null : k })); }
   openResv() { this.setState({ resvOpen: true, resvErr: false }); }
@@ -1650,7 +1670,7 @@ class Component extends DCLogic {
         brand: m.brand, model: m.model, price: m.price, state: m.state, code: m.code,
         year: m.year, km: m.km, cc: m.cc, fuel: m.fuel, license: m.license, type: m.type,
         heroCss: 'url("' + this.IMG + gal[gi] + '")',
-        galleryList: gal.map((g) => ({ css: 'url("' + this.IMG + g + '")' })),
+        galleryList: gal.map((g, idx) => ({ css: 'url("' + this.IMG + g + '")', onOpen: () => this.setState({ galleryIdx: idx, lightbox: true }) })),
         gMulti: gal.length > 1, gCount: gal.length,
         gDots: gal.map((_, di) => ({ dotColor: di === 0 ? acc : 'rgba(255,255,255,.65)' })),
         counter: '1 / ' + gal.length,
@@ -2002,8 +2022,8 @@ class Component extends DCLogic {
       // filtros móvil (panel deslizante)
       filtersOpen: this.state.filtersOpen,
       filtersOpenClass: this.state.filtersOpen ? 'is-open' : '',
-      onToggleFilters: () => this.setState(s => ({ filtersOpen: !s.filtersOpen })),
-      closeFilters: () => this.setState({ filtersOpen: false }),
+      onToggleFilters: () => this.setState(s => { const open = !s.filtersOpen; this.lockScroll(open); return { filtersOpen: open }; }),
+      closeFilters: () => { this.lockScroll(false); this.setState({ filtersOpen: false }); },
       // pedir cita
       goInicio: () => this.setTab('inicio'),
       goMerch: () => this.setState({ checkoutOpen: false, cartOpen: false, tab: 'merch', merchIdx: null }),
@@ -2011,6 +2031,8 @@ class Component extends DCLogic {
       form: this.state.form, formOpen: this.state.formOpen,
       openForm: () => this.setState({ formOpen:true, cartOpen:false, showErr:false, navOpen:false }),
       closeForm: () => this.setState({ formOpen:false, showErr:false }),
+      citaCols: (typeof window !== 'undefined' && window.innerWidth <= 560) ? '1fr' : '1fr 1fr',
+      citaSpan: (typeof window !== 'undefined' && window.innerWidth <= 560) ? 'auto' : '1 / 3',
       showErr: this.state.showErr, sendOpacity: formValid ? '1' : '.55',
       onSendGuard, waHref, mailHref,
       contact: { waBorder:w.Border, waBg:w.Bg, waColor:w.Color, emBorder:e.Border, emBg:e.Bg, emColor:e.Color, phBorder:p.Border, phBg:p.Bg, phColor:p.Color },
