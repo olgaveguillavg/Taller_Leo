@@ -22,6 +22,8 @@ input,textarea,button{font-family:inherit}
 #rel-carousel::-webkit-scrollbar{height:0}
 #tab-strip{scrollbar-width:none}
 #tab-strip::-webkit-scrollbar{display:none}
+.card-scroller,.hero-carousel,.gallery-scroller{scrollbar-width:none}
+.card-scroller::-webkit-scrollbar,.hero-carousel::-webkit-scrollbar,.gallery-scroller::-webkit-scrollbar{display:none}
 .moto-card-nav{opacity:0;transition:opacity .2s ease}
 .moto-card:hover .moto-card-nav{opacity:.9}
 .gallery-overlay{opacity:0;transition:opacity .2s ease}
@@ -47,8 +49,8 @@ body.is-touch .moto-card-nav,body.is-touch .gallery-overlay{opacity:1!important}
   .ns-grid>div{grid-column:auto!important;grid-row:auto!important;min-height:180px!important}
   /* Filtros como panel deslizante tras el botón "Filtros" */
   .filters-toggle{display:flex!important}
-  .motos-filters{position:fixed!important;top:0!important;left:0!important;height:100%!important;width:min(340px,90vw)!important;z-index:82!important;overflow-y:auto!important;transform:translateX(-100%);transition:transform .3s cubic-bezier(.22,.61,.36,1);box-shadow:24px 0 60px rgba(0,0,0,.4);border:none!important;border-right:1px solid #ECECE6!important;padding-bottom:40px!important}
-  .motos-filters.is-open{transform:none}
+  .motos-filters{position:fixed!important;top:0!important;right:0!important;left:auto!important;height:100%!important;width:min(340px,90vw)!important;z-index:82!important;overflow-y:auto!important;transform:translateX(100%);transition:transform .3s cubic-bezier(.22,.61,.36,1);box-shadow:-24px 0 60px rgba(0,0,0,.4);border:none!important;border-left:1px solid #ECECE6!important;padding-bottom:40px!important}
+  .motos-filters.is-open{transform:translateX(0)!important}
   .filters-close{display:flex!important}
   .filters-apply{display:block!important}
 }
@@ -64,6 +66,14 @@ body.is-touch .moto-card-nav,body.is-touch .gallery-overlay{opacity:1!important}
   .cesta-btn{display:none!important}
   .cta-cita{display:none!important}
   .nav-burger{display:flex!important}
+  /* Barra superior de Motos estilo mundimoto: buscador arriba; debajo Filtros (izq) y Orden (der) */
+  .motos-topbar{gap:12px!important}
+  .topbar-search{flex:1 0 100%!important;order:1}
+  .filters-toggle{order:2;padding:0 14px!important}
+  .topbar-sort{order:3;margin-left:auto!important;gap:8px!important}
+  .topbar-sort select{width:140px!important;max-width:140px!important;padding:0 8px!important;font-size:13px!important}
+  .orden-label{display:inline!important;font-size:12px!important}
+  .alert-btn{display:none!important}
 }
 @media (max-width:560px){
   .ns-grid{grid-template-columns:1fr!important}
@@ -127,10 +137,7 @@ body.is-touch .moto-card-nav,body.is-touch .gallery-overlay{opacity:1!important}
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>
       </button>
     </div>
-    <div style="position:relative;padding:22px 24px 4px;display:flex;align-items:center;gap:12px;font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.14em;color:rgba(255,255,255,.42);text-transform:uppercase;">
-      <span style="width:24px;height:2px;background:var(--accent,#F56007);"></span>Navegación
-    </div>
-    <div style="position:relative;display:flex;flex-direction:column;padding:8px 14px 6px;">
+    <div style="position:relative;display:flex;flex-direction:column;padding:18px 14px 6px;">
       <sc-for list="{{ tabs }}" as="t">
         <button onClick="{{ t.onClick }}" style="display:flex;align-items:center;gap:16px;background:none;border:none;border-bottom:1px solid #202020;cursor:pointer;padding:15px 10px;text-align:left;" style-hover="background:rgba(255,255,255,.03)">
           <span style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--accent,#F56007);width:22px;flex:none;">{{ t.num }}</span>
@@ -168,32 +175,66 @@ body.is-touch .moto-card-nav,body.is-touch .gallery-overlay{opacity:1!important}
 <!-- ================= TAB · INICIO ================= -->
 <sc-if value="{{ isInicio }}" hint-placeholder-val="{{ true }}">
 <div style="animation:fadeIn .5s ease both;">
-  <!-- HERO -->
-  <section style="position:relative;height:calc(100vh - 88px);min-height:580px;overflow:hidden;background:#141414;">
-    <div style="position:absolute;top:6%;right:3%;width:min(42%,520px);display:flex;align-items:flex-start;justify-content:flex-end;pointer-events:none;">
-      <img src="/img/logo-v2.png" alt="" aria-hidden="true" style="width:100%;opacity:1;transform:rotate(-7deg);"/>
-    </div>
-    <div style="position:absolute;inset:0;background:linear-gradient(120deg,rgba(20,20,20,.82) 0%,rgba(20,20,20,.55) 55%,rgba(20,20,20,.35) 100%);"></div>
-    <div style="position:absolute;inset:0;background:repeating-linear-gradient(115deg,rgba(255,255,255,.015) 0px,rgba(255,255,255,.015) 2px,transparent 2px,transparent 26px);"></div>
-    <div style="position:absolute;inset:0;background:linear-gradient(180deg,rgba(20,20,20,.35) 0%,rgba(20,20,20,.1) 40%,rgba(20,20,20,.55) 100%);"></div>
+  <!-- HERO CARRUSEL -->
+  <section class="hero-sec" style="position:relative;height:calc(100vh - 88px);min-height:580px;overflow:hidden;background:#141414;" onMouseEnter="{{ onHeroEnter }}" onMouseLeave="{{ onHeroLeave }}">
 
-    <div style="position:absolute;left:0;right:0;bottom:0;padding:0 30px 56px;max-width:1400px;margin:0 auto;">
-      <div style="display:flex;align-items:center;gap:12px;font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:.12em;color:rgba(255,255,255,.72);text-transform:uppercase;margin-bottom:20px;">
-        <span style="width:34px;height:2px;background:var(--accent,#F56007);"></span>{{ t.heroKicker }}
-      </div>
-      <h1 class="hero-h1" style="margin:0;color:#fff;font-weight:900;letter-spacing:-.03em;line-height:.96;font-size:clamp(48px,7vw,96px);max-width:16ch;">{{ t.heroTitle }}</h1>
-      <p style="margin:22px 0 0;color:rgba(255,255,255,.78);font-size:clamp(16px,1.5vw,20px);max-width:52ch;line-height:1.5;">{{ t.heroSub }}</p>
-      <div style="margin-top:32px;display:flex;flex-direction:column;gap:16px;align-items:flex-start;">
-        <button onClick="{{ openForm }}" style="height:58px;padding:0 34px;background:var(--accent,#F56007);color:#fff;border:none;border-radius:0;font-weight:700;font-size:16px;cursor:pointer;letter-spacing:.01em;" style-hover="filter:brightness(1.1)">{{ t.pedirCita }}</button>
-        <div style="display:flex;flex-wrap:wrap;gap:12px;align-items:center;">
-          <button onClick="{{ goMotos }}" style="height:46px;padding:0 22px;background:transparent;color:#fff;border:1.5px solid rgba(255,255,255,.5);border-radius:0;font-weight:700;font-size:14px;cursor:pointer;display:flex;align-items:center;gap:8px;" style-hover="border-color:#fff">
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="5.5" cy="17" r="3"/><circle cx="18.5" cy="17" r="3"/><path d="M8.5 17h6l2-6h3M6 11l2-4h4l3 4"/></svg>
-            {{ t.compraMoto }}</button>
-          <button onClick="{{ openSell }}" style="height:46px;padding:0 22px;background:transparent;color:#fff;border:1.5px solid rgba(255,255,255,.5);border-radius:0;font-weight:700;font-size:14px;cursor:pointer;display:flex;align-items:center;gap:8px;" style-hover="border-color:#fff">
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="20" r="1.4"/><circle cx="18" cy="20" r="1.4"/><path d="M2 3h3l2.4 12.4a1.6 1.6 0 0 0 1.6 1.3h8.2a1.6 1.6 0 0 0 1.6-1.3L22 7H6"/></svg>
-            {{ t.vendeMoto }}</button>
+      <!-- SLIDE 1 · Pide cita -->
+      <div style="position:absolute;inset:0;opacity: {{ hs0.op }};pointer-events: {{ hs0.pe }};background:#141414;">
+        <div style="position:absolute;inset:0;background:linear-gradient(120deg,rgba(20,20,20,.82) 0%,rgba(20,20,20,.5) 55%,rgba(20,20,20,.35) 100%);"></div>
+        <div style="position:absolute;inset:0;background:repeating-linear-gradient(115deg,rgba(255,255,255,.015) 0px,rgba(255,255,255,.015) 2px,transparent 2px,transparent 26px);"></div>
+        <div style="position:absolute;inset:0;background:linear-gradient(180deg,rgba(20,20,20,.3) 0%,rgba(20,20,20,.1) 40%,rgba(20,20,20,.6) 100%);"></div>
+        <div style="position:absolute;left:0;right:0;bottom:0;padding:0 30px 88px;max-width:1400px;margin:0 auto;">
+          <h1 class="hero-h1" style="margin:0;color:#fff;font-weight:900;letter-spacing:-.03em;line-height:.96;font-size:clamp(46px,6.5vw,92px);max-width:16ch;">{{ t.heroTitle }}</h1>
+          <p style="margin:22px 0 0;color:rgba(255,255,255,.8);font-size:clamp(16px,1.5vw,20px);max-width:52ch;line-height:1.5;">{{ t.heroSub }}</p>
+          <div style="position:relative;z-index:6;margin-top:30px;">
+            <button onClick="{{ openForm }}" style="height:58px;padding:0 34px;background:var(--accent,#F56007);color:#fff;border:none;border-radius:0;font-weight:700;font-size:16px;cursor:pointer;letter-spacing:.01em;" style-hover="filter:brightness(1.1)">{{ t.pedirCita }}</button>
+          </div>
         </div>
       </div>
+
+      <!-- SLIDE 2 · Compra / Vende tu moto -->
+      <div style="position:absolute;inset:0;opacity: {{ hs1.op }};pointer-events: {{ hs1.pe }};background:#141414;">
+        <div style="position:absolute;inset:0;background:linear-gradient(120deg,rgba(20,20,20,.85) 0%,rgba(30,20,16,.55) 55%,rgba(20,20,20,.35) 100%);"></div>
+        <div style="position:absolute;inset:0;background:repeating-linear-gradient(115deg,rgba(255,255,255,.015) 0px,rgba(255,255,255,.015) 2px,transparent 2px,transparent 26px);"></div>
+        <div style="position:absolute;inset:0;background:linear-gradient(180deg,rgba(20,20,20,.3) 0%,rgba(20,20,20,.1) 40%,rgba(20,20,20,.6) 100%);"></div>
+        <div style="position:absolute;left:0;right:0;bottom:0;padding:0 30px 88px;max-width:1400px;margin:0 auto;">
+          <h1 class="hero-h1" style="margin:0;color:#fff;font-weight:900;letter-spacing:-.03em;line-height:.98;font-size:clamp(42px,5.6vw,80px);max-width:18ch;">{{ t.heroTitle2 }}</h1>
+          <p style="margin:22px 0 0;color:rgba(255,255,255,.8);font-size:clamp(16px,1.5vw,20px);max-width:54ch;line-height:1.5;">{{ t.heroSub2 }}</p>
+          <div style="position:relative;z-index:6;margin-top:30px;display:flex;flex-wrap:wrap;gap:14px;">
+            <button onClick="{{ goMotos }}" style="height:56px;padding:0 30px;background:var(--accent,#F56007);color:#fff;border:none;border-radius:0;font-weight:700;font-size:15px;cursor:pointer;display:flex;align-items:center;gap:9px;" style-hover="filter:brightness(1.1)">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="5.5" cy="17" r="3"/><circle cx="18.5" cy="17" r="3"/><path d="M8.5 17h6l2-6h3M6 11l2-4h4l3 4"/></svg>
+              {{ t.compraMoto }}</button>
+            <button onClick="{{ openSell }}" style="height:56px;padding:0 30px;background:transparent;color:#fff;border:1.5px solid rgba(255,255,255,.55);border-radius:0;font-weight:700;font-size:15px;cursor:pointer;display:flex;align-items:center;gap:9px;" style-hover="border-color:#fff">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="20" r="1.4"/><circle cx="18" cy="20" r="1.4"/><path d="M2 3h3l2.4 12.4a1.6 1.6 0 0 0 1.6 1.3h8.2a1.6 1.6 0 0 0 1.6-1.3L22 7H6"/></svg>
+              {{ t.vendeMoto }}</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- SLIDE 3 · Merchandising -->
+      <div style="position:absolute;inset:0;opacity: {{ hs2.op }};pointer-events: {{ hs2.pe }};background:#141414;">
+        <div style="position:absolute;inset:0;background:linear-gradient(120deg,rgba(20,20,20,.85) 0%,rgba(20,20,20,.5) 55%,rgba(30,22,16,.4) 100%);"></div>
+        <div style="position:absolute;inset:0;background:repeating-linear-gradient(115deg,rgba(255,255,255,.018) 0px,rgba(255,255,255,.018) 2px,transparent 2px,transparent 26px);"></div>
+        <div style="position:absolute;inset:0;background:linear-gradient(180deg,rgba(20,20,20,.3) 0%,rgba(20,20,20,.1) 40%,rgba(20,20,20,.6) 100%);"></div>
+        <div style="position:absolute;left:0;right:0;bottom:0;padding:0 30px 88px;max-width:1400px;margin:0 auto;">
+          <h1 class="hero-h1" style="margin:0;color:#fff;font-weight:900;letter-spacing:-.03em;line-height:.96;font-size:clamp(46px,6.5vw,92px);max-width:16ch;">{{ t.heroTitle3 }}</h1>
+          <p style="margin:22px 0 0;color:rgba(255,255,255,.8);font-size:clamp(16px,1.5vw,20px);max-width:52ch;line-height:1.5;">{{ t.heroSub3 }}</p>
+          <div style="position:relative;z-index:6;margin-top:30px;">
+            <button onClick="{{ goMerch }}" style="height:56px;padding:0 30px;background:var(--accent,#F56007);color:#fff;border:none;border-radius:0;font-weight:700;font-size:15px;cursor:pointer;display:flex;align-items:center;gap:9px;" style-hover="filter:brightness(1.1)">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+              {{ t.verMerch }}</button>
+          </div>
+        </div>
+      </div>
+
+    <!-- zonas de clic laterales (sin flechas visibles) -->
+    <button onClick="{{ onHeroPrev }}" aria-label="Anterior" title="Anterior" style="position:absolute;top:0;left:0;width:28%;height:52%;background:transparent;border:none;cursor:pointer;z-index:4;"></button>
+    <button onClick="{{ onHeroNext }}" aria-label="Siguiente" title="Siguiente" style="position:absolute;top:0;right:0;width:28%;height:52%;background:transparent;border:none;cursor:pointer;z-index:4;"></button>
+    <!-- puntitos -->
+    <div style="position:absolute;bottom:30px;left:0;right:0;z-index:6;display:flex;gap:9px;justify-content:center;align-items:center;">
+      <sc-for list="{{ heroDots }}" as="hd" hint-placeholder-count="3">
+        <button onClick="{{ hd.onDot }}" aria-label="Ir al slide" style="width: {{ hd.w }};height:9px;border-radius: {{ hd.rad }};background: {{ hd.bg }};border:none;padding:0;cursor:pointer;transition:background .3s ease;"></button>
+      </sc-for>
     </div>
   </section>
 </div>
@@ -212,26 +253,29 @@ body.is-touch .moto-card-nav,body.is-touch .gallery-overlay{opacity:1!important}
   </div>
 
   <!-- top bar -->
-  <div style="margin-top:36px;display:flex;gap:14px;flex-wrap:wrap;align-items:center;">
-    <button onClick="{{ onToggleFilters }}" class="filters-toggle" style="display:none;height:50px;padding:0 18px;background:#141414;color:#fff;border:none;border-radius:0;font-weight:700;font-size:13.5px;cursor:pointer;align-items:center;gap:9px;flex:none;order:-1;">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h16M7 12h10M10 18h4"/></svg>
+  <div class="motos-topbar" style="margin-top:36px;display:flex;gap:14px;flex-wrap:wrap;align-items:center;">
+    <div class="topbar-search" style="flex:1;min-width:240px;position:relative;">
+      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#9a9a92" stroke-width="2" stroke-linecap="round" style="position:absolute;left:14px;top:50%;transform:translateY(-50%);"><circle cx="11" cy="11" r="7"/><path d="m20 20-3-3"/></svg>
+      <input value="{{ mf.q }}" onInput="{{ onSearch }}" placeholder="Buscar por marca, modelo, estilo..." style="width:100%;height:50px;border:1px solid #E0E0DA;border-radius:2px;padding:0 14px 0 40px;font-size:15px;background:#fff;outline:none;" style-focus="border-color:var(--ink)"/>
+    </div>
+    <button onClick="{{ onToggleFilters }}" class="filters-toggle" style="display:none;height:50px;padding:0 18px;background:#141414;color:#fff;border:none;border-radius:0;font-weight:700;font-size:13.5px;cursor:pointer;align-items:center;gap:9px;flex:none;">
       Filtros
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="8" x2="20" y2="8"/><circle cx="9" cy="8" r="2.4" fill="#141414"/><line x1="4" y1="16" x2="20" y2="16"/><circle cx="15" cy="16" r="2.4" fill="#141414"/></svg>
       <sc-if value="{{ hasActiveChips }}">
         <span style="min-width:19px;height:19px;padding:0 5px;background:var(--accent,#F56007);color:#fff;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;font-family:'IBM Plex Mono',monospace;">{{ activeCount }}</span>
       </sc-if>
     </button>
-    <div style="flex:1;min-width:240px;position:relative;">
-      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#9a9a92" stroke-width="2" stroke-linecap="round" style="position:absolute;left:14px;top:50%;transform:translateY(-50%);"><circle cx="11" cy="11" r="7"/><path d="m20 20-3-3"/></svg>
-      <input value="{{ mf.q }}" onInput="{{ onSearch }}" placeholder="Buscar por marca, modelo, estilo..." style="width:100%;height:50px;border:1px solid #E0E0DA;border-radius:2px;padding:0 14px 0 40px;font-size:15px;background:#fff;outline:none;" style-focus="border-color:var(--ink)"/>
+    <div class="topbar-sort" style="display:flex;align-items:center;gap:10px;flex:none;">
+      <span class="orden-label" style="display:none;font-family:'IBM Plex Mono',monospace;font-size:13px;color:#8a8a82;letter-spacing:.04em;">Orden:</span>
+      <select value="{{ mf.sort }}" onChange="{{ onSort }}" style="height:50px;border:1px solid #E0E0DA;border-radius:2px;padding:0 14px;font-size:14px;font-weight:600;background:#fff;outline:none;cursor:pointer;color:#141414;" style-focus="border-color:var(--ink)">
+        <option value="reco">Recomendadas</option>
+        <option value="priceAsc">Precio: menor a mayor</option>
+        <option value="priceDesc">Precio: mayor a menor</option>
+        <option value="yearDesc">Año: más nuevas</option>
+        <option value="kmAsc">Km: menor a mayor</option>
+      </select>
     </div>
-    <select value="{{ mf.sort }}" onChange="{{ onSort }}" style="height:50px;border:1px solid #E0E0DA;border-radius:2px;padding:0 14px;font-size:14px;font-weight:600;background:#fff;outline:none;cursor:pointer;color:#141414;" style-focus="border-color:var(--ink)">
-      <option value="reco">Recomendadas</option>
-      <option value="priceAsc">Precio: menor a mayor</option>
-      <option value="priceDesc">Precio: mayor a menor</option>
-      <option value="yearDesc">Año: más nuevas</option>
-      <option value="kmAsc">Km: menor a mayor</option>
-    </select>
-    <button onClick="{{ onCreateAlert }}" title="Crear alerta con estos filtros" style="height:50px;padding:0 18px;background:#141414;color:#fff;border:none;border-radius:0;font-weight:700;font-size:13.5px;cursor:pointer;display:flex;align-items:center;gap:9px;flex:none;" style-hover="filter:brightness(1.3)">
+    <button onClick="{{ onCreateAlert }}" class="alert-btn" title="Crear alerta con estos filtros" style="height:50px;padding:0 18px;background:#141414;color:#fff;border:none;border-radius:0;font-weight:700;font-size:13.5px;cursor:pointer;display:flex;align-items:center;gap:9px;flex:none;" style-hover="filter:brightness(1.3)">
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/></svg>
       {{ alertLabel }}</button>
   </div>
@@ -374,9 +418,14 @@ body.is-touch .moto-card-nav,body.is-touch .gallery-overlay{opacity:1!important}
         <div class="motos-results" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:26px;">
           <sc-for list="{{ motosView }}" as="m" hint-placeholder-count="4">
             <div onClick="{{ m.onView }}" class="moto-card" style="background:#fff;border:1px solid #E8E8E2;border-radius:18px;overflow:hidden;cursor: {{ m.cardCursor }};transition:box-shadow .2s,border-color .2s,transform .2s;" style-hover="box-shadow:0 14px 34px -18px rgba(0,0,0,.4);border-color:#DADAD3;transform:translateY(-3px)">
-              <div style="height:230px;position:relative;background:#1a1a1a center/cover no-repeat;background-image: {{ m.bgCss }};opacity: {{ m.imgOpacity }};filter: {{ m.imgGray }};">
-                <div style="position:absolute;inset:0;display:flex;align-items:flex-start;justify-content:space-between;padding:16px;background:linear-gradient(180deg,rgba(0,0,0,.3) 0%,transparent 40%);z-index:2;">
-                  <button onClick="{{ m.onToggleSaved }}" title="Guardar" style="width:38px;height:38px;border:none;background:rgba(20,20,20,.4);backdrop-filter:blur(3px);border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;flex:none;" style-hover="background:rgba(20,20,20,.65)">
+              <div style="height:230px;position:relative;opacity: {{ m.imgOpacity }};filter: {{ m.imgGray }};">
+                <div class="card-scroller" style="display:flex;height:100%;overflow-x:auto;overflow-y:hidden;scroll-snap-type:x mandatory;background:#1a1a1a;">
+                  <sc-for list="{{ m.galleryList }}" as="g" hint-placeholder-count="1">
+                    <div style="flex:0 0 100%;height:100%;scroll-snap-align:center;background:#1a1a1a center/cover no-repeat;background-image: {{ g.css }};"></div>
+                  </sc-for>
+                </div>
+                <div style="position:absolute;top:0;left:0;right:0;display:flex;align-items:flex-start;justify-content:space-between;padding:16px;background:linear-gradient(180deg,rgba(0,0,0,.3) 0%,transparent 40%);z-index:2;pointer-events:none;">
+                  <button onClick="{{ m.onToggleSaved }}" title="Guardar" style="width:38px;height:38px;border:none;background:rgba(20,20,20,.4);backdrop-filter:blur(3px);border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;flex:none;pointer-events:auto;" style-hover="background:rgba(20,20,20,.65)">
                     <svg width="19" height="19" viewBox="0 0 24 24" fill="{{ m.heartFill }}" stroke="{{ m.heartStroke }}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="transition:all .2s;"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1-1.1a5.5 5.5 0 0 0-7.8 7.8l1 1.1L12 21l7.8-7.5 1-1.1a5.5 5.5 0 0 0 0-7.8z"/></svg>
                   </button>
                   <sc-if value="{{ m.showState }}" hint-placeholder-val="{{ true }}">
@@ -384,9 +433,7 @@ body.is-touch .moto-card-nav,body.is-touch .gallery-overlay{opacity:1!important}
                   </sc-if>
                 </div>
                 <sc-if value="{{ m.gMulti }}" hint-placeholder-val="{{ false }}">
-                  <button onClick="{{ m.onGalPrev }}" title="Anterior" class="moto-card-nav" style="position:absolute;top:50%;left:10px;transform:translateY(-50%);z-index:3;width:32px;height:32px;border:none;background:rgba(20,20,20,.45);backdrop-filter:blur(3px);color:#fff;border-radius:50%;font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;" style-hover="background:var(--accent,#F56007)">‹</button>
-                  <button onClick="{{ m.onGalNext }}" title="Siguiente" class="moto-card-nav" style="position:absolute;top:50%;right:10px;transform:translateY(-50%);z-index:3;width:32px;height:32px;border:none;background:rgba(20,20,20,.45);backdrop-filter:blur(3px);color:#fff;border-radius:50%;font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;" style-hover="background:var(--accent,#F56007)">›</button>
-                  <div style="position:absolute;bottom:10px;left:0;right:0;z-index:3;display:flex;gap:6px;justify-content:center;">
+                  <div style="position:absolute;bottom:10px;left:0;right:0;z-index:3;display:flex;gap:6px;justify-content:center;pointer-events:none;">
                     <sc-for list="{{ m.gDots }}" as="d" hint-placeholder-count="3">
                       <span style="width:6px;height:6px;border-radius:50%;background: {{ d.dotColor }};box-shadow:0 0 3px rgba(0,0,0,.4);"></span>
                     </sc-for>
@@ -440,24 +487,31 @@ body.is-touch .moto-card-nav,body.is-touch .gallery-overlay{opacity:1!important}
 
     <div class="detail-grid" style="margin-top:26px;display:grid;grid-template-columns:1.5fr 1fr;gap:40px;align-items:start;">
       <div>
-        <div class="gallery-wrap" style="position:relative;width:100%;aspect-ratio:4/3;background:#EFEFEB center/cover no-repeat;background-image: {{ detail.heroCss }};border:1px solid #E8E8E2;">
-          <div class="gallery-overlay" style="position:absolute;top:14px;left:14px;font-family:'IBM Plex Mono',monospace;font-size:12px;color:#fff;background:rgba(0,0,0,.55);padding:5px 11px;">{{ detail.counter }}</div>
-          <div class="gallery-overlay" style="position:absolute;top:14px;right:14px;display:flex;gap:8px;z-index:2;">
-            <button onClick="{{ detail.onToggleSaved }}" title="Guardar" style="width:40px;height:40px;border:none;background:rgba(20,20,20,.5);backdrop-filter:blur(3px);color:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;" style-hover="background:rgba(20,20,20,.75)">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="{{ detail.heartFill }}" stroke="{{ detail.heartStroke }}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="transition:all .2s;"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1-1.1a5.5 5.5 0 0 0-7.8 7.8l1 1.1L12 21l7.8-7.5 1-1.1a5.5 5.5 0 0 0 0-7.8z"/></svg>
+        <div class="gallery-wrap" style="position:relative;width:100%;aspect-ratio:4/3;border:1px solid #E8E8E2;overflow:hidden;background:#EFEFEB;">
+          <div class="gallery-scroller" style="display:flex;height:100%;overflow-x:auto;overflow-y:hidden;scroll-snap-type:x mandatory;">
+            <sc-for list="{{ detail.galleryList }}" as="g" hint-placeholder-count="1">
+              <div style="flex:0 0 100%;height:100%;scroll-snap-align:center;background:#EFEFEB center/cover no-repeat;background-image: {{ g.css }};"></div>
+            </sc-for>
+          </div>
+          <sc-if value="{{ detail.gMulti }}" hint-placeholder-val="{{ true }}">
+            <div class="gallery-overlay" style="position:absolute;top:12px;left:12px;font-family:'IBM Plex Mono',monospace;font-size:11px;color:#fff;background:rgba(0,0,0,.5);padding:3px 8px;pointer-events:none;z-index:2;">{{ detail.gCount }} fotos</div>
+          </sc-if>
+          <div style="position:absolute;top:12px;right:12px;display:flex;gap:6px;z-index:3;">
+            <button onClick="{{ detail.onToggleSaved }}" title="Guardar" style="width:30px;height:30px;border:none;background:rgba(20,20,20,.42);backdrop-filter:blur(3px);color:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;" style-hover="background:rgba(20,20,20,.7)">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="{{ detail.heartFill }}" stroke="{{ detail.heartStroke }}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="transition:all .2s;"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1-1.1a5.5 5.5 0 0 0-7.8 7.8l1 1.1L12 21l7.8-7.5 1-1.1a5.5 5.5 0 0 0 0-7.8z"/></svg>
             </button>
-            <button onClick="{{ detail.onAlert }}" title="Crear alerta" style="width:40px;height:40px;border:none;background:rgba(20,20,20,.5);backdrop-filter:blur(3px);color:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;" style-hover="background:rgba(20,20,20,.75)">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/></svg>
+            <button onClick="{{ detail.onAlert }}" title="Crear alerta" style="width:30px;height:30px;border:none;background:rgba(20,20,20,.42);backdrop-filter:blur(3px);color:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;" style-hover="background:rgba(20,20,20,.7)">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/></svg>
             </button>
-            <button onClick="{{ onOpenLightbox }}" title="Ampliar imagen" style="width:40px;height:40px;border:none;background:rgba(20,20,20,.5);backdrop-filter:blur(3px);color:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;" style-hover="background:var(--accent,#F56007)">
-              <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg>
+            <button onClick="{{ onOpenLightbox }}" title="Ampliar imagen" style="width:30px;height:30px;border:none;background:rgba(20,20,20,.42);backdrop-filter:blur(3px);color:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;" style-hover="background:var(--accent,#F56007)">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg>
             </button>
             <div style="position:relative;">
-              <button onClick="{{ detail.onShare }}" title="Compartir" style="width:40px;height:40px;border:none;background:rgba(20,20,20,.5);backdrop-filter:blur(3px);color:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;" style-hover="background:rgba(20,20,20,.75)">
-                <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="M8.6 13.5l6.8 4M15.4 6.5l-6.8 4"/></svg>
+              <button onClick="{{ detail.onShare }}" title="Compartir" style="width:30px;height:30px;border:none;background:rgba(20,20,20,.42);backdrop-filter:blur(3px);color:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;" style-hover="background:rgba(20,20,20,.7)">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="M8.6 13.5l6.8 4M15.4 6.5l-6.8 4"/></svg>
               </button>
               <sc-if value="{{ detail.shareOpen }}" hint-placeholder-val="{{ false }}">
-                <div style="position:absolute;top:48px;right:0;z-index:5;background:#fff;border:1px solid #E4E4DE;box-shadow:0 14px 34px -12px rgba(0,0,0,.35);min-width:190px;padding:6px;">
+                <div style="position:absolute;top:40px;right:0;z-index:5;background:#fff;border:1px solid #E4E4DE;box-shadow:0 14px 34px -12px rgba(0,0,0,.35);min-width:190px;padding:6px;">
                   <button onClick="{{ detail.onCopyLink }}" style="width:100%;display:flex;align-items:center;gap:10px;background:none;border:none;cursor:pointer;padding:10px 12px;font-size:13.5px;font-weight:600;color:#141414;text-align:left;" style-hover="background:#F3F3EE"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#141414" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7 0l3-3a5 5 0 0 0-7-7l-1 1"/><path d="M14 11a5 5 0 0 0-7 0l-3 3a5 5 0 0 0 7 7l1-1"/></svg>Copiar enlace</button>
                   <a href="{{ detail.shareWa }}" target="_blank" rel="noopener" style="width:100%;display:flex;align-items:center;gap:10px;text-decoration:none;padding:10px 12px;font-size:13.5px;font-weight:600;color:#141414;" style-hover="background:#F3F3EE"><svg width="15" height="15" viewBox="0 0 24 24" fill="#25D366"><path d="M12 2a10 10 0 0 0-8.6 15l-1.3 4.7 4.8-1.3A10 10 0 1 0 12 2Z"/></svg>WhatsApp</a>
                   <a href="{{ detail.shareMail }}" style="width:100%;display:flex;align-items:center;gap:10px;text-decoration:none;padding:10px 12px;font-size:13.5px;font-weight:600;color:#141414;" style-hover="background:#F3F3EE"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#141414" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="1"/><path d="m3 7 9 6 9-6"/></svg>Email</a>
@@ -465,8 +519,13 @@ body.is-touch .moto-card-nav,body.is-touch .gallery-overlay{opacity:1!important}
               </sc-if>
             </div>
           </div>
-          <button onClick="{{ detail.onPrev }}" title="Anterior" class="gallery-overlay" style="position:absolute;top:50%;left:14px;transform:translateY(-50%);width:46px;height:46px;border-radius:50%;border:1.5px solid rgba(20,20,20,.25);background:rgba(255,255,255,.8);color:#141414;font-size:20px;cursor:pointer;display:flex;align-items:center;justify-content:center;" style-hover="background:var(--accent,#F56007);border-color:var(--accent,#F56007)">‹</button>
-          <button onClick="{{ detail.onNext }}" title="Siguiente" class="gallery-overlay" style="position:absolute;top:50%;right:14px;transform:translateY(-50%);width:46px;height:46px;border-radius:50%;border:1.5px solid rgba(20,20,20,.25);background:rgba(255,255,255,.8);color:#141414;font-size:20px;cursor:pointer;display:flex;align-items:center;justify-content:center;" style-hover="background:var(--accent,#F56007);border-color:var(--accent,#F56007)">›</button>
+          <sc-if value="{{ detail.gMulti }}" hint-placeholder-val="{{ true }}">
+            <div style="position:absolute;bottom:12px;left:0;right:0;z-index:2;display:flex;gap:7px;justify-content:center;pointer-events:none;">
+              <sc-for list="{{ detail.gDots }}" as="d" hint-placeholder-count="4">
+                <span style="width:7px;height:7px;border-radius:50%;background: {{ d.dotColor }};box-shadow:0 0 3px rgba(0,0,0,.4);"></span>
+              </sc-for>
+            </div>
+          </sc-if>
         </div>
         <div style="margin-top:12px;display:flex;gap:10px;flex-wrap:wrap;">
           <sc-for list="{{ detail.thumbs }}" as="t" hint-placeholder-count="5">
@@ -1169,6 +1228,7 @@ class Component extends DCLogic {
     tab: 'inicio',
     navOpen: false,
     filtersOpen: false,
+    heroSlide: 0,
     lang: 'es',
     openCard: null,
     hoverCard: null,
@@ -1368,6 +1428,44 @@ class Component extends DCLogic {
 
   openDetail(i) { this.setState({ tab: 'motos', detailIdx: i, galleryIdx: 0, openAcc: 'specs' }); try { window.scrollTo(0, 0); } catch (e) {} }
   galleryTo(n, len) { this.setState({ galleryIdx: (n + len) % len }); }
+  scrollDetailGal(idx) { try { const sc = document.querySelector('.gallery-scroller'); if (sc) sc.scrollLeft = idx * sc.clientWidth; } catch (e) {} }
+  heroSet(i) { if (i !== this.state.heroSlide) this.setState({ heroSlide: i }); }
+  heroTo(i) { this.heroSet(i); }
+  heroNav(dir) { this.heroSet((this.state.heroSlide + dir + 3) % 3); }
+  heroTick() { if (this._heroHover || this.state.tab !== 'inicio') return; this.heroSet((this.state.heroSlide + 1) % 3); }
+  bindHeroSwipe() {
+    const sec = document.querySelector('.hero-sec');
+    if (!sec || sec.__heroBound) return;
+    sec.__heroBound = true;
+    // trackpad / rueda horizontal
+    sec.addEventListener('wheel', (e) => {
+      if (Math.abs(e.deltaX) <= Math.abs(e.deltaY) || Math.abs(e.deltaX) < 12) return;
+      e.preventDefault();
+      const now = Date.now();
+      if (now - (this._heroWheelT || 0) < 500) return;
+      this._heroWheelT = now;
+      this.heroNav(e.deltaX > 0 ? 1 : -1);
+    }, { passive: false });
+    // swipe táctil
+    sec.addEventListener('touchstart', (e) => { this._heroTX = e.touches[0].clientX; }, { passive: true });
+    sec.addEventListener('touchend', (e) => {
+      if (this._heroTX == null) return;
+      const dx = e.changedTouches[0].clientX - this._heroTX;
+      this._heroTX = null;
+      if (Math.abs(dx) > 45) this.heroNav(dx < 0 ? 1 : -1);
+    }, { passive: true });
+  }
+  ensureHero() {
+    this.bindHeroSwipe();
+    window.__heroComp = this;
+    if (this._heroInit) return;
+    this._heroInit = true;
+    setTimeout(() => this.bindHeroSwipe(), 60);
+    // un único avance automático cada 5 s, sobre el componente vivo
+    if (!window.__heroInterval) {
+      window.__heroInterval = setInterval(() => { const c = window.__heroComp; if (c) c.heroTick(); }, 5000);
+    }
+  }
   toggleAcc(k) { this.setState(s => ({ openAcc: s.openAcc === k ? null : k })); }
   openResv() { this.setState({ resvOpen: true, resvErr: false }); }
   closeResv() { this.setState({ resvOpen: false }); }
@@ -1402,6 +1500,7 @@ class Component extends DCLogic {
   }
 
   renderVals() {
+    this.ensureHero();
     const acc = this.accent;
     const tab = this.state.tab;
     const di = this.state.detailIdx;
@@ -1452,7 +1551,8 @@ class Component extends DCLogic {
         showState: !!cardState, state: cardState,
         stateBg: stBg,
         gCount: gal.length, gMulti: gal.length > 1, gActive: gi,
-        gDots: gal.map((_, di) => ({ dotColor: di === gi ? acc : 'rgba(255,255,255,.55)' })),
+        galleryList: gal.map((g) => ({ css: 'url("' + this.IMG + g + '")' })),
+        gDots: gal.map((_, di) => ({ dotColor: di === 0 ? acc : 'rgba(255,255,255,.6)' })),
         onGalPrev: (ev) => this.cardGalTo(m.code, gi - 1, gal.length, ev),
         onGalNext: (ev) => this.cardGalTo(m.code, gi + 1, gal.length, ev),
         condLabel: isNew ? 'Nueva' : 'Ocasión',
@@ -1550,9 +1650,12 @@ class Component extends DCLogic {
         brand: m.brand, model: m.model, price: m.price, state: m.state, code: m.code,
         year: m.year, km: m.km, cc: m.cc, fuel: m.fuel, license: m.license, type: m.type,
         heroCss: 'url("' + this.IMG + gal[gi] + '")',
-        counter: (gi + 1) + ' / ' + gal.length,
+        galleryList: gal.map((g) => ({ css: 'url("' + this.IMG + g + '")' })),
+        gMulti: gal.length > 1, gCount: gal.length,
+        gDots: gal.map((_, di) => ({ dotColor: di === 0 ? acc : 'rgba(255,255,255,.65)' })),
+        counter: '1 / ' + gal.length,
         waHref: 'https://wa.me/' + this.waNum + '?text=' + encodeURIComponent(dmsg),
-        thumbs: gal.map((g, idx) => ({ css: 'url("' + this.IMG + g + '")', border: idx === gi ? acc : '#2C2C2C', onClick: () => this.setState({ galleryIdx: idx }) })),
+        thumbs: gal.map((g, idx) => ({ css: 'url("' + this.IMG + g + '")', border: '#E0E0DA', onClick: () => this.scrollDetailGal(idx) })),
         onPrev: () => this.galleryTo(gi - 1, gal.length),
         onNext: () => this.galleryTo(gi + 1, gal.length),
         specs: m.specs.map(s => ({ k: s[0], v: s[1] })),
@@ -1757,6 +1860,11 @@ class Component extends DCLogic {
         pedirCita: this.L('Pedir cita','Demanar cita'),
         compraMoto: this.L('Compra tu moto','Compra la teva moto'),
         vendeMoto: this.L('Vende tu moto','Ven la teva moto'),
+        heroTitle2: this.L('Comprar o vender tu moto nunca ha sido tan fácil.','Comprar o vendre la teva moto mai ha estat tan fàcil.'),
+        heroSub2: this.L('Ocasión y nuevas, revisadas en banco y con garantía. Y si vendes, te la tasamos sin compromiso.','Ocasió i noves, revisades en banc i amb garantia. I si véns, te la taxem sense compromís.'),
+        heroTitle3: this.L('Llévate el taller contigo.','Emporta\'t el taller amb tu.'),
+        heroSub3: this.L('Ropa y accesorios de edición limitada con el sello del taller. Diseño propio y tirada corta.','Roba i accessoris d\'edició limitada amb el segell del taller. Disseny propi i tirada curta.'),
+        verMerch: this.L('Ver merchandising','Veure marxandatge'),
         videoTaller: this.L('Vídeo · Taller en marcha','Vídeo · Taller en marxa'),
         cesta: this.L('Cesta','Cistella')
       },
@@ -1877,6 +1985,15 @@ class Component extends DCLogic {
       resvTermsBorder: this.state.resvForm.terms ? acc : '#C4C4BC',
       resvCheckOpacity: this.state.resvForm.terms ? '1' : '0',
       closeResv: () => this.closeResv(),
+      // hero carrusel (crossfade dirigido por estado)
+      heroDots: [0, 1, 2].map(i => ({ onDot: () => this.heroTo(i), w: this.state.heroSlide === i ? '28px' : '9px', rad: this.state.heroSlide === i ? '5px' : '50%', bg: this.state.heroSlide === i ? acc : 'rgba(255,255,255,.42)' })),
+      hs0: { op: this.state.heroSlide === 0 ? '1' : '0', pe: this.state.heroSlide === 0 ? 'auto' : 'none' },
+      hs1: { op: this.state.heroSlide === 1 ? '1' : '0', pe: this.state.heroSlide === 1 ? 'auto' : 'none' },
+      hs2: { op: this.state.heroSlide === 2 ? '1' : '0', pe: this.state.heroSlide === 2 ? 'auto' : 'none' },
+      onHeroPrev: () => this.heroNav(-1),
+      onHeroNext: () => this.heroNav(1),
+      onHeroEnter: () => { this._heroHover = true; },
+      onHeroLeave: () => { this._heroHover = false; },
       // menú móvil (hamburguesa)
       navOpen: this.state.navOpen,
       navClosed: !this.state.navOpen,
