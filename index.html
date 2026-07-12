@@ -252,7 +252,7 @@ body.is-touch .moto-card-nav,body.is-touch .gallery-overlay{opacity:1!important}
 
 <!-- ================= TAB · MOTOS (listado + filtros) ================= -->
 <sc-if value="{{ isMotosHome }}" hint-placeholder-val="{{ false }}">
-<div style="animation:fadeIn .5s ease both;max-width:1400px;margin:0 auto;padding:56px 30px 110px;">
+<div style="max-width:1400px;margin:0 auto;padding:56px 30px 110px;">
   <div style="font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:.12em;color:var(--accent,#F56007);text-transform:uppercase;">Compra tu próxima moto</div>
   <h2 style="margin:12px 0 0;font-size:clamp(34px,4.6vw,60px);font-weight:900;letter-spacing:-.03em;line-height:.98;">Motos disponibles.</h2>
   <div style="margin-top:14px;display:flex;align-items:flex-end;justify-content:space-between;gap:20px;flex-wrap:wrap;">
@@ -530,9 +530,9 @@ body.is-touch .moto-card-nav,body.is-touch .gallery-overlay{opacity:1!important}
             </div>
           </div>
           <sc-if value="{{ detail.gMulti }}" hint-placeholder-val="{{ true }}">
-            <div style="position:absolute;bottom:12px;left:0;right:0;z-index:2;display:flex;gap:7px;justify-content:center;pointer-events:none;">
+            <div class="card-dots" style="position:absolute;bottom:12px;left:0;right:0;z-index:2;display:flex;gap:7px;justify-content:center;pointer-events:none;">
               <sc-for list="{{ detail.gDots }}" as="d" hint-placeholder-count="4">
-                <span style="width:7px;height:7px;border-radius:50%;background: {{ d.dotColor }};box-shadow:0 0 3px rgba(0,0,0,.4);"></span>
+                <span class="card-dot" style="width:7px;height:7px;border-radius:50%;background: {{ d.dotColor }};box-shadow:0 0 3px rgba(0,0,0,.4);"></span>
               </sc-for>
             </div>
           </sc-if>
@@ -1071,13 +1071,19 @@ body.is-touch .moto-card-nav,body.is-touch .gallery-overlay{opacity:1!important}
 
 <!-- ================= LIGHTBOX GALERÍA ================= -->
 <sc-if value="{{ lightbox }}" hint-placeholder-val="{{ false }}">
-  <div style="position:fixed;inset:0;z-index:97;background:rgba(10,10,10,.95);display:flex;align-items:center;justify-content:center;padding:40px;">
-    <div onClick="{{ onCloseLightbox }}" style="position:absolute;inset:0;"></div>
-    <button onClick="{{ onCloseLightbox }}" title="Cerrar" style="position:absolute;top:24px;right:24px;width:46px;height:46px;border:1.5px solid rgba(255,255,255,.4);background:transparent;color:#fff;border-radius:50%;font-size:20px;cursor:pointer;z-index:2;" style-hover="background:rgba(255,255,255,.15)">✕</button>
-    <button onClick="{{ detail.onPrev }}" title="Anterior" style="position:absolute;left:24px;top:50%;transform:translateY(-50%);width:54px;height:54px;border:1.5px solid rgba(255,255,255,.4);background:transparent;color:#fff;border-radius:50%;font-size:24px;cursor:pointer;z-index:2;" style-hover="background:var(--accent,#F56007);border-color:var(--accent,#F56007)">‹</button>
-    <button onClick="{{ detail.onNext }}" title="Siguiente" style="position:absolute;right:24px;top:50%;transform:translateY(-50%);width:54px;height:54px;border:1.5px solid rgba(255,255,255,.4);background:transparent;color:#fff;border-radius:50%;font-size:24px;cursor:pointer;z-index:2;" style-hover="background:var(--accent,#F56007);border-color:var(--accent,#F56007)">›</button>
-    <div style="position:relative;width:min(1100px,92vw);height:min(76vh,760px);background:center/contain no-repeat;background-image: {{ detail.heroCss }};"></div>
-    <div style="position:absolute;bottom:28px;left:50%;transform:translateX(-50%);font-family:'IBM Plex Mono',monospace;font-size:13px;color:rgba(255,255,255,.85);letter-spacing:.06em;">{{ detail.counter }}</div>
+  <div style="position:fixed;inset:0;z-index:97;background:rgba(8,8,8,.97);">
+    <div onClick="{{ onCloseLightbox }}" style="position:absolute;inset:0;z-index:1;"></div>
+    <div style="position:absolute;top:54px;left:8px;right:8px;bottom:54px;z-index:1;background:center/contain no-repeat;background-image: {{ detail.heroCss }};pointer-events:none;"></div>
+    <!-- navegación por los lados, sin flechas -->
+    <button onClick="{{ detail.onPrev }}" aria-label="Anterior" title="Anterior" style="position:absolute;left:0;top:54px;bottom:54px;width:34%;background:transparent;border:none;cursor:pointer;z-index:2;"></button>
+    <button onClick="{{ detail.onNext }}" aria-label="Siguiente" title="Siguiente" style="position:absolute;right:0;top:54px;bottom:54px;width:34%;background:transparent;border:none;cursor:pointer;z-index:2;"></button>
+    <button onClick="{{ onCloseLightbox }}" title="Cerrar" style="position:absolute;top:16px;right:16px;width:44px;height:44px;border:1.5px solid rgba(255,255,255,.4);background:rgba(0,0,0,.35);color:#fff;border-radius:50%;font-size:20px;cursor:pointer;z-index:4;display:flex;align-items:center;justify-content:center;" style-hover="background:rgba(255,255,255,.18)">✕</button>
+    <div style="position:absolute;bottom:20px;left:0;right:0;z-index:3;display:flex;gap:8px;justify-content:center;pointer-events:none;">
+      <sc-for list="{{ detail.gDots }}" as="d" hint-placeholder-count="4">
+        <span style="width:8px;height:8px;border-radius:50%;background: {{ d.dotColor }};"></span>
+      </sc-for>
+    </div>
+    <div style="position:absolute;top:24px;left:50%;transform:translateX(-50%);z-index:3;font-family:'IBM Plex Mono',monospace;font-size:13px;color:rgba(255,255,255,.85);letter-spacing:.06em;pointer-events:none;">{{ detail.counter }}</div>
   </div>
 </sc-if>
 
@@ -1442,8 +1448,35 @@ class Component extends DCLogic {
   heroSet(i) { if (i !== this.state.heroSlide) this.setState({ heroSlide: i }); }
   heroTo(i) { this.heroSet(i); }
   heroNav(dir) { this.heroSet((this.state.heroSlide + dir + 3) % 3); }
-  heroTick() { if (this._heroHover || this.state.tab !== 'inicio') return; this.heroSet((this.state.heroSlide + 1) % 3); }
-  lockScroll(on) { try { document.body.style.overflow = on ? 'hidden' : ''; } catch (e) {} }
+  heroTick() {
+    if (this.state.tab !== 'inicio') return;
+    // en escritorio se pausa al pasar el ratón; en táctil no (un toque dejaría el hover activo para siempre)
+    const canHover = typeof window !== 'undefined' && window.matchMedia && window.matchMedia('(hover: hover)').matches;
+    if (canHover && this._heroHover) return;
+    this.heroSet((this.state.heroSlide + 1) % 3);
+  }
+  lockScroll(on) {
+    try {
+      const b = document.body;
+      if (on) {
+        this._scrollY = window.scrollY || 0;
+        b.style.position = 'fixed';
+        b.style.top = (-this._scrollY) + 'px';
+        b.style.left = '0';
+        b.style.right = '0';
+        b.style.width = '100%';
+        b.style.overflow = 'hidden';
+      } else {
+        b.style.position = '';
+        b.style.top = '';
+        b.style.left = '';
+        b.style.right = '';
+        b.style.width = '';
+        b.style.overflow = '';
+        window.scrollTo(0, this._scrollY || 0);
+      }
+    } catch (e) {}
+  }
   bindHeroSwipe() {
     const sec = document.querySelector('.hero-sec');
     if (!sec || sec.__heroBound) return;
@@ -1484,7 +1517,8 @@ class Component extends DCLogic {
     // los puntitos de cada tarjeta/galería siguen a la foto visible al hacer swipe
     document.addEventListener('scroll', (e) => {
       const el = e.target;
-      if (!el || !el.classList || !el.classList.contains('card-scroller')) return;
+      if (!el || !el.classList) return;
+      if (!el.classList.contains('card-scroller') && !el.classList.contains('gallery-scroller')) return;
       const idx = Math.round(el.scrollLeft / (el.clientWidth || 1));
       const dc = el.parentElement && el.parentElement.querySelector('.card-dots');
       if (!dc) return;
@@ -1679,8 +1713,8 @@ class Component extends DCLogic {
         heroCss: 'url("' + this.IMG + gal[gi] + '")',
         galleryList: gal.map((g, idx) => ({ css: 'url("' + this.IMG + g + '")', onOpen: () => this.setState({ galleryIdx: idx, lightbox: true }) })),
         gMulti: gal.length > 1, gCount: gal.length,
-        gDots: gal.map((_, di) => ({ dotColor: di === 0 ? acc : 'rgba(255,255,255,.65)' })),
-        counter: '1 / ' + gal.length,
+        gDots: gal.map((_, di) => ({ dotColor: di === gi ? acc : 'rgba(255,255,255,.65)' })),
+        counter: (gi + 1) + ' / ' + gal.length,
         waHref: 'https://wa.me/' + this.waNum + '?text=' + encodeURIComponent(dmsg),
         thumbs: gal.map((g, idx) => ({ css: 'url("' + this.IMG + g + '")', border: '#E0E0DA', onClick: () => this.scrollDetailGal(idx) })),
         onPrev: () => this.galleryTo(gi - 1, gal.length),
