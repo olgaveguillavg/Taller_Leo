@@ -441,7 +441,7 @@ body.is-touch .moto-card-nav,body.is-touch .gallery-overlay{opacity:1!important}
                   </sc-for>
                 </div>
                 <div style="position:absolute;top:0;left:0;right:0;display:flex;align-items:flex-start;justify-content:space-between;padding:16px;background:linear-gradient(180deg,rgba(0,0,0,.3) 0%,transparent 40%);z-index:2;pointer-events:none;">
-                  <button onClick="{{ m.onToggleSaved }}" title="Guardar" style="width:38px;height:38px;border:none;background:rgba(20,20,20,.4);backdrop-filter:blur(3px);border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;flex:none;pointer-events:auto;" style-hover="background:rgba(20,20,20,.65)">
+                  <button onClick="{{ m.onToggleSaved }}" title="{{ t.guardarTip }}" style="width:38px;height:38px;border:none;background:rgba(20,20,20,.4);backdrop-filter:blur(3px);border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;flex:none;pointer-events:auto;" style-hover="background:rgba(20,20,20,.65)">
                     <svg width="19" height="19" viewBox="0 0 24 24" fill="{{ m.heartFill }}" stroke="{{ m.heartStroke }}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="transition:all .2s;"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1-1.1a5.5 5.5 0 0 0-7.8 7.8l1 1.1L12 21l7.8-7.5 1-1.1a5.5 5.5 0 0 0 0-7.8z"/></svg>
                   </button>
                   <sc-if value="{{ m.showState }}" hint-placeholder-val="{{ true }}">
@@ -494,7 +494,7 @@ body.is-touch .moto-card-nav,body.is-touch .gallery-overlay{opacity:1!important}
 <div style="animation:fadeIn .5s ease both;background:#FFFFFF;color:#141414;min-height:calc(100vh - 88px);">
   <div style="max-width:1400px;margin:0 auto;padding:34px 30px 90px;">
     <div style="font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:.06em;color:#8a8a82;display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
-      <span onClick="{{ detail.onBack }}" style="cursor:pointer;color:#5a5a5a;" style-hover="color:#fff">Motos</span>
+      <span onClick="{{ detail.onBack }}" style="cursor:pointer;color:#5a5a5a;" style-hover="color:#fff">{{ t.motosCrumb }}</span>
       <span style="color:#c4c4bc;">/</span>
       <span style="color:var(--accent,#F56007);">{{ detail.brand }}</span>
       <span style="color:#c4c4bc;">/</span>
@@ -513,22 +513,22 @@ body.is-touch .moto-card-nav,body.is-touch .gallery-overlay{opacity:1!important}
             <div class="gallery-overlay" style="position:absolute;top:12px;left:12px;font-family:'IBM Plex Mono',monospace;font-size:11px;color:#fff;background:rgba(0,0,0,.5);padding:3px 8px;pointer-events:none;z-index:2;">{{ detail.gCount }} fotos</div>
           </sc-if>
           <div style="position:absolute;top:12px;right:12px;display:flex;gap:6px;z-index:3;">
-            <button onClick="{{ detail.onToggleSaved }}" title="Guardar" style="width:30px;height:30px;border:none;background:rgba(20,20,20,.42);backdrop-filter:blur(3px);color:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;" style-hover="background:rgba(20,20,20,.7)">
+            <button onClick="{{ detail.onToggleSaved }}" title="{{ t.guardarTip }}" style="width:30px;height:30px;border:none;background:rgba(20,20,20,.42);backdrop-filter:blur(3px);color:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;" style-hover="background:rgba(20,20,20,.7)">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="{{ detail.heartFill }}" stroke="{{ detail.heartStroke }}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="transition:all .2s;"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1-1.1a5.5 5.5 0 0 0-7.8 7.8l1 1.1L12 21l7.8-7.5 1-1.1a5.5 5.5 0 0 0 0-7.8z"/></svg>
             </button>
             <button onClick="{{ detail.onAlert }}" title="Crear alerta" style="width:30px;height:30px;border:none;background:rgba(20,20,20,.42);backdrop-filter:blur(3px);color:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;" style-hover="background:rgba(20,20,20,.7)">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/></svg>
             </button>
-            <button onClick="{{ onOpenLightbox }}" title="Ampliar imagen" style="width:30px;height:30px;border:none;background:rgba(20,20,20,.42);backdrop-filter:blur(3px);color:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;" style-hover="background:var(--accent,#F56007)">
+            <button onClick="{{ onOpenLightbox }}" title="{{ t.ampliarTip }}" style="width:30px;height:30px;border:none;background:rgba(20,20,20,.42);backdrop-filter:blur(3px);color:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;" style-hover="background:var(--accent,#F56007)">
               <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg>
             </button>
             <div style="position:relative;">
-              <button onClick="{{ detail.onShare }}" title="Compartir" style="width:30px;height:30px;border:none;background:rgba(20,20,20,.42);backdrop-filter:blur(3px);color:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;" style-hover="background:rgba(20,20,20,.7)">
+              <button onClick="{{ detail.onShare }}" title="{{ t.compartirTip }}" style="width:30px;height:30px;border:none;background:rgba(20,20,20,.42);backdrop-filter:blur(3px);color:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;" style-hover="background:rgba(20,20,20,.7)">
                 <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="M8.6 13.5l6.8 4M15.4 6.5l-6.8 4"/></svg>
               </button>
               <sc-if value="{{ detail.shareOpen }}" hint-placeholder-val="{{ false }}">
                 <div style="position:absolute;top:40px;right:0;z-index:5;background:#fff;border:1px solid #E4E4DE;box-shadow:0 14px 34px -12px rgba(0,0,0,.35);min-width:190px;padding:6px;">
-                  <button onClick="{{ detail.onCopyLink }}" style="width:100%;display:flex;align-items:center;gap:10px;background:none;border:none;cursor:pointer;padding:10px 12px;font-size:13.5px;font-weight:600;color:#141414;text-align:left;" style-hover="background:#F3F3EE"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#141414" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7 0l3-3a5 5 0 0 0-7-7l-1 1"/><path d="M14 11a5 5 0 0 0-7 0l-3 3a5 5 0 0 0 7 7l1-1"/></svg>Copiar enlace</button>
+                  <button onClick="{{ detail.onCopyLink }}" style="width:100%;display:flex;align-items:center;gap:10px;background:none;border:none;cursor:pointer;padding:10px 12px;font-size:13.5px;font-weight:600;color:#141414;text-align:left;" style-hover="background:#F3F3EE"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#141414" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7 0l3-3a5 5 0 0 0-7-7l-1 1"/><path d="M14 11a5 5 0 0 0-7 0l-3 3a5 5 0 0 0 7 7l1-1"/></svg>{{ t.copiarEnlace }}</button>
                   <a href="{{ detail.shareWa }}" target="_blank" rel="noopener" style="width:100%;display:flex;align-items:center;gap:10px;text-decoration:none;padding:10px 12px;font-size:13.5px;font-weight:600;color:#141414;" style-hover="background:#F3F3EE"><svg width="15" height="15" viewBox="0 0 24 24" fill="#25D366"><path d="M12 2a10 10 0 0 0-8.6 15l-1.3 4.7 4.8-1.3A10 10 0 1 0 12 2Z"/></svg>WhatsApp</a>
                   <a href="{{ detail.shareMail }}" style="width:100%;display:flex;align-items:center;gap:10px;text-decoration:none;padding:10px 12px;font-size:13.5px;font-weight:600;color:#141414;" style-hover="background:#F3F3EE"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#141414" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="1"/><path d="m3 7 9 6 9-6"/></svg>Email</a>
                 </div>
@@ -565,11 +565,11 @@ body.is-touch .moto-card-nav,body.is-touch .gallery-overlay{opacity:1!important}
         </div>
         <sc-if value="{{ detail.sold }}" hint-placeholder-val="{{ false }}">
           <div style="margin-top:18px;background:#F3F3EE;border:1px solid #E4E4DE;padding:22px;">
-            <div style="display:flex;align-items:center;gap:9px;font-weight:800;font-size:17px;letter-spacing:-.01em;"><span style="width:9px;height:9px;background:#4a4a4a;border-radius:50%;"></span>Esta moto ya ha sido vendida</div>
-            <p style="margin:9px 0 0;font-size:13.5px;color:#6a6a64;line-height:1.5;">Crea una alerta y te avisamos si entra otra unidad del mismo modelo o similar.</p>
+            <div style="display:flex;align-items:center;gap:9px;font-weight:800;font-size:17px;letter-spacing:-.01em;"><span style="width:9px;height:9px;background:#4a4a4a;border-radius:50%;"></span>{{ t.motoVendida }}</div>
+            <p style="margin:9px 0 0;font-size:13.5px;color:#6a6a64;line-height:1.5;">{{ t.motoVendidaSub }}</p>
             <button onClick="{{ detail.onAlert }}" style="margin-top:16px;width:100%;height:54px;background:var(--accent,#F56007);color:#fff;border:none;border-radius:0;font-weight:700;font-size:15px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:9px;" style-hover="filter:brightness(1.1)">
               <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/></svg>
-              Crear alerta</button>
+              {{ t.crearAlertaBtn }}</button>
           </div>
         </sc-if>
         <sc-if value="{{ detail.notSold }}" hint-placeholder-val="{{ true }}">
@@ -702,7 +702,7 @@ body.is-touch .moto-card-nav,body.is-touch .gallery-overlay{opacity:1!important}
           <sc-if value="{{ p.soldOut }}" hint-placeholder-val="{{ false }}">
             <span style="position:absolute;top:14px;right:14px;z-index:2;font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:#fff;background:rgba(74,74,74,.9);padding:4px 9px;font-weight:700;">{{ t.sinStock }}</span>
           </sc-if>
-          <button onClick="{{ p.onToggleSaved }}" title="Guardar" style="position:absolute;bottom:12px;right:12px;z-index:4;width:36px;height:36px;border:none;background:rgba(20,20,20,.4);backdrop-filter:blur(3px);border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;" style-hover="background:rgba(20,20,20,.65)">
+          <button onClick="{{ p.onToggleSaved }}" title="{{ t.guardarTip }}" style="position:absolute;bottom:12px;right:12px;z-index:4;width:36px;height:36px;border:none;background:rgba(20,20,20,.4);backdrop-filter:blur(3px);border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;" style-hover="background:rgba(20,20,20,.65)">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="{{ p.heartFill }}" stroke="{{ p.heartStroke }}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="transition:all .2s;"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1-1.1a5.5 5.5 0 0 0-7.8 7.8l1 1.1L12 21l7.8-7.5 1-1.1a5.5 5.5 0 0 0 0-7.8z"/></svg>
           </button>
           <span style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:#C4C4BC;letter-spacing:.08em;">{{ p.tag }}</span>
@@ -741,16 +741,16 @@ body.is-touch .moto-card-nav,body.is-touch .gallery-overlay{opacity:1!important}
         <span style="position:absolute;top:16px;left:16px;width:10px;height:10px;background:var(--accent,#F56007);border-radius:50%;"></span>
         <span style="font-family:'IBM Plex Mono',monospace;font-size:13px;color:#A8A8A0;letter-spacing:.08em;">{{ merchDetail.tag }}</span>
         <div class="gallery-overlay" style="position:absolute;top:14px;left:14px;display:flex;gap:8px;z-index:4;">
-          <button onClick="{{ merchDetail.onToggleSaved }}" title="Guardar" style="width:38px;height:38px;border:none;background:rgba(20,20,20,.5);backdrop-filter:blur(3px);color:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;" style-hover="background:rgba(20,20,20,.75)">
+          <button onClick="{{ merchDetail.onToggleSaved }}" title="{{ t.guardarTip }}" style="width:38px;height:38px;border:none;background:rgba(20,20,20,.5);backdrop-filter:blur(3px);color:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;" style-hover="background:rgba(20,20,20,.75)">
             <svg width="17" height="17" viewBox="0 0 24 24" fill="{{ merchDetail.heartFill }}" stroke="{{ merchDetail.heartStroke }}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="transition:all .2s;"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1-1.1a5.5 5.5 0 0 0-7.8 7.8l1 1.1L12 21l7.8-7.5 1-1.1a5.5 5.5 0 0 0 0-7.8z"/></svg>
           </button>
           <div style="position:relative;">
-            <button onClick="{{ merchDetail.onShare }}" title="Compartir" style="width:38px;height:38px;border:none;background:rgba(20,20,20,.5);backdrop-filter:blur(3px);color:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;" style-hover="background:rgba(20,20,20,.75)">
+            <button onClick="{{ merchDetail.onShare }}" title="{{ t.compartirTip }}" style="width:38px;height:38px;border:none;background:rgba(20,20,20,.5);backdrop-filter:blur(3px);color:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;" style-hover="background:rgba(20,20,20,.75)">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="M8.6 13.5l6.8 4M15.4 6.5l-6.8 4"/></svg>
             </button>
             <sc-if value="{{ merchDetail.shareOpen }}" hint-placeholder-val="{{ false }}">
               <div style="position:absolute;top:46px;left:0;z-index:5;background:#fff;border:1px solid #E4E4DE;box-shadow:0 14px 34px -12px rgba(0,0,0,.35);min-width:180px;padding:6px;">
-                <button onClick="{{ merchDetail.onCopyLink }}" style="width:100%;display:flex;align-items:center;gap:10px;background:none;border:none;cursor:pointer;padding:10px 12px;font-size:13.5px;font-weight:600;color:#141414;text-align:left;" style-hover="background:#F3F3EE"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#141414" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7 0l3-3a5 5 0 0 0-7-7l-1 1"/><path d="M14 11a5 5 0 0 0-7 0l-3 3a5 5 0 0 0 7 7l1-1"/></svg>Copiar enlace</button>
+                <button onClick="{{ merchDetail.onCopyLink }}" style="width:100%;display:flex;align-items:center;gap:10px;background:none;border:none;cursor:pointer;padding:10px 12px;font-size:13.5px;font-weight:600;color:#141414;text-align:left;" style-hover="background:#F3F3EE"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#141414" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7 0l3-3a5 5 0 0 0-7-7l-1 1"/><path d="M14 11a5 5 0 0 0-7 0l-3 3a5 5 0 0 0 7 7l1-1"/></svg>{{ t.copiarEnlace }}</button>
                 <a href="{{ merchDetail.shareWa }}" target="_blank" rel="noopener" style="width:100%;display:flex;align-items:center;gap:10px;text-decoration:none;padding:10px 12px;font-size:13.5px;font-weight:600;color:#141414;" style-hover="background:#F3F3EE"><svg width="15" height="15" viewBox="0 0 24 24" fill="#25D366"><path d="M12 2a10 10 0 0 0-8.6 15l-1.3 4.7 4.8-1.3A10 10 0 1 0 12 2Z"/></svg>WhatsApp</a>
                 <a href="{{ merchDetail.shareMail }}" style="width:100%;display:flex;align-items:center;gap:10px;text-decoration:none;padding:10px 12px;font-size:13.5px;font-weight:600;color:#141414;" style-hover="background:#F3F3EE"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#141414" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="1"/><path d="m3 7 9 6 9-6"/></svg>Email</a>
               </div>
@@ -802,7 +802,7 @@ body.is-touch .moto-card-nav,body.is-touch .gallery-overlay{opacity:1!important}
         </div>
       </sc-if>
       <sc-if value="{{ merchDetail.warn }}" hint-placeholder-val="{{ false }}">
-        <div style="margin-top:18px;display:flex;align-items:center;gap:8px;background:rgba(245,96,7,.1);border:1px solid rgba(245,96,7,.35);border-radius:2px;padding:11px 13px;font-size:13px;color:#B4470A;font-weight:600;"><span style="font-size:15px;">⚠</span>{{ merchDetail.warnMsg }} antes de añadir a la cesta.</div>
+        <div style="margin-top:18px;display:flex;align-items:center;gap:8px;background:rgba(245,96,7,.1);border:1px solid rgba(245,96,7,.35);border-radius:2px;padding:11px 13px;font-size:13px;color:#B4470A;font-weight:600;"><span style="font-size:15px;">⚠</span>{{ merchDetail.warnMsg }} {{ t.antesAnadir }}</div>
       </sc-if>
       <div style="margin-top:22px;display:flex;gap:14px;align-items:center;flex-wrap:wrap;">
         <div style="display:flex;align-items:center;border:1.5px solid #DADAD3;">
@@ -814,7 +814,7 @@ body.is-touch .moto-card-nav,body.is-touch .gallery-overlay{opacity:1!important}
           <button disabled="true" style="flex:1;min-width:180px;height:52px;background:#E8E8E4;color:#8a8a82;border:none;border-radius:0;font-weight:700;font-size:15px;cursor:not-allowed;">{{ t.agotado }}</button>
           <button onClick="{{ merchDetail.onAlert }}" style="flex:1;min-width:180px;height:52px;background:transparent;border:1.5px solid var(--accent,#F56007);color:var(--accent,#F56007);border-radius:0;font-weight:700;font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;" style-hover="background:var(--accent,#F56007);color:#fff">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/></svg>
-            Avísame cuando esté disponible</button>
+            {{ t.avisameDisponible }}</button>
         </sc-if>
         <sc-if value="{{ merchDetail.canBuyView }}" hint-placeholder-val="{{ true }}">
           <button onClick="{{ merchDetail.onAdd }}" style="flex:1;min-width:220px;height:52px;background:var(--accent,#F56007);color:#fff;border:none;border-radius:0;font-weight:700;font-size:15px;cursor:pointer;opacity: {{ merchDetail.addOpacity }};" style-hover="filter:brightness(1.1)">{{ t.anadirCesta }}</button>
@@ -823,7 +823,7 @@ body.is-touch .moto-card-nav,body.is-touch .gallery-overlay{opacity:1!important}
       <sc-if value="{{ merchAdded }}" hint-placeholder-val="{{ false }}">
         <div style="margin-top:14px;display:flex;align-items:center;gap:9px;background:rgba(245,96,7,.08);border:1px solid rgba(245,96,7,.35);padding:11px 14px;font-size:13.5px;font-weight:600;color:var(--accent,#F56007);">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
-          Añadido a la cesta
+          {{ t.anadidoCestaMsg }}
         </div>
       </sc-if>
       <div style="margin-top:30px;padding-top:24px;border-top:1px solid #ECECE6;">
@@ -1077,31 +1077,31 @@ body.is-touch .moto-card-nav,body.is-touch .gallery-overlay{opacity:1!important}
     <div style="max-width:1100px;margin:0 auto;padding:34px 30px 80px;">
       <div style="display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;">
         <div style="display:flex;align-items:center;gap:16px;flex-wrap:wrap;">
-          <button onClick="{{ closeCheckout }}" style="height:40px;padding:0 16px;border:1.5px solid #DADAD3;background:#fff;border-radius:0;cursor:pointer;font-weight:700;font-size:13.5px;color:#141414;display:flex;align-items:center;gap:7px;" style-hover="border-color:#141414">‹ Volver a la cesta</button>
-          <button onClick="{{ goMerch }}" style="height:40px;padding:0 16px;border:none;background:none;cursor:pointer;font-weight:600;font-size:13.5px;color:#8a8a82;display:flex;align-items:center;gap:6px;" style-hover="color:#141414">Seguir comprando</button>
+          <button onClick="{{ closeCheckout }}" style="height:40px;padding:0 16px;border:1.5px solid #DADAD3;background:#fff;border-radius:0;cursor:pointer;font-weight:700;font-size:13.5px;color:#141414;display:flex;align-items:center;gap:7px;" style-hover="border-color:#141414">{{ t.volverCesta }}</button>
+          <button onClick="{{ goMerch }}" style="height:40px;padding:0 16px;border:none;background:none;cursor:pointer;font-weight:600;font-size:13.5px;color:#8a8a82;display:flex;align-items:center;gap:6px;" style-hover="color:#141414">{{ t.seguirComprando }}</button>
         </div>
       </div>
-      <h2 style="margin:24px 0 0;font-size:clamp(30px,4vw,52px);font-weight:900;letter-spacing:-.03em;line-height:1;">Enviar pedido</h2>
-      <p style="margin:14px 0 0;font-size:15px;color:#5e5e5e;max-width:60ch;line-height:1.55;">Déjanos tus datos de envío. Coordinamos el pago y la entrega contigo directamente (WhatsApp, transferencia o contra reembolso) — sin pasarela online.</p>
+      <h2 style="margin:24px 0 0;font-size:clamp(30px,4vw,52px);font-weight:900;letter-spacing:-.03em;line-height:1;">{{ t.enviarPedido }}</h2>
+      <p style="margin:14px 0 0;font-size:15px;color:#5e5e5e;max-width:60ch;line-height:1.55;">{{ t.checkoutSub }}</p>
 
       <div class="co-grid" style="margin-top:36px;display:grid;grid-template-columns:1.4fr 1fr;gap:40px;align-items:start;">
         <!-- forms -->
         <div>
-          <div style="font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:.08em;color:var(--accent,#F56007);text-transform:uppercase;">Datos de envío</div>
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:.08em;color:var(--accent,#F56007);text-transform:uppercase;">{{ t.datosEnvio }}</div>
           <div style="margin-top:16px;display:grid;grid-template-columns:1fr 1fr;gap:14px;">
-            <input value="{{ coForm.name }}" onInput="{{ onCoName }}" placeholder="Nombre y apellidos" style="grid-column:1/3;height:48px;border:1px solid #E0E0DA;border-radius:2px;padding:0 14px;font-size:15px;background:#fff;outline:none;" style-focus="border-color:var(--ink)"/>
-            <input value="{{ coForm.phone }}" onInput="{{ onCoPhone }}" placeholder="Teléfono" style="height:48px;border:1px solid #E0E0DA;border-radius:2px;padding:0 14px;font-size:15px;background:#fff;outline:none;" style-focus="border-color:var(--ink)"/>
-            <input value="{{ coForm.email }}" onInput="{{ onCoEmail }}" placeholder="Email" style="height:48px;border:1px solid #E0E0DA;border-radius:2px;padding:0 14px;font-size:15px;background:#fff;outline:none;" style-focus="border-color:var(--ink)"/>
-            <input value="{{ coForm.address }}" onInput="{{ onCoAddress }}" placeholder="Dirección de envío" style="grid-column:1/3;height:48px;border:1px solid #E0E0DA;border-radius:2px;padding:0 14px;font-size:15px;background:#fff;outline:none;" style-focus="border-color:var(--ink)"/>
-            <input value="{{ coForm.city }}" onInput="{{ onCoCity }}" placeholder="Ciudad" style="height:48px;border:1px solid #E0E0DA;border-radius:2px;padding:0 14px;font-size:15px;background:#fff;outline:none;" style-focus="border-color:var(--ink)"/>
-            <input value="{{ coForm.zip }}" onInput="{{ onCoZip }}" placeholder="Código postal" style="height:48px;border:1px solid #E0E0DA;border-radius:2px;padding:0 14px;font-size:15px;background:#fff;outline:none;" style-focus="border-color:var(--ink)"/>
-            <textarea value="{{ coForm.notes }}" onInput="{{ onCoNotes }}" placeholder="Comentarios (opcional)" rows="3" style="grid-column:1/3;border:1px solid #E0E0DA;border-radius:2px;padding:12px 14px;font-size:15px;background:#fff;outline:none;resize:vertical;" style-focus="border-color:var(--ink)"></textarea>
+            <input value="{{ coForm.name }}" onInput="{{ onCoName }}" placeholder="{{ t.nombreApellidos }}" style="grid-column:1/3;height:48px;border:1px solid #E0E0DA;border-radius:2px;padding:0 14px;font-size:15px;background:#fff;outline:none;" style-focus="border-color:var(--ink)"/>
+            <input value="{{ coForm.phone }}" onInput="{{ onCoPhone }}" placeholder="{{ t.telefono }}" style="height:48px;border:1px solid #E0E0DA;border-radius:2px;padding:0 14px;font-size:15px;background:#fff;outline:none;" style-focus="border-color:var(--ink)"/>
+            <input value="{{ coForm.email }}" onInput="{{ onCoEmail }}" placeholder="{{ t.email }}" style="height:48px;border:1px solid #E0E0DA;border-radius:2px;padding:0 14px;font-size:15px;background:#fff;outline:none;" style-focus="border-color:var(--ink)"/>
+            <input value="{{ coForm.address }}" onInput="{{ onCoAddress }}" placeholder="{{ t.dirEnvio }}" style="grid-column:1/3;height:48px;border:1px solid #E0E0DA;border-radius:2px;padding:0 14px;font-size:15px;background:#fff;outline:none;" style-focus="border-color:var(--ink)"/>
+            <input value="{{ coForm.city }}" onInput="{{ onCoCity }}" placeholder="{{ t.ciudad }}" style="height:48px;border:1px solid #E0E0DA;border-radius:2px;padding:0 14px;font-size:15px;background:#fff;outline:none;" style-focus="border-color:var(--ink)"/>
+            <input value="{{ coForm.zip }}" onInput="{{ onCoZip }}" placeholder="{{ t.codPostal }}" style="height:48px;border:1px solid #E0E0DA;border-radius:2px;padding:0 14px;font-size:15px;background:#fff;outline:none;" style-focus="border-color:var(--ink)"/>
+            <textarea value="{{ coForm.notes }}" onInput="{{ onCoNotes }}" placeholder="{{ t.comentariosOpc }}" rows="3" style="grid-column:1/3;border:1px solid #E0E0DA;border-radius:2px;padding:12px 14px;font-size:15px;background:#fff;outline:none;resize:vertical;" style-focus="border-color:var(--ink)"></textarea>
           </div>
         </div>
 
         <!-- summary -->
         <div style="background:#fff;border:1px solid #E8E8E2;padding:26px;position:sticky;top:24px;">
-          <div style="font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:.08em;color:#8a8a82;text-transform:uppercase;margin-bottom:16px;">Resumen del pedido</div>
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:.08em;color:#8a8a82;text-transform:uppercase;margin-bottom:16px;">{{ t.resumenPedido }}</div>
           <div style="display:flex;flex-direction:column;gap:12px;">
             <sc-for list="{{ cartItems }}" as="it" hint-placeholder-count="2">
               <div style="display:flex;align-items:center;gap:12px;font-size:14px;">
@@ -1112,13 +1112,13 @@ body.is-touch .moto-card-nav,body.is-touch .gallery-overlay{opacity:1!important}
             </sc-for>
           </div>
           <div style="margin-top:16px;padding-top:16px;border-top:1px solid #ECECE6;display:flex;justify-content:space-between;align-items:baseline;">
-            <span style="font-weight:700;">Total</span><span style="font-size:26px;font-weight:900;letter-spacing:-.02em;">{{ subtotalLabel }}</span>
+            <span style="font-weight:700;">{{ t.total }}</span><span style="font-size:26px;font-weight:900;letter-spacing:-.02em;">{{ subtotalLabel }}</span>
           </div>
           <sc-if value="{{ coErr }}" hint-placeholder-val="{{ false }}">
-            <div style="margin-top:16px;display:flex;align-items:center;gap:8px;background:#FDECEC;border:1px solid #F5C6C6;border-radius:2px;padding:11px 13px;font-size:13px;color:#B00020;font-weight:600;"><span style="font-size:15px;">⚠</span>Completa nombre, teléfono, email, dirección, ciudad y CP.</div>
+            <div style="margin-top:16px;display:flex;align-items:center;gap:8px;background:#FDECEC;border:1px solid #F5C6C6;border-radius:2px;padding:11px 13px;font-size:13px;color:#B00020;font-weight:600;"><span style="font-size:15px;">⚠</span>{{ t.checkoutErr }}</div>
           </sc-if>
-          <button onClick="{{ onPayNow }}" style="margin-top:18px;width:100%;height:54px;background:var(--accent,#F56007);color:#fff;border:none;border-radius:0;font-weight:700;font-size:16px;cursor:pointer;" style-hover="filter:brightness(1.1)">Enviar pedido</button>
-          <div style="margin-top:12px;font-family:'IBM Plex Mono',monospace;font-size:11px;color:#A8A8A0;text-align:center;line-height:1.5;">El pago y el envío se coordinan directamente con MOTORLAB.</div>
+          <button onClick="{{ onPayNow }}" style="margin-top:18px;width:100%;height:54px;background:var(--accent,#F56007);color:#fff;border:none;border-radius:0;font-weight:700;font-size:16px;cursor:pointer;" style-hover="filter:brightness(1.1)">{{ t.enviarPedido }}</button>
+          <div style="margin-top:12px;font-family:'IBM Plex Mono',monospace;font-size:11px;color:#A8A8A0;text-align:center;line-height:1.5;">{{ t.pagoEnvioMsg }}</div>
         </div>
       </div>
     </div>
@@ -1132,11 +1132,11 @@ body.is-touch .moto-card-nav,body.is-touch .gallery-overlay{opacity:1!important}
       <div style="width:88px;height:88px;border-radius:50%;background:var(--accent,#F56007);margin:0 auto;display:flex;align-items:center;justify-content:center;animation:pop .4s ease both;">
         <svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
       </div>
-      <h2 style="margin:28px 0 0;font-size:clamp(32px,4.5vw,52px);font-weight:900;letter-spacing:-.03em;line-height:1;color:#fff;">¡Pedido recibido!</h2>
-      <p style="margin:18px 0 0;font-size:16px;color:rgba(255,255,255,.68);line-height:1.6;">Nos pondremos en contacto contigo para confirmar el envío y el pago (WhatsApp, transferencia o contra reembolso). Gracias por confiar en MOTORLAB.</p>
-      <div style="margin-top:24px;display:inline-block;border:1px solid #2C2C2C;background:#1B1B1B;padding:14px 24px;font-family:'IBM Plex Mono',monospace;font-size:13px;letter-spacing:.06em;color:rgba(255,255,255,.85);">Nº DE PEDIDO · {{ orderNum }}</div>
+      <h2 style="margin:28px 0 0;font-size:clamp(32px,4.5vw,52px);font-weight:900;letter-spacing:-.03em;line-height:1;color:#fff;">{{ t.pedidoRecibido }}</h2>
+      <p style="margin:18px 0 0;font-size:16px;color:rgba(255,255,255,.68);line-height:1.6;">{{ t.pedidoRecibidoSub }}</p>
+      <div style="margin-top:24px;display:inline-block;border:1px solid #2C2C2C;background:#1B1B1B;padding:14px 24px;font-family:'IBM Plex Mono',monospace;font-size:13px;letter-spacing:.06em;color:rgba(255,255,255,.85);">{{ t.numPedido }} · {{ orderNum }}</div>
       <div style="margin-top:32px;">
-        <button onClick="{{ onFinishOrder }}" style="height:54px;padding:0 32px;background:var(--accent,#F56007);color:#fff;border:none;border-radius:0;font-weight:700;font-size:15px;cursor:pointer;" style-hover="filter:brightness(1.1)">Seguir comprando</button>
+        <button onClick="{{ onFinishOrder }}" style="height:54px;padding:0 32px;background:var(--accent,#F56007);color:#fff;border:none;border-radius:0;font-weight:700;font-size:15px;cursor:pointer;" style-hover="filter:brightness(1.1)">{{ t.seguirComprando }}</button>
       </div>
     </div>
   </div>
@@ -1181,7 +1181,7 @@ body.is-touch .moto-card-nav,body.is-touch .gallery-overlay{opacity:1!important}
     <div onClick="{{ closeAlert }}" style="position:absolute;inset:0;background:rgba(20,20,20,.5);backdrop-filter:blur(3px);"></div>
     <div style="position:relative;width:min(500px,100%);max-height:92vh;overflow-y:auto;background:#FFFFFF;border-radius:4px;box-shadow:0 30px 70px rgba(0,0,0,.3);">
       <div style="padding:24px 28px 16px;border-bottom:1px solid #E8E8E2;display:flex;align-items:flex-start;justify-content:space-between;">
-        <div><div style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--accent,#F56007);letter-spacing:.08em;text-transform:uppercase;">Alerta de stock</div><h3 style="margin:5px 0 0;font-size:23px;font-weight:900;letter-spacing:-.02em;">Crea una alerta y te avisamos.</h3></div>
+        <div><div style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--accent,#F56007);letter-spacing:.08em;text-transform:uppercase;">{{ t.alertaStock }}</div><h3 style="margin:5px 0 0;font-size:23px;font-weight:900;letter-spacing:-.02em;">{{ t.creaAlertaTitle }}</h3></div>
         <button onClick="{{ closeAlert }}" style="width:36px;height:36px;border:1px solid #E0E0DA;background:#fff;border-radius:2px;cursor:pointer;font-size:18px;line-height:1;color:#555;flex:none;">✕</button>
       </div>
       <div style="padding:22px 28px 28px;">
@@ -1190,9 +1190,9 @@ body.is-touch .moto-card-nav,body.is-touch .gallery-overlay{opacity:1!important}
             <div style="width:64px;height:64px;border-radius:50%;background:var(--accent,#F56007);margin:0 auto;display:flex;align-items:center;justify-content:center;">
               <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
             </div>
-            <div style="margin-top:18px;font-size:20px;font-weight:800;letter-spacing:-.01em;">Alerta creada</div>
-            <p style="margin:8px 0 0;font-size:14px;color:#6a6a64;line-height:1.5;">Te escribiremos a <strong>{{ alertEmail }}</strong> en cuanto entre una moto que encaje.</p>
-            <button onClick="{{ closeAlert }}" style="margin-top:22px;height:46px;padding:0 24px;background:var(--ink);color:#fff;border:none;border-radius:0;font-weight:700;font-size:14px;cursor:pointer;">Entendido</button>
+            <div style="margin-top:18px;font-size:20px;font-weight:800;letter-spacing:-.01em;">{{ t.alertaCreada }}</div>
+            <p style="margin:8px 0 0;font-size:14px;color:#6a6a64;line-height:1.5;">{{ t.alertaCreadaSub1 }} <strong>{{ alertEmail }}</strong> {{ t.alertaCreadaSub2 }}</p>
+            <button onClick="{{ closeAlert }}" style="margin-top:22px;height:46px;padding:0 24px;background:var(--ink);color:#fff;border:none;border-radius:0;font-weight:700;font-size:14px;cursor:pointer;">{{ t.entendido }}</button>
           </div>
         </sc-if>
         <sc-if value="{{ alertShowForm }}" hint-placeholder-val="{{ true }}">
@@ -1210,10 +1210,10 @@ body.is-touch .moto-card-nav,body.is-touch .gallery-overlay{opacity:1!important}
           </sc-if>
           <sc-if value="{{ alertNoFilters }}" hint-placeholder-val="{{ false }}">
             <div style="margin-bottom:18px;display:flex;align-items:flex-start;gap:9px;background:#F3F3EE;border:1px solid #E4E4DE;padding:12px 14px;font-size:13px;color:#6a6a64;line-height:1.5;">
-              <span style="color:var(--accent,#F56007);font-size:15px;">✱</span>No has aplicado filtros. Aplica alguno (marca, precio, estilo…) para que la alerta te avise solo de lo que te interesa.
+              <span style="color:var(--accent,#F56007);font-size:15px;">✱</span>{{ t.noFiltros }}
             </div>
           </sc-if>
-          <label style="display:flex;flex-direction:column;gap:6px;"><span style="font-size:12px;font-weight:700;color:#555;">Email <span style="color:var(--accent,#F56007);">*</span></span><input value="{{ alertEmail }}" onInput="{{ onAlertEmail }}" placeholder="tu@email.com" style="height:48px;border:1px solid #E0E0DA;border-radius:2px;padding:0 13px;font-size:15px;background:#fff;outline:none;" style-focus="border-color:var(--ink)"/></label>
+          <label style="display:flex;flex-direction:column;gap:6px;"><span style="font-size:12px;font-weight:700;color:#555;">{{ t.email }} <span style="color:var(--accent,#F56007);">*</span></span><input value="{{ alertEmail }}" onInput="{{ onAlertEmail }}" placeholder="tu@email.com" style="height:48px;border:1px solid #E0E0DA;border-radius:2px;padding:0 13px;font-size:15px;background:#fff;outline:none;" style-focus="border-color:var(--ink)"/></label>
           <button onClick="{{ onAlertSubmit }}" style="margin-top:20px;width:100%;height:52px;background:var(--accent,#F56007);color:#fff;border:none;border-radius:0;font-weight:700;font-size:15px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:10px;opacity: {{ alertBtnOpacity }};" style-hover="filter:brightness(1.1)">
             <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/></svg>
             Crear alerta</button>
@@ -1230,20 +1230,20 @@ body.is-touch .moto-card-nav,body.is-touch .gallery-overlay{opacity:1!important}
     <div onClick="{{ closeSell }}" style="position:absolute;inset:0;background:rgba(20,20,20,.5);backdrop-filter:blur(3px);"></div>
     <div style="position:relative;width:min(520px,100%);max-height:92vh;overflow-y:auto;background:#FFFFFF;border-radius:4px;box-shadow:0 30px 70px rgba(0,0,0,.3);">
       <div style="position:sticky;top:0;background:#FFFFFF;padding:24px 28px 16px;border-bottom:1px solid #E8E8E2;display:flex;align-items:flex-start;justify-content:space-between;">
-        <div><div style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--accent,#F56007);letter-spacing:.08em;text-transform:uppercase;">Vende tu moto</div><h3 style="margin:5px 0 0;font-size:23px;font-weight:900;letter-spacing:-.02em;">Cuéntanos tu moto</h3></div>
+        <div><div style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--accent,#F56007);letter-spacing:.08em;text-transform:uppercase;">{{ t.vendeMoto }}</div><h3 style="margin:5px 0 0;font-size:23px;font-weight:900;letter-spacing:-.02em;">{{ t.cuentanosTuMoto }}</h3></div>
         <button onClick="{{ closeSell }}" style="width:36px;height:36px;border:1px solid #E0E0DA;background:#fff;border-radius:2px;cursor:pointer;font-size:18px;line-height:1;color:#555;flex:none;">✕</button>
       </div>
       <div style="padding:22px 28px 28px;">
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">
-          <input value="{{ sellForm.name }}" onInput="{{ onSellName }}" placeholder="Nombre" style="grid-column:1/3;height:46px;border:1px solid #E0E0DA;border-radius:2px;padding:0 13px;font-size:15px;background:#fff;outline:none;" style-focus="border-color:var(--ink)"/>
-          <input value="{{ sellForm.phone }}" onInput="{{ onSellPhone }}" placeholder="Teléfono" style="height:46px;border:1px solid #E0E0DA;border-radius:2px;padding:0 13px;font-size:15px;background:#fff;outline:none;" style-focus="border-color:var(--ink)"/>
-          <input value="{{ sellForm.email }}" onInput="{{ onSellEmail }}" placeholder="Email" style="height:46px;border:1px solid #E0E0DA;border-radius:2px;padding:0 13px;font-size:15px;background:#fff;outline:none;" style-focus="border-color:var(--ink)"/>
-          <input value="{{ sellForm.model }}" onInput="{{ onSellModel }}" placeholder="Marca y modelo" style="grid-column:1/3;height:46px;border:1px solid #E0E0DA;border-radius:2px;padding:0 13px;font-size:15px;background:#fff;outline:none;" style-focus="border-color:var(--ink)"/>
-          <input value="{{ sellForm.year }}" onInput="{{ onSellYear }}" placeholder="Año" inputmode="numeric" style="height:46px;border:1px solid #E0E0DA;border-radius:2px;padding:0 13px;font-size:15px;background:#fff;outline:none;" style-focus="border-color:var(--ink)"/>
-          <input value="{{ sellForm.km }}" onInput="{{ onSellKm }}" placeholder="Kilometraje" inputmode="numeric" style="height:46px;border:1px solid #E0E0DA;border-radius:2px;padding:0 13px;font-size:15px;background:#fff;outline:none;" style-focus="border-color:var(--ink)"/>
+          <input value="{{ sellForm.name }}" onInput="{{ onSellName }}" placeholder="{{ t.nombre }}" style="grid-column:1/3;height:46px;border:1px solid #E0E0DA;border-radius:2px;padding:0 13px;font-size:15px;background:#fff;outline:none;" style-focus="border-color:var(--ink)"/>
+          <input value="{{ sellForm.phone }}" onInput="{{ onSellPhone }}" placeholder="{{ t.telefono }}" style="height:46px;border:1px solid #E0E0DA;border-radius:2px;padding:0 13px;font-size:15px;background:#fff;outline:none;" style-focus="border-color:var(--ink)"/>
+          <input value="{{ sellForm.email }}" onInput="{{ onSellEmail }}" placeholder="{{ t.email }}" style="height:46px;border:1px solid #E0E0DA;border-radius:2px;padding:0 13px;font-size:15px;background:#fff;outline:none;" style-focus="border-color:var(--ink)"/>
+          <input value="{{ sellForm.model }}" onInput="{{ onSellModel }}" placeholder="{{ t.marcaModelo }}" style="grid-column:1/3;height:46px;border:1px solid #E0E0DA;border-radius:2px;padding:0 13px;font-size:15px;background:#fff;outline:none;" style-focus="border-color:var(--ink)"/>
+          <input value="{{ sellForm.year }}" onInput="{{ onSellYear }}" placeholder="{{ t.anyo }}" inputmode="numeric" style="height:46px;border:1px solid #E0E0DA;border-radius:2px;padding:0 13px;font-size:15px;background:#fff;outline:none;" style-focus="border-color:var(--ink)"/>
+          <input value="{{ sellForm.km }}" onInput="{{ onSellKm }}" placeholder="{{ t.kmLabel }}" inputmode="numeric" style="height:46px;border:1px solid #E0E0DA;border-radius:2px;padding:0 13px;font-size:15px;background:#fff;outline:none;" style-focus="border-color:var(--ink)"/>
         </div>
-        <a href="{{ sellWa }}" target="_blank" rel="noopener" style="margin-top:20px;height:52px;background:var(--accent,#F56007);color:#fff;border-radius:2px;display:flex;align-items:center;justify-content:center;text-decoration:none;font-weight:700;font-size:15px;" style-hover="filter:brightness(1.1)">Enviar y pedir tasación</a>
-        <div style="margin-top:12px;font-family:'IBM Plex Mono',monospace;font-size:11px;color:#A8A8A0;text-align:center;line-height:1.5;">Te respondemos con una valoración orientativa sin compromiso.</div>
+        <a href="{{ sellWa }}" target="_blank" rel="noopener" style="margin-top:20px;height:52px;background:var(--accent,#F56007);color:#fff;border-radius:2px;display:flex;align-items:center;justify-content:center;text-decoration:none;font-weight:700;font-size:15px;" style-hover="filter:brightness(1.1)">{{ t.enviarTasacion }}</a>
+        <div style="margin-top:12px;font-family:'IBM Plex Mono',monospace;font-size:11px;color:#A8A8A0;text-align:center;line-height:1.5;">{{ t.tasacionSub }}</div>
       </div>
     </div>
   </div>
@@ -1256,27 +1256,27 @@ body.is-touch .moto-card-nav,body.is-touch .gallery-overlay{opacity:1!important}
     <div style="position:relative;width:min(500px,100%);max-height:92vh;overflow-y:auto;background:#1B1B1B;border:1px solid #2C2C2C;border-radius:4px;box-shadow:0 30px 70px rgba(0,0,0,.5);color:#fff;">
       <div style="padding:26px 28px 18px;border-bottom:1px solid #2C2C2C;display:flex;align-items:flex-start;justify-content:space-between;">
         <div>
-          <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--accent,#F56007);letter-spacing:.08em;text-transform:uppercase;">Reserva</div>
-          <h3 style="margin:6px 0 0;font-size:23px;font-weight:900;letter-spacing:-.02em;color:#fff;">Reserva esta moto</h3>
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--accent,#F56007);letter-spacing:.08em;text-transform:uppercase;">{{ t.reservaKicker }}</div>
+          <h3 style="margin:6px 0 0;font-size:23px;font-weight:900;letter-spacing:-.02em;color:#fff;">{{ t.reservaEstaMoto }}</h3>
           <div style="margin-top:4px;font-family:'IBM Plex Mono',monospace;font-size:12px;color:rgba(255,255,255,.5);">{{ detail.brand }} {{ detail.model }} · {{ detail.price }}</div>
         </div>
         <button onClick="{{ closeResv }}" style="width:36px;height:36px;border:1px solid #333;background:#141414;border-radius:2px;cursor:pointer;font-size:18px;line-height:1;color:#aaa;flex:none;">✕</button>
       </div>
       <div style="padding:22px 28px 28px;display:flex;flex-direction:column;gap:12px;">
-        <input value="{{ resvForm.name }}" onInput="{{ onResvName }}" placeholder="Nombre y apellidos" style="height:48px;background:#141414;border:1px solid #333;border-radius:2px;padding:0 14px;font-size:15px;color:#fff;outline:none;" style-focus="border-color:#F56007"/>
-        <input value="{{ resvForm.phone }}" onInput="{{ onResvPhone }}" placeholder="Teléfono" style="height:48px;background:#141414;border:1px solid #333;border-radius:2px;padding:0 14px;font-size:15px;color:#fff;outline:none;" style-focus="border-color:#F56007"/>
-        <input value="{{ resvForm.email }}" onInput="{{ onResvEmail }}" placeholder="Email" style="height:48px;background:#141414;border:1px solid #333;border-radius:2px;padding:0 14px;font-size:15px;color:#fff;outline:none;" style-focus="border-color:#F56007"/>
+        <input value="{{ resvForm.name }}" onInput="{{ onResvName }}" placeholder="{{ t.nombreApellidos }}" style="height:48px;background:#141414;border:1px solid #333;border-radius:2px;padding:0 14px;font-size:15px;color:#fff;outline:none;" style-focus="border-color:#F56007"/>
+        <input value="{{ resvForm.phone }}" onInput="{{ onResvPhone }}" placeholder="{{ t.telefono }}" style="height:48px;background:#141414;border:1px solid #333;border-radius:2px;padding:0 14px;font-size:15px;color:#fff;outline:none;" style-focus="border-color:#F56007"/>
+        <input value="{{ resvForm.email }}" onInput="{{ onResvEmail }}" placeholder="{{ t.email }}" style="height:48px;background:#141414;border:1px solid #333;border-radius:2px;padding:0 14px;font-size:15px;color:#fff;outline:none;" style-focus="border-color:#F56007"/>
         <button onClick="{{ onResvTerms }}" style="display:flex;align-items:center;gap:11px;background:none;border:none;cursor:pointer;padding:6px 0;text-align:left;">
           <span style="flex:none;width:22px;height:22px;border-radius:3px;border:1.5px solid {{ resvTermsBorder }};background:{{ resvTermsBg }};display:flex;align-items:center;justify-content:center;transition:all .2s;">
             <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round" style="opacity: {{ resvCheckOpacity }};"><path d="M20 6 9 17l-5-5"/></svg>
           </span>
-          <span style="font-size:13px;color:rgba(255,255,255,.7);line-height:1.4;">Acepto que MOTORLAB me contacte y la política de privacidad.</span>
+          <span style="font-size:13px;color:rgba(255,255,255,.7);line-height:1.4;">{{ t.terminosReserva }}</span>
         </button>
         <sc-if value="{{ resvErr }}" hint-placeholder-val="{{ false }}">
-          <div style="display:flex;align-items:center;gap:8px;background:rgba(245,96,7,.12);border:1px solid rgba(245,96,7,.4);border-radius:2px;padding:11px 13px;font-size:13px;color:#F56007;font-weight:600;"><span style="font-size:15px;">⚠</span>Completa nombre, teléfono, email y acepta los términos.</div>
+          <div style="display:flex;align-items:center;gap:8px;background:rgba(245,96,7,.12);border:1px solid rgba(245,96,7,.4);border-radius:2px;padding:11px 13px;font-size:13px;color:#F56007;font-weight:600;"><span style="font-size:15px;">⚠</span>{{ t.reservaErr }}</div>
         </sc-if>
-        <a href="{{ resvWa }}" target="_blank" rel="noopener" onClick="{{ onResvSend }}" style="margin-top:6px;height:54px;background:var(--accent,#F56007);color:#fff;border-radius:0;display:flex;align-items:center;justify-content:center;gap:10px;text-decoration:none;font-weight:700;font-size:15.5px;opacity: {{ resvOpacity }};" style-hover="filter:brightness(1.1)">Confirmar reserva</a>
-        <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:rgba(255,255,255,.4);text-align:center;line-height:1.5;margin-top:4px;">Sin compromiso · te confirmamos disponibilidad en menos de 24h.</div>
+        <a href="{{ resvWa }}" target="_blank" rel="noopener" onClick="{{ onResvSend }}" style="margin-top:6px;height:54px;background:var(--accent,#F56007);color:#fff;border-radius:0;display:flex;align-items:center;justify-content:center;gap:10px;text-decoration:none;font-weight:700;font-size:15.5px;opacity: {{ resvOpacity }};" style-hover="filter:brightness(1.1)">{{ t.confirmarReserva }}</a>
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:rgba(255,255,255,.4);text-align:center;line-height:1.5;margin-top:4px;">{{ t.reservaSub2 }}</div>
       </div>
     </div>
   </div>
@@ -1381,6 +1381,29 @@ class Component extends DCLogic {
   L(es, ca) { return this.state.lang === 'ca' ? ca : es; }
   tState(s) { const map = { 'Nueva':'Nova', 'Ocasión':'Ocasió', 'En oferta':'En oferta', 'Reservada':'Reservada', 'Recién llegada':"Acabada d'arribar", 'Vendida':'Venuda', 'Km 0':'Km 0', 'En stock':'En stock' }; return this.state.lang === 'ca' ? (map[s] || s) : s; }
   tStyle(s) { const map = { 'Naked':'Naked', 'Deportiva':'Esportiva', 'Trail':'Trail', 'Custom':'Custom', 'Scooter':'Scooter', 'Clásica':'Clàssica', 'Touring':'Touring', 'Cross':'Cross', 'Enduro':'Enduro' }; return this.state.lang === 'ca' ? (map[s] || s) : s; }
+  tSpecKey(k) { const map = { 'Cilindrada':'Cilindrada', 'Potencia':'Potència', 'Par motor':'Parell motor', 'Peso':'Pes', 'Cambio':'Canvi', 'Suspensión':'Suspensió', 'Frenos':'Frens', 'Neumáticos':'Pneumàtics' }; return this.state.lang === 'ca' ? (map[k] || k) : k; }
+  tD(s) {
+    if (this.state.lang !== 'ca' || !s) return s;
+    const map = {
+      'Revisión completa en banco':'Revisió completa en banc','Aceite y filtros Motul 300V':'Oli i filtres Motul 300V','Pastillas y líquido de frenos nuevos':'Pastilles i líquid de frens nous','Diagnosis ECU sin fallos':'Diagnosi ECU sense errors','Cambio de aceite y bujías':'Canvi d\'oli i bugies','Actualización de software':'Actualització de programari','Neumáticos nuevos':'Pneumàtics nous','Puesta a punto de suspensión':'Posada a punt de suspensió','Kit de arrastre nuevo':'Kit d\'arrossegament nou','Reglaje de válvulas':'Reglatge de vàlvules','Revisión de entrega en banco':'Revisió de lliurament en banc','Aceite y filtros':'Oli i filtres','Inspección de transmisión':'Inspecció de transmissió','Cambio de aceite y filtros':'Canvi d\'oli i filtres','Sustitución de batería':'Substitució de bateria','Ajuste de embrague':'Ajust d\'embragatge','Aceite de motor y transmisión':'Oli de motor i transmissió','Comprobación de frenos':'Comprovació de frens','Diagnosis sin incidencias':'Diagnosi sense incidències','Preentrega (PDI) en banco':'Prelliurament (PDI) en banc','Puesta a cero de electrónica':'Posada a zero de l\'electrònica','Garantía oficial 24 meses':'Garantia oficial 24 mesos','Primer mantenimiento incluido':'Primer manteniment inclòs','Configuración de modos de conducción':'Configuració de modes de conducció','Calibración de suspensión Öhlins':'Calibratge de suspensió Öhlins',
+      'Pequeño desgaste en pinza de freno delantera':'Petit desgast a la pinça de fre davantera','Rozadura leve en carenado lateral izquierdo':'Frec lleu al carenat lateral esquerre','Marca de uso en el asiento':'Marca d\'ús al seient'
+    };
+    if (map[s]) return map[s];
+    return s.replace(/\bEne\b/g,'Gen').replace(/\bDic\b/g,'Des').replace(/\bAbr\b/g,'Abr').replace(/\bAgo\b/g,'Ago');
+  }
+  tM(s) {
+    if (this.state.lang !== 'ca' || !s) return s;
+    const map = {
+      'Camiseta SOY DE MOTO':'Samarreta SOY DE MOTO','Sudadera Taller':'Dessuadora Taller','Gorra bordada':'Gorra brodada','Taza Banco de Pruebas':'Tassa Banc de Proves','Llavero Pistón':'Clauer Pistó','Bolsa de herramientas':'Bossa d\'eines','Guantes de taller':'Guants de taller','Pack de pegatinas':'Pack d\'adhesius',
+      'Textil':'Tèxtil','Accesorio':'Accessori','Hogar':'Llar','Taller':'Taller',
+      'Camiseta de algodón orgánico 180 g/m² con el logo bordado en el pecho. Corte regular.':'Samarreta de cotó orgànic 180 g/m² amb el logo brodat al pit. Tall regular.','Sudadera con capucha, interior perchado y bolsillo canguro. Estampado técnico en la espalda.':'Dessuadora amb caputxa, interior escardat i butxaca cangur. Estampat tècnic a l\'esquena.','Gorra estructurada de 6 paneles con cierre metálico ajustable y logo bordado en relieve.':'Gorra estructurada de 6 panells amb tancament metàl·lic ajustable i logo brodat en relleu.','Taza de cerámica de 350 ml con escala de par motor serigrafiada. Apta para lavavajillas.':'Tassa de ceràmica de 350 ml amb escala de parell motor serigrafiada. Apta per a rentaplats.','Llavero macizo mecanizado en aluminio con forma de pistón y anilla reforzada. Pieza pequeña, acabado premium.':'Clauer massís mecanitzat en alumini amb forma de pistó i anella reforçada. Peça petita, acabat premium.','Bolsa enrollable de lona encerada con 12 compartimentos para llaves y destornilladores.':'Bossa enrotllable de lona encerada amb 12 compartiments per a claus i tornavisos.','Guantes de nitrilo reforzado con agarre en la palma. Protección y tacto para trabajo de precisión.':'Guants de nitril reforçat amb agafada al palmell. Protecció i tacte per a treball de precisió.','Set de 10 pegatinas de vinilo resistente al agua y a los rayos UV. Ideales para casco, depósito o maletín.':'Set de 10 adhesius de vinil resistent a l\'aigua i als raigs UV. Ideals per a casc, dipòsit o maletí.',
+      'Negro':'Negre','Hueso':'Os','Naranja':'Taronja','Gris':'Gris','Blanco':'Blanc','Plata':'Plata','Única':'Única',
+      'Material':'Material','Gramaje':'Gramatge','Tallas':'Talles','Cuidado':'Cura','Cierre':'Tancament','Talla':'Talla','Color':'Color','Capacidad':'Capacitat','Apta':'Apta','Diseño':'Disseny','Medidas':'Mides','Peso':'Pes','Acabado':'Acabat','Compartimentos':'Compartiments','Uso':'Ús','Agarre':'Agafada','Unidades':'Unitats','Resistencia':'Resistència','Tamaños':'Mides',
+      '100% algodón orgánico':'100% cotó orgànic','Lavado a 30°':'Rentat a 30°','80% algodón · 20% poliéster':'80% cotó · 20% polièster','Sarga de algodón':'Sarja de cotó','Hebilla metálica':'Sivella metàl·lica','Única ajustable':'Única ajustable','Negro / naranja':'Negre / taronja','Cerámica':'Ceràmica','Lavavajillas y microondas':'Rentaplats i microones','Escala de par motor':'Escala de parell motor','Aluminio mecanizado':'Alumini mecanitzat','Anodizado':'Anoditzat','Lona encerada':'Lona encerada','Correa de cuero':'Corretja de cuir','Herramienta hasta 30 cm':'Eina fins a 30 cm','Nitrilo reforzado':'Nitril reforçat','Palma texturizada':'Palmell texturitzat','Mecánica general':'Mecànica general','Vinilo laminado':'Vinil laminat','10 pegatinas':'10 adhesius','Agua y UV':'Aigua i UV','Variados':'Variats'
+    };
+    return map[s] || s;
+  }
+  tType(t) { if (this.state.lang !== 'ca' || !t) return t; return t.replace(/Naked/g,'Naked').replace(/Deportiva/g,'Esportiva').replace(/deportiva/g,'esportiva').replace(/Trail/g,'Trail').replace(/Custom/g,'Custom').replace(/Scooter/g,'Scooter').replace(/Clásica/g,'Clàssica').replace(/Touring/g,'Touring'); }
 
   faqs = [
     { q: ['¿Las motos de ocasión llevan garantía?', 'Les motos d\'ocasió tenen garantia?'], a: ['Sí. Todas nuestras motos de ocasión salen revisadas en nuestro banco y con garantía. Te entregamos el informe del estado real antes de comprar.', 'Sí. Totes les nostres motos d\'ocasió surten revisades al nostre banc i amb garantia. T\'entreguem l\'informe de l\'estat real abans de comprar.'] },
@@ -1833,7 +1856,7 @@ class Component extends DCLogic {
       const sold = m.state === 'Vendida';
       detail = {
         brand: m.brand, model: m.model, price: m.price, state: m.state, code: m.code,
-        year: m.year, km: m.km, cc: m.cc, fuel: m.fuel, license: m.license, type: m.type,
+        year: m.year, km: m.km, cc: m.cc, fuel: m.fuel, license: m.license, type: this.tType(m.type),
         heroCss: 'url("' + this.IMG + gal[gi] + '")',
         galleryList: gal.map((g, idx) => ({ css: 'url("' + this.IMG + g + '")', onOpen: () => this.setState({ galleryIdx: idx, lightbox: true }) })),
         gMulti: gal.length > 1, gCount: gal.length,
@@ -1844,10 +1867,10 @@ class Component extends DCLogic {
         lbThumbs: gal.map((g, idx) => ({ css: 'url("' + this.IMG + g + '")', border: idx === gi ? acc : 'rgba(255,255,255,.25)', onClick: () => this.galleryTo(idx, gal.length) })),
         onPrev: () => this.galleryTo(gi - 1, gal.length),
         onNext: () => this.galleryTo(gi + 1, gal.length),
-        specs: m.specs.map(s => ({ k: s[0], v: s[1] })),
-        history: m.history.map(h => ({ k: h[0], v: h[1] })),
+        specs: m.specs.map(s => ({ k: this.tSpecKey(s[0]), v: s[1] })),
+        history: m.history.map(h => ({ k: this.tD(h[0]), v: this.tD(h[1]) })),
         hasFlaws: !!(m.flaws && m.flaws.length),
-        flaws: (m.flaws || []).map(fl => ({ css: 'url("' + this.IMG + fl[0] + '")', desc: fl[1], onOpen: () => this.setState({ imgLightbox: this.IMG + fl[0] }) })),
+        flaws: (m.flaws || []).map(fl => ({ css: 'url("' + this.IMG + fl[0] + '")', desc: this.tD(fl[1]), onOpen: () => this.setState({ imgLightbox: this.IMG + fl[0] }) })),
         specsOpen: this.state.openAcc === 'specs', specsIcon: this.state.openAcc === 'specs' ? '−' : '+', onToggleSpecs: () => this.toggleAcc('specs'),
         histOpen: this.state.openAcc === 'hist', histIcon: this.state.openAcc === 'hist' ? '−' : '+', onToggleHist: () => this.toggleAcc('hist'),
         onReserve: () => this.openResv(),
@@ -1872,9 +1895,9 @@ class Component extends DCLogic {
       };
     }
     const detailQuick = isDetail ? (detail.isNew ? [
-      { k:'Estado', v:'Nueva · km 0' }, { k:'Cilindrada', v: detail.cc }, { k:'Carnet', v: detail.license }, { k:'Combustible', v: detail.fuel }
+      { k: this.L('Estado','Estat'), v: this.L('Nueva · km 0','Nova · km 0') }, { k: this.L('Cilindrada','Cilindrada'), v: detail.cc }, { k: this.L('Carnet','Carnet'), v: detail.license }, { k: this.L('Combustible','Combustible'), v: detail.fuel }
     ] : [
-      { k:'Año', v: detail.year }, { k:'Kilómetros', v: detail.km }, { k:'Carnet', v: detail.license }, { k:'Combustible', v: detail.fuel }
+      { k: this.L('Año','Any'), v: detail.year }, { k: this.L('Kilómetros','Quilòmetres'), v: detail.km }, { k: this.L('Carnet','Carnet'), v: detail.license }, { k: this.L('Combustible','Combustible'), v: detail.fuel }
     ]) : [];
 
     // RESERVA
@@ -1896,7 +1919,7 @@ class Component extends DCLogic {
       const gi = (this.state.gIdx['m' + p.id] || 0) % frames;
       const dots = Array.from({ length: frames }, (_, di) => ({ dotColor: di === gi ? acc : 'rgba(20,20,20,.28)' }));
       return {
-        name: p.name, tag: p.tag,
+        name: this.tM(p.name), tag: this.tM(p.tag),
         price: this.fmt(p.price),
         hasOffer: !!p.offer, priceOld: p.offer ? this.fmt(p.offer.old) : '', pct: p.offer ? p.offer.pct : '',
         priceColor: p.offer ? acc : '#141414',
@@ -1929,7 +1952,7 @@ class Component extends DCLogic {
       const selOk = (!hasSizes || this.state.merchSize) && (!hasColors || this.state.merchColor);
       const canBuy = !soldOut && (!needsSel || selOk);
       merchDetail = {
-        name: p.name, tag: p.tag, desc: p.desc, priceLabel: this.fmt(p.price),
+        name: this.tM(p.name), tag: this.tM(p.tag), desc: this.tM(p.desc), priceLabel: this.fmt(p.price),
         hasOffer: !!p.offer, priceOld: p.offer ? this.fmt(p.offer.old) : '', pct: p.offer ? p.offer.pct : '',
         priceColor: p.offer ? acc : '#141414',
         soldOut,
@@ -1944,21 +1967,21 @@ class Component extends DCLogic {
         onGalPrev: () => this.setState({ merchGal: (dgi - 1 + frames) % frames }),
         onGalNext: () => this.setState({ merchGal: (dgi + 1) % frames }),
         qty: this.state.merchQty,
-        specs: p.specs.map(x => ({ k: x[0], v: x[1] })),
+        specs: p.specs.map(x => ({ k: this.tM(x[0]), v: this.tM(x[1]) })),
         hasSizes, hasColors,
         sizes: (p.sizes || []).map(sz => {
           const out = outSizes.includes(sz);
           const on = this.state.merchSize === sz;
-          return { label: sz, out, border: out ? '#E8E8E2' : (on ? acc : '#DADAD3'), bg: out ? '#F5F5F1' : (on ? 'rgba(245,96,7,.08)' : '#fff'), color: out ? '#c0c0b8' : (on ? acc : '#141414'), deco: out ? 'line-through' : 'none', onPick: out ? (() => {}) : (() => this.setState({ merchSize: sz, merchWarn: false })) };
+          return { label: this.tM(sz), out, border: out ? '#E8E8E2' : (on ? acc : '#DADAD3'), bg: out ? '#F5F5F1' : (on ? 'rgba(245,96,7,.08)' : '#fff'), color: out ? '#c0c0b8' : (on ? acc : '#141414'), deco: out ? 'line-through' : 'none', onPick: out ? (() => {}) : (() => this.setState({ merchSize: sz, merchWarn: false })) };
         }),
         colors: (p.colors || []).map(cl => {
           const out = outColors.includes(cl.n);
           const on = this.state.merchColor === cl.n;
-          return { name: cl.n, hex: cl.h, out, opacity: out ? '.4' : '1', ring: on ? acc : 'transparent', onPick: out ? (() => {}) : (() => this.setState({ merchColor: cl.n, merchWarn: false, merchGal: 0 })) };
+          return { name: this.tM(cl.n), hex: cl.h, out, opacity: out ? '.4' : '1', ring: on ? acc : 'transparent', onPick: out ? (() => {}) : (() => this.setState({ merchColor: cl.n, merchWarn: false, merchGal: 0 })) };
         }),
-        selColorName: this.state.merchColor || '',
+        selColorName: this.tM(this.state.merchColor || ''),
         warn: this.state.merchWarn,
-        warnMsg: (hasSizes && hasColors) ? 'Elige talla y color' : hasSizes ? 'Elige una talla' : 'Elige un color',
+        warnMsg: (hasSizes && hasColors) ? this.L('Elige talla y color','Tria talla i color') : hasSizes ? this.L('Elige una talla','Tria una talla') : this.L('Elige un color','Tria un color'),
         canBuy, canBuyView: !soldOut, addOpacity: canBuy ? '1' : '.55',
         onInc: () => this.incMerchQty(),
         onDec: () => this.decMerchQty(),
@@ -1984,7 +2007,7 @@ class Component extends DCLogic {
         shareMail: 'mailto:?subject=' + encodeURIComponent(p.name + ' · SOY DE MOTO') + '&body=' + encodeURIComponent('Mira este producto: ' + p.name),
         onCopyLink: () => { try { navigator.clipboard && navigator.clipboard.writeText(window.location.href); } catch(e){} this.setState({ shareOpen: false }); },
         related: this.merch.map((rp, ri) => ({ rp, ri })).filter(o => o.ri !== mIdx).slice(0, 4).map(o => ({
-          name: o.rp.name, tag: o.rp.tag, priceLabel: this.fmt(o.rp.price),
+          name: this.tM(o.rp.name), tag: this.tM(o.rp.tag), priceLabel: this.fmt(o.rp.price),
           onOpen: () => this.openMerch(o.ri)
         }))
       };
@@ -2140,6 +2163,11 @@ class Component extends DCLogic {
         detalles: this.L('Detalles','Detalls'),
         tambienInteresar: this.L('{{ t.tambienInteresar }}','També et pot interessar'),
         antesAnadir: this.L('antes de añadir a la cesta.','abans d\'afegir a la cistella.'),
+        guardarTip: this.L('Guardar','Desar'),
+        compartirTip: this.L('Compartir','Compartir'),
+        copiarEnlace: this.L('Copiar enlace','Copiar enllaç'),
+        cerrarTip: this.L('Cerrar','Tancar'),
+        ampliarTip: this.L('Ampliar imagen','Ampliar imatge'),
         // Detalle moto
         certificado: this.L('Certificado MOTORLAB','Certificat MOTORLAB'),
         reservarCita: this.L('Reservar · Pedir cita para verla','Reservar · Demanar cita per veure-la'),
@@ -2180,7 +2208,53 @@ class Component extends DCLogic {
         enviarWa: this.L('Enviar por WhatsApp','Enviar per WhatsApp'),
         enviarEmail: this.L('Enviar por email','Enviar per correu'),
         confirmamosPresupuesto: this.L('Te confirmamos el presupuesto antes de tocar nada.','Et confirmem el pressupost abans de tocar res.'),
-        sujetoVariaciones: this.L('*Presupuesto sujeto a variaciones.','*Pressupost subjecte a variacions.')
+        sujetoVariaciones: this.L('*Presupuesto sujeto a variaciones.','*Pressupost subjecte a variacions.'),
+        // Checkout / confirmación
+        enviarPedido: this.L('Enviar pedido','Enviar comanda'),
+        checkoutSub: this.L('Déjanos tus datos de envío. Coordinamos el pago y la entrega contigo directamente (WhatsApp, transferencia o contra reembolso) — sin pasarela online.','Deixa\'ns les teves dades d\'enviament. Coordinem el pagament i el lliurament amb tu directament (WhatsApp, transferència o contra reemborsament) — sense passarel·la online.'),
+        datosEnvio: this.L('Datos de envío','Dades d\'enviament'),
+        dirEnvio: this.L('Dirección de envío','Adreça d\'enviament'),
+        codPostal: this.L('Código postal','Codi postal'),
+        comentariosOpc: this.L('Comentarios (opcional)','Comentaris (opcional)'),
+        resumenPedido: this.L('Resumen del pedido','Resum de la comanda'),
+        total: this.L('Total','Total'),
+        checkoutErr: this.L('Completa nombre, teléfono, email, dirección, ciudad y CP.','Completa nom, telèfon, correu, adreça, ciutat i CP.'),
+        pagoEnvioMsg: this.L('El pago y el envío se coordinan directamente con MOTORLAB.','El pagament i l\'enviament es coordinen directament amb MOTORLAB.'),
+        pedidoRecibido: this.L('¡Pedido recibido!','Comanda rebuda!'),
+        pedidoRecibidoSub: this.L('Nos pondremos en contacto contigo para confirmar el envío y el pago (WhatsApp, transferencia o contra reembolso). Gracias por confiar en MOTORLAB.','Ens posarem en contacte amb tu per confirmar l\'enviament i el pagament (WhatsApp, transferència o contra reemborsament). Gràcies per confiar en MOTORLAB.'),
+        numPedido: this.L('Nº DE PEDIDO','Nº DE COMANDA'),
+        // Alerta
+        alertaStock: this.L('Alerta de stock','Alerta d\'estoc'),
+        creaAlertaTitle: this.L('Crea una alerta y te avisamos.','Crea una alerta i t\'avisem.'),
+        alertaCreada: this.L('Alerta creada','Alerta creada'),
+        entendido: this.L('Entendido','Entesos'),
+        crearAlertaBtn: this.L('Crear alerta','Crear alerta'),
+        // Reserva
+        reservarTitulo: this.L('Reservar','Reservar'),
+        // Vender
+        venderTitulo: this.L('Vende tu moto','Ven la teva moto'),
+        alertaCreadaSub1: this.L('Te escribiremos a','T\'escriurem a'),
+        alertaCreadaSub2: this.L('en cuanto entre una moto que encaje.','tan bon punt entri una moto que encaixi.'),
+        noFiltros: this.L('No has aplicado filtros. Aplica alguno (marca, precio, estilo…) para que la alerta te avise solo de lo que te interesa.','No has aplicat filtres. Aplica\'n algun (marca, preu, estil…) perquè l\'alerta t\'avisi només del que t\'interessa.'),
+        // Vender
+        cuentanosTuMoto: this.L('Cuéntanos tu moto','Explica\'ns la teva moto'),
+        marcaModelo: this.L('Marca y modelo','Marca i model'),
+        kmLabel: this.L('Kilometraje','Quilometratge'),
+        enviarTasacion: this.L('Enviar y pedir tasación','Enviar i demanar taxació'),
+        tasacionSub: this.L('Te respondemos con una valoración orientativa sin compromiso.','Et responem amb una valoració orientativa sense compromís.'),
+        reservaKicker: this.L('Reserva','Reserva'),
+        reservaEstaMoto: this.L('Reserva esta moto','Reserva aquesta moto'),
+        terminosReserva: this.L('Acepto que MOTORLAB me contacte y la política de privacidad.','Accepto que MOTORLAB em contacti i la política de privacitat.'),
+        reservaErr: this.L('Completa nombre, teléfono, email y acepta los términos.','Completa nom, telèfon, correu i accepta els termes.'),
+        confirmarReserva: this.L('Confirmar reserva','Confirmar reserva'),
+        reservaSub2: this.L('Sin compromiso · te confirmamos disponibilidad en menos de 24h.','Sense compromís · et confirmem disponibilitat en menys de 24h.'),
+        // Reserva
+        reservaSub: this.L('Déjanos tus datos y te confirmamos la cita para verla.','Deixa\'ns les teves dades i et confirmem la cita per veure-la.'),
+        aceptoTerminos: this.L('Acepto la política de privacidad y el tratamiento de mis datos.','Accepto la política de privacitat i el tractament de les meves dades.'),
+        enviarReserva: this.L('Enviar reserva','Enviar reserva'),
+        // varios
+        motosCrumb: this.L('Motos','Motos'),
+        anadidoCestaMsg: this.L('Añadido a la cesta','Afegit a la cistella')
       },
       faqList: this.faqs.map(f => ({ q: this.L(f.q[0], f.q[1]), a: this.L(f.a[0], f.a[1]) })),
       isInicio: tab === 'inicio',
@@ -2220,7 +2294,7 @@ class Component extends DCLogic {
       imgLightbox: this.state.imgLightbox,
       imgLightboxCss: this.state.imgLightbox ? 'url("' + this.state.imgLightbox + '")' : 'none',
       closeImgLightbox: () => this.setState({ imgLightbox: null }),
-      alertLabel: 'Crear alerta',
+      alertLabel: this.L('Crear alerta','Crear alerta'),
       onCreateAlert: () => this.openAlert(null),
       alertOpen: this.state.alertOpen,
       alertDone: this.state.alertDone,
@@ -2229,18 +2303,18 @@ class Component extends DCLogic {
       alertNoFilters: activeChips.length === 0 && !this.state.alertMoto,
       alertIsProduct: !!(this.state.alertMoto && String(this.state.alertMoto).indexOf('merch-') === 0),
       alertText: (this.state.alertMoto && String(this.state.alertMoto).indexOf('merch-') === 0)
-        ? 'Te avisamos por email en cuanto este producto vuelva a tener stock.'
+        ? this.L('Te avisamos por email en cuanto este producto vuelva a tener stock.','T\'avisem per correu tan bon punt aquest producte torni a tenir estoc.')
         : (this.state.alertMoto
-            ? 'Te avisamos por email si entra otra unidad que encaje con esta moto.'
-            : 'Guardamos tu búsqueda y te avisamos por email cuando llegue una moto que cumpla estos criterios.'),
+            ? this.L('Te avisamos por email si entra otra unidad que encaje con esta moto.','T\'avisem per correu si entra una altra unitat que encaixi amb aquesta moto.')
+            : this.L('Guardamos tu búsqueda y te avisamos por email cuando llegue una moto que cumpla estos criterios.','Desem la teva cerca i t\'avisem per correu quan arribi una moto que compleixi aquests criteris.')),
       alertChips: (this.state.alertMoto && String(this.state.alertMoto).indexOf('merch-') === 0)
-        ? (() => { const pr = this.merch.find(x => 'merch-' + x.id === this.state.alertMoto); const parts = []; if (pr) parts.push(pr.name); if (this.state.merchSize) parts.push('Talla ' + this.state.merchSize); if (this.state.merchColor) parts.push(this.state.merchColor); return parts; })()
+        ? (() => { const pr = this.merch.find(x => 'merch-' + x.id === this.state.alertMoto); const parts = []; if (pr) parts.push(pr.name); if (this.state.merchSize) parts.push(this.L('Talla ','Talla ') + this.state.merchSize); if (this.state.merchColor) parts.push(this.state.merchColor); return parts; })()
         : (this.state.alertMoto
             ? (isDetail ? [detail.brand, detail.model, detail.type].filter(Boolean) : [])
             : activeChips.map(c => c.label)),
       alertIsMoto: !!this.state.alertMoto,
       alertShowForm: !this.state.alertDone,
-      alertChipsTitle: (this.state.alertMoto && String(this.state.alertMoto).indexOf('merch-') === 0) ? 'Alerta para este producto' : (this.state.alertMoto ? 'Alerta para esta moto' : 'Filtros guardados'),
+      alertChipsTitle: (this.state.alertMoto && String(this.state.alertMoto).indexOf('merch-') === 0) ? this.L('Alerta para este producto','Alerta per a aquest producte') : (this.state.alertMoto ? this.L('Alerta para esta moto','Alerta per a aquesta moto') : this.L('Filtros guardados','Filtres desats')),
       alertEmailOk: this.state.alertEmail.trim().length > 0,
       alertBtnOpacity: this.state.alertEmail.trim().length > 0 ? '1' : '.55',
       onAlertEmail: (e) => this.setState({ alertEmail: e.target.value }),
@@ -2262,10 +2336,10 @@ class Component extends DCLogic {
       onOpenLightbox: () => { if (isDetail) this.setState({ lightbox: true }); },
       onCloseLightbox: () => this.setState({ lightbox: false }),
       certList: [
-        'Revisión completa en banco de pruebas',
-        'Garantía incluida por escrito',
-        'Historial de mantenimiento verificado',
-        'Aceptamos tu moto actual como parte del pago'
+        this.L('Revisión completa en banco de pruebas','Revisió completa en banc de proves'),
+        this.L('Garantía incluida por escrito','Garantia inclosa per escrit'),
+        this.L('Historial de mantenimiento verificado','Historial de manteniment verificat'),
+        this.L('Aceptamos tu moto actual como parte del pago','Acceptem la teva moto actual com a part del pagament')
       ],
       onRelPrev: () => { const el = document.getElementById('rel-carousel'); if (el) el.scrollBy({ left: -Math.round(el.clientWidth * 0.7), behavior:'smooth' }); },
       onRelNext: () => { const el = document.getElementById('rel-carousel'); if (el) el.scrollBy({ left: Math.round(el.clientWidth * 0.7), behavior:'smooth' }); },
