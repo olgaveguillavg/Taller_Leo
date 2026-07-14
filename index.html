@@ -61,7 +61,7 @@ body.is-touch .moto-card-nav,body.is-touch .gallery-overlay{opacity:1!important}
   /* Cabecera más compacta (estrecha) en móvil */
   header{height:58px!important}
   header + div{padding-top:58px!important}
-  .hdr-bar{padding:0 16px!important;gap:12px!important}
+  .hdr-bar{padding:0 max(16px,env(safe-area-inset-right)) 0 max(16px,env(safe-area-inset-left))!important;gap:12px!important}
   .logo-plate{height:auto!important;margin-right:0!important}
   .logo-img{height:28px!important}
   .nav-burger{width:40px!important;height:34px!important}
@@ -90,6 +90,18 @@ body.is-touch .moto-card-nav,body.is-touch .gallery-overlay{opacity:1!important}
   /* Modal "Pedir cita" responsive */
   .cita-modal > div{padding-left:18px!important;padding-right:18px!important}
   .cita-modal h3{font-size:21px!important}
+}
+/* Móvil en HORIZONTAL (giro de pantalla): el hero es muy bajo de alto, así que
+   se compacta el contenido para que quepa completo y no se corte. */
+@media (orientation:landscape) and (max-height:600px){
+  .hero-sec{height:calc(100dvh - 58px)!important;min-height:0!important}
+  .hero-body{padding:8px max(22px,env(safe-area-inset-left)) 34px max(22px,env(safe-area-inset-left))!important;justify-content:center!important}
+  .hero-h1{font-size:clamp(24px,5vw,40px)!important;line-height:1.02!important;max-width:26ch!important}
+  .hero-body p{font-size:13.5px!important;margin-top:9px!important;line-height:1.4!important}
+  .hero-body>div{margin-top:14px!important}
+  .hero-body button{height:44px!important;font-size:14px!important}
+  /* Pantalla "Próximamente": menos aire para que quepa en horizontal */
+  .soon-sec{padding:26px max(24px,env(safe-area-inset-left))!important;min-height:calc(100dvh - 58px)!important}
 }
 </style>
 </helmet>
@@ -266,7 +278,7 @@ body.is-touch .moto-card-nav,body.is-touch .gallery-overlay{opacity:1!important}
      llegan como "props" según la sección activa. Se muestra cuando la bandera de la sección
      está en false; el código real de la sección permanece intacto más abajo. -->
 <sc-if value="{{ showSoon }}" hint-placeholder-val="{{ false }}">
-<section style="position:relative;min-height:calc(100dvh - 90px);overflow:hidden;background:#141414;display:flex;align-items:center;justify-content:center;padding:56px 24px;">
+<section class="soon-sec" style="position:relative;min-height:calc(100dvh - 90px);overflow:hidden;background:#141414;display:flex;align-items:center;justify-content:center;padding:56px 24px;">
   <div style="position:absolute;inset:0;background:linear-gradient(120deg,rgba(20,20,20,.85) 0%,rgba(20,20,20,.5) 55%,rgba(20,20,20,.35) 100%);"></div>
   <div style="position:absolute;inset:0;background:repeating-linear-gradient(115deg,rgba(255,255,255,.015) 0px,rgba(255,255,255,.015) 2px,transparent 2px,transparent 26px);"></div>
   <div style="position:absolute;inset:0;background:linear-gradient(180deg,rgba(20,20,20,.3) 0%,rgba(20,20,20,.1) 40%,rgba(20,20,20,.6) 100%);"></div>
@@ -274,13 +286,13 @@ body.is-touch .moto-card-nav,body.is-touch .gallery-overlay{opacity:1!important}
   <div style="position:absolute;right:-40px;top:calc(50% + 96px);width:min(42%,340px);height:3px;background:linear-gradient(90deg,transparent,rgba(245,96,7,.5));transform:rotate(-16deg);transform-origin:right center;pointer-events:none;z-index:1;"></div>
   <div style="position:absolute;right:-40px;top:calc(50% + 116px);width:min(28%,210px);height:2px;background:linear-gradient(90deg,transparent,rgba(245,96,7,.3));transform:rotate(-16deg);transform-origin:right center;pointer-events:none;z-index:1;"></div>
 
-  <div style="position:relative;z-index:2;width:min(640px,100%);text-align:left;">
+  <div class="soon-inner" style="position:relative;z-index:2;width:min(640px,100%);text-align:center;">
     <!-- etiqueta (IBM Plex Mono + acento naranja), como el hero -->
-    <div style="display:flex;align-items:center;gap:12px;font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:.14em;color:rgba(255,255,255,.62);text-transform:uppercase;">
+    <div style="display:flex;align-items:center;justify-content:center;gap:12px;font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:.14em;color:rgba(255,255,255,.62);text-transform:uppercase;">
       <span style="width:34px;height:2px;background:var(--accent,#F56007);flex:none;"></span>{{ soonKicker }}
     </div>
-    <!-- gancho (Archivo, izquierda, 2 líneas equilibradas) -->
-    <p style="margin:22px 0 0;color:rgba(255,255,255,.9);font-family:'Archivo',system-ui,sans-serif;font-weight:600;font-size:clamp(19px,2.1vw,27px);line-height:1.22;letter-spacing:-.015em;max-width:46ch;text-wrap:balance;">{{ soonHook }}</p>
+    <!-- gancho (Archivo, centrado, 2 líneas equilibradas) -->
+    <p style="margin:22px auto 0;color:rgba(255,255,255,.9);font-family:'Archivo',system-ui,sans-serif;font-weight:600;font-size:clamp(19px,2.1vw,27px);line-height:1.22;letter-spacing:-.015em;max-width:46ch;text-wrap:balance;">{{ soonHook }}</p>
     <!-- bloque protagonista PRÓXIMAMENTE (corte diagonal, esquinas rectas, texto recto) -->
     <div style="margin:34px 0 0;max-width:100%;display:inline-block;background:var(--accent,#F56007);color:#fff;padding:14px clamp(20px,4.5vw,34px);clip-path:polygon(15px 0,100% 0,calc(100% - 15px) 100%,0 100%);">
       <span style="display:block;font-family:'Archivo',system-ui,sans-serif;font-weight:900;letter-spacing:.01em;font-size:clamp(28px,4vw,56px);line-height:1;white-space:nowrap;">{{ soonTitle }}</span>
