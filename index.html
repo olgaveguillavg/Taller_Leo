@@ -1683,18 +1683,42 @@ class Component extends DCLogic {
       }
     } catch (e) {}
   }
-  // Fija el fondo de html/body al color de la pestaña activa para que, al girar
-  // el móvil, las franjas de la zona segura (notch) no queden en blanco: el
-  // fondo se "amplía" y coincide, se gire o no la pantalla.
+  // Fija el fondo de html/body para que, al girar el móvil, las franjas de la
+  // zona segura (notch) no queden en blanco: el fondo del elemento raíz (<html>)
+  // se propaga al "canvas" del navegador y pinta también esas franjas laterales.
+  //
+  // La cabecera es SIEMPRE oscura y está fija arriba, mientras que el resto de la
+  // página puede ser oscuro (Inicio/Próximamente) o blanco (Nosotros/Contacto…).
+  // Por eso en las pestañas blancas usamos un degradado vertical: oscuro en la
+  // franja de la cabecera y blanco por debajo. Así las franjas del notch
+  // coinciden con lo que tienen al lado (oscuro junto a la cabecera, blanco junto
+  // al contenido), se gire o no la pantalla y esté o no soportado viewport-fit.
   applyPageBg(dark) {
     try {
-      const c = dark ? '#141414' : '#FFFFFF';
-      if (this._pageBg === c) return;
-      this._pageBg = c;
-      document.documentElement.style.background = c;
-      document.body.style.background = c;
+      this._pageDark = dark;
+      const ink = '#141414';
+      const hEl = document.querySelector('header');
+      const h = (hEl && hEl.offsetHeight) ||
+        (window.matchMedia && window.matchMedia('(max-width:760px)').matches ? 58 : 88);
+      const key = (dark ? 'd' : 'l') + ':' + h;
+      if (this._pageBg === key) return;
+      this._pageBg = key;
+      // Recalcular al girar/redimensionar (la cabecera cambia de alto): una sola vez.
+      if (!this._pageBgBound) {
+        this._pageBgBound = true;
+        const rerun = () => this.applyPageBg(this._pageDark);
+        window.addEventListener('resize', rerun);
+        window.addEventListener('orientationchange', rerun);
+      }
+      const htmlBg = dark
+        ? ink
+        : 'linear-gradient(180deg,' + ink + ' 0,' + ink + ' ' + h + 'px,#FFFFFF ' + h + 'px,#FFFFFF 100%)';
+      document.documentElement.style.background = htmlBg;
+      document.documentElement.style.backgroundColor = ink; // respaldo por si no hay degradado
+      document.body.style.background = dark ? ink : '#FFFFFF';
+      // La barra del navegador queda sobre la cabecera (siempre oscura).
       const meta = document.querySelector('meta[name="theme-color"]');
-      if (meta) meta.setAttribute('content', c);
+      if (meta) meta.setAttribute('content', ink);
     } catch (e) {}
   }
   bindHeroSwipe() {
