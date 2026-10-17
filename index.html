@@ -122,10 +122,9 @@ body.is-touch .moto-card-nav,body.is-touch .gallery-overlay{opacity:1!important}
 @media (max-aspect-ratio:9/10){.m4-img{object-position:50% 100%}}
 @media (max-width:760px){
   /* Hero móvil: encuadres centrados en el elemento principal de cada foto */
-  /* Slide 1 (moto) en móvil: la foto horizontal ocupa solo la parte alta y se funde en negro
-     hacia el texto, así entra la moto entera. Ajustables con estas dos variables:
-     --h1-h = altura de la foto · --h1-pos = qué parte de la foto se ve (x% y%) */
-  .hero-img1{--h1-h:62%;--h1-pos:96% 40%;bottom:auto!important;height:var(--h1-h)!important;object-position:var(--h1-pos)!important;-webkit-mask-image:linear-gradient(180deg,#000 68%,transparent 100%);mask-image:linear-gradient(180deg,#000 68%,transparent 100%)}
+  /* Slide 1 (moto) en móvil: la foto llena todo el hero. Posición ajustable con --h1-pos (x% y%) */
+  .hero-img1{--h1-pos:100% 50%;object-position:var(--h1-pos)!important}
+  .hero-img1 + .hero-ov{background:linear-gradient(180deg,rgba(18,18,18,.18) 0%,rgba(18,18,18,.5) 52%,rgba(18,18,18,.88) 100%)!important}
   .hero-photo-r{left:0!important;-webkit-mask-image:none!important;mask-image:none!important}
   .hero-img2{object-position:47% 42%!important}
   .hero-img3{object-position:70% 50%!important}
