@@ -67,7 +67,9 @@ body.is-touch .moto-card-nav,body.is-touch .gallery-overlay{opacity:1!important}
   .nav-burger{width:40px!important;height:34px!important}
   /* Hero ajustado: sin tanto aire arriba y sin necesidad de scroll */
   .hero-sec{height:calc(100dvh - 58px)!important;min-height:0!important}
-  .hero-body{top:0!important;bottom:0!important;display:flex!important;flex-direction:column!important;justify-content:center!important;padding:24px 22px 76px!important}
+  .hero-body{top:0!important;bottom:0!important;display:flex!important;flex-direction:column!important;justify-content:center!important;padding:24px 22px 98px!important}
+  /* Franja de confianza compacta en móvil (deja ver la foto detrás) */
+  .trust-bar > div{padding:11px 16px!important;gap:8px 16px!important}
   #tab-strip{display:none!important}
   .hdr-actions{margin-left:auto!important}
   .lang-switch{display:none!important}
@@ -90,6 +92,9 @@ body.is-touch .moto-card-nav,body.is-touch .gallery-overlay{opacity:1!important}
   /* Modal "Pedir cita" responsive */
   .cita-modal > div{padding-left:18px!important;padding-right:18px!important}
   .cita-modal h3{font-size:21px!important}
+  /* Franja de confianza: sin avatares ni separador para que quepa limpia */
+  .trust-avatars{display:none!important}
+  .trust-sep{display:none!important}
 }
 /* Móvil en HORIZONTAL (giro de pantalla): el hero es muy bajo de alto, así que
    se compacta el contenido para que quepa completo y no se corte. */
@@ -102,6 +107,36 @@ body.is-touch .moto-card-nav,body.is-touch .gallery-overlay{opacity:1!important}
   .hero-body button{height:44px!important;font-size:14px!important}
   /* Pantalla "Próximamente": menos aire para que quepa en horizontal */
   .soon-sec{padding:26px max(24px,env(safe-area-inset-left))!important;min-height:calc(100dvh - 58px)!important}
+}
+/* ===== Integración de fotografías (Inicio) ===== */
+/* Fotos ancladas a la derecha que se funden en negro hacia el texto (sin cortes duros) */
+.hero-photo-r{-webkit-mask-image:linear-gradient(90deg,transparent 0,#000 40%);mask-image:linear-gradient(90deg,transparent 0,#000 40%)}
+.habla-photo{-webkit-mask-image:linear-gradient(90deg,transparent 0,#000 38%);mask-image:linear-gradient(90deg,transparent 0,#000 38%)}
+/* Slide "Las motos nos mueven": una sola imagen a sangre (cover) sin bandas ni difuminados.
+   El encuadre garantiza que el titular y el párrafo integrados en la foto siempre se ven. */
+.m4-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:100% 35%;display:block}
+@media (max-aspect-ratio:9/10){.m4-img{object-position:50% 100%}}
+@media (max-width:760px){
+  /* Hero móvil: encuadres centrados en el elemento principal de cada foto */
+  .hero-img1{object-position:78% 50%!important}
+  .hero-photo-r{left:0!important;-webkit-mask-image:none!important;mask-image:none!important}
+  .hero-img2{object-position:47% 42%!important}
+  .hero-img3{object-position:70% 50%!important}
+  .hero-ov{background:linear-gradient(180deg,rgba(18,18,18,.5) 0%,rgba(18,18,18,.7) 45%,rgba(18,18,18,.9) 100%)!important}
+  .habla-inner{padding-left:22px!important;padding-right:22px!important}
+}
+/* ¿Hablamos de tu moto? en móvil, tablet y portátil pequeño: la foto pasa a ser una banda superior nítida
+   que se funde con el contenido (así el texto nunca queda encima del mecánico). */
+@media (max-width:1300px){
+  .habla-sec{--band:clamp(280px,36vw,380px)}
+  .habla-photo{left:0!important;bottom:auto!important;height:var(--band)!important;-webkit-mask-image:linear-gradient(180deg,#000 45%,transparent 100%)!important;mask-image:linear-gradient(180deg,#000 45%,transparent 100%)!important}
+  .habla-img{object-position:62% 30%!important}
+  .habla-ov{background:linear-gradient(180deg,rgba(18,18,18,.1) 0%,rgba(18,18,18,.5) calc(var(--band) * .5),#141414 var(--band))!important}
+  .habla-inner{padding-top:calc(var(--band) - 100px)!important}
+}
+@media (max-width:640px){
+  .habla-checks{flex-direction:column!important;align-items:stretch!important;margin-top:30px!important;padding-top:0!important;border-top:none!important}
+  .habla-item{padding:14px 0!important;border-left:none!important;border-top:1px solid rgba(255,255,255,.14)!important}
 }
 </style>
 </helmet>
@@ -211,10 +246,11 @@ body.is-touch .moto-card-nav,body.is-touch .gallery-overlay{opacity:1!important}
   <!-- HERO CARRUSEL -->
   <section class="hero-sec" style="position:relative;height:calc(100vh - 88px);min-height:580px;overflow:hidden;background:#141414;" onMouseEnter="{{ onHeroEnter }}" onMouseLeave="{{ onHeroLeave }}">
 
-      <!-- SLIDE 1 · Pide cita -->
+      <!-- SLIDE 1 · Pide cita (foto 01_hero: moto protagonista a la derecha) -->
       <div style="position:absolute;inset:0;opacity: {{ hs0.op }};pointer-events: {{ hs0.pe }};background:#141414;">
-        <div style="position:absolute;inset:0;background:linear-gradient(120deg,rgba(20,20,20,.82) 0%,rgba(20,20,20,.5) 55%,rgba(20,20,20,.35) 100%);"></div>
-        <div style="position:absolute;inset:0;background:repeating-linear-gradient(115deg,rgba(255,255,255,.015) 0px,rgba(255,255,255,.015) 2px,transparent 2px,transparent 26px);"></div>
+        <img src="/img/10_hero_mecanica_v2.webp" alt="" class="hero-img1" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center right;display:block;"/>
+        <!-- fade negro CSS: más oscuro a la izquierda (titular) → moto visible a la derecha -->
+        <div class="hero-ov" style="position:absolute;inset:0;background:linear-gradient(90deg,rgba(18,18,18,.96) 0%,rgba(18,18,18,.82) 28%,rgba(18,18,18,.5) 55%,rgba(18,18,18,.12) 82%,rgba(18,18,18,0) 100%);"></div>
         <div style="position:absolute;inset:0;background:linear-gradient(180deg,rgba(20,20,20,.3) 0%,rgba(20,20,20,.1) 40%,rgba(20,20,20,.6) 100%);"></div>
         <div class="hero-body" style="position:absolute;left:0;right:0;bottom:0;padding:0 30px 88px;max-width:1400px;margin:0 auto;">
           <h1 class="hero-h1" style="margin:0;color:#fff;font-weight:900;letter-spacing:-.03em;line-height:.96;font-size:clamp(46px,6.5vw,92px);max-width:16ch;">{{ t.heroTitle }}</h1>
@@ -225,10 +261,12 @@ body.is-touch .moto-card-nav,body.is-touch .gallery-overlay{opacity:1!important}
         </div>
       </div>
 
-      <!-- SLIDE 2 · Compra / Vende tu moto -->
+      <!-- SLIDE 2 · Compra / Vende tu moto (foto 08_hero_compra_venta a la derecha, fundida en negro) -->
       <div style="position:absolute;inset:0;opacity: {{ hs1.op }};pointer-events: {{ hs1.pe }};background:#141414;">
-        <div style="position:absolute;inset:0;background:linear-gradient(120deg,rgba(20,20,20,.85) 0%,rgba(30,20,16,.55) 55%,rgba(20,20,20,.35) 100%);"></div>
-        <div style="position:absolute;inset:0;background:repeating-linear-gradient(115deg,rgba(255,255,255,.015) 0px,rgba(255,255,255,.015) 2px,transparent 2px,transparent 26px);"></div>
+        <div class="hero-photo-r" style="position:absolute;top:0;bottom:0;right:0;left:36%;">
+          <img src="/img/08_hero_compra_venta.webp" alt="" class="hero-img2" style="width:100%;height:100%;object-fit:cover;object-position:45% 45%;display:block;"/>
+        </div>
+        <div class="hero-ov" style="position:absolute;inset:0;background:linear-gradient(90deg,rgba(18,18,18,.9) 0%,rgba(18,18,18,.6) 38%,rgba(18,18,18,.18) 70%,rgba(18,18,18,.08) 100%);"></div>
         <div style="position:absolute;inset:0;background:linear-gradient(180deg,rgba(20,20,20,.3) 0%,rgba(20,20,20,.1) 40%,rgba(20,20,20,.6) 100%);"></div>
         <div class="hero-body" style="position:absolute;left:0;right:0;bottom:0;padding:0 30px 88px;max-width:1400px;margin:0 auto;">
           <h1 class="hero-h1" style="margin:0;color:#fff;font-weight:900;letter-spacing:-.03em;line-height:.98;font-size:clamp(42px,5.6vw,80px);max-width:18ch;">{{ t.heroTitle2 }}</h1>
@@ -244,10 +282,10 @@ body.is-touch .moto-card-nav,body.is-touch .gallery-overlay{opacity:1!important}
         </div>
       </div>
 
-      <!-- SLIDE 3 · Merchandising -->
+      <!-- SLIDE 3 · Merchandising (foto 07_hero_merchandising: producto a la derecha) -->
       <div style="position:absolute;inset:0;opacity: {{ hs2.op }};pointer-events: {{ hs2.pe }};background:#141414;">
-        <div style="position:absolute;inset:0;background:linear-gradient(120deg,rgba(20,20,20,.85) 0%,rgba(20,20,20,.5) 55%,rgba(30,22,16,.4) 100%);"></div>
-        <div style="position:absolute;inset:0;background:repeating-linear-gradient(115deg,rgba(255,255,255,.018) 0px,rgba(255,255,255,.018) 2px,transparent 2px,transparent 26px);"></div>
+        <img src="/img/07_hero_merchandising.webp" alt="" class="hero-img3" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:100% 50%;display:block;"/>
+        <div class="hero-ov" style="position:absolute;inset:0;background:linear-gradient(90deg,rgba(18,18,18,.92) 0%,rgba(18,18,18,.7) 30%,rgba(18,18,18,.25) 60%,rgba(18,18,18,.05) 100%);"></div>
         <div style="position:absolute;inset:0;background:linear-gradient(180deg,rgba(20,20,20,.3) 0%,rgba(20,20,20,.1) 40%,rgba(20,20,20,.6) 100%);"></div>
         <div class="hero-body" style="position:absolute;left:0;right:0;bottom:0;padding:0 30px 88px;max-width:1400px;margin:0 auto;">
           <h1 class="hero-h1" style="margin:0;color:#fff;font-weight:900;letter-spacing:-.03em;line-height:.96;font-size:clamp(46px,6.5vw,92px);max-width:16ch;">{{ t.heroTitle3 }}</h1>
@@ -260,14 +298,220 @@ body.is-touch .moto-card-nav,body.is-touch .gallery-overlay{opacity:1!important}
         </div>
       </div>
 
+      <!-- SLIDE 4 · Cierre emocional "Las motos nos mueven" (último del carrusel).
+           La IMAGEN ya lleva el texto integrado (comillas, título y párrafo): NO se añade
+           texto por HTML. Ocupa el hero de borde a borde (reglas .m4 en el <style>):
+           - Pantallas apaisadas: versión horizontal en "cover", encuadrada para no cortar
+             ni al motorista ni el texto.
+           - Pantallas verticales (móvil/tablet): versión vertical ajustada al ancho.
+           Si la proporción de la pantalla obligase a recortar texto, la imagen se ajusta
+           y el hueco se rellena con la misma foto difuminada (nunca bandas negras). -->
+      <div class="m4" style="position:absolute;inset:0;opacity: {{ hs3.op }};pointer-events: {{ hs3.pe }};">
+        <picture>
+          <source media="(max-aspect-ratio: 9/10)" srcset="/img/09_las_motos_nos_mueven_movil.webp"/>
+          <img class="m4-img" src="/img/09_las_motos_nos_mueven_escritorio.webp" alt="Las motos nos mueven. No es solo un medio de transporte. Es libertad, es tiempo para ti, es una forma de ver la vida. Por eso en Soy de Moto las cuidamos con el mismo respeto con el que las vives."/>
+        </picture>
+      </div>
+
     <!-- zonas de clic laterales (sin flechas visibles) -->
     <button onClick="{{ onHeroPrev }}" aria-label="Anterior" title="Anterior" style="position:absolute;top:0;left:0;width:28%;height:52%;background:transparent;border:none;cursor:pointer;z-index:4;"></button>
     <button onClick="{{ onHeroNext }}" aria-label="Siguiente" title="Siguiente" style="position:absolute;top:0;right:0;width:28%;height:52%;background:transparent;border:none;cursor:pointer;z-index:4;"></button>
-    <!-- puntitos -->
-    <div style="position:absolute;bottom:30px;left:0;right:0;z-index:6;display:flex;gap:9px;justify-content:center;align-items:center;">
-      <sc-for list="{{ heroDots }}" as="hd" hint-placeholder-count="3">
-        <button onClick="{{ hd.onDot }}" aria-label="Ir al slide" style="width: {{ hd.w }};height:9px;border-radius: {{ hd.rad }};background: {{ hd.bg }};border:none;padding:0;cursor:pointer;transition:background .3s ease;"></button>
-      </sc-for>
+    <!-- ===== FRANJA DE CONFIANZA · overlay transparente fijo sobre el carrusel =====
+         Va dentro de .hero-sec (no dentro de cada slide), por eso permanece fija
+         mientras cambian las diapositivas y deja ver por detrás la foto del slide
+         activo. Fondo transparente (solo un degradado sutil para legibilidad).
+         Incluye los puntitos del carrusel a la derecha.
+         PENDIENTE DE CONFIRMAR: cifras (+500 / 4,9/5) en t.trustCount / t.trustRating. -->
+    <div class="trust-bar" style="position:absolute;left:0;right:0;bottom:0;z-index:6;display: {{ heroBarDisplay }};background:linear-gradient(0deg,rgba(16,16,16,.62) 0%,rgba(16,16,16,.2) 72%,transparent 100%);border-top:1px solid rgba(255,255,255,.14);">
+      <div style="max-width:1400px;margin:0 auto;padding:13px 30px;display:flex;align-items:center;justify-content:space-between;gap:12px 24px;flex-wrap:wrap;">
+        <div style="display:flex;align-items:center;gap:20px;flex-wrap:wrap;">
+          <div style="display:flex;align-items:center;gap:13px;">
+            <div class="trust-avatars" style="display:flex;">
+              <span style="width:32px;height:32px;border-radius:50%;background:#262626;border:2px solid rgba(20,20,20,.7);display:flex;align-items:center;justify-content:center;"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#8a8a82" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg></span>
+              <span style="width:32px;height:32px;border-radius:50%;background:#262626;border:2px solid rgba(20,20,20,.7);margin-left:-11px;display:flex;align-items:center;justify-content:center;"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#8a8a82" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg></span>
+              <span style="width:32px;height:32px;border-radius:50%;background:#262626;border:2px solid rgba(20,20,20,.7);margin-left:-11px;display:flex;align-items:center;justify-content:center;"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#8a8a82" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg></span>
+            </div>
+            <div style="color:#fff;font-size:14px;line-height:1.3;"><strong style="font-weight:800;">{{ t.trustCount }}</strong> {{ t.trustCountLabel }}</div>
+          </div>
+          <span class="trust-sep" style="width:1px;height:26px;background:rgba(255,255,255,.22);"></span>
+          <div style="display:flex;align-items:center;gap:9px;">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="var(--accent,#F56007)"><path d="m12 2 3 6.9 7.5.6-5.7 4.9 1.8 7.3L12 18l-6.4 3.7 1.8-7.3L1.7 9.5 9.2 8.9 12 2Z"/></svg>
+            <div style="color:#fff;font-size:14px;"><strong style="font-weight:800;">{{ t.trustRating }}</strong> {{ t.trustRatingLabel }}</div>
+          </div>
+        </div>
+        <!-- puntitos del carrusel -->
+        <div style="display:flex;gap:9px;align-items:center;">
+          <sc-for list="{{ heroDots }}" as="hd" hint-placeholder-count="4">
+            <button onClick="{{ hd.onDot }}" aria-label="Ir al slide" style="width: {{ hd.w }};height:9px;border-radius: {{ hd.rad }};background: {{ hd.bg }};border:none;padding:0;cursor:pointer;transition:background .3s ease;"></button>
+          </sc-for>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== 2 · ASÍ TRABAJAMOS / UN PROCESO CLARO ===== -->
+  <section style="background:#fff;color:#141414;">
+    <div style="max-width:1400px;margin:0 auto;padding:clamp(54px,7vw,88px) 30px;">
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:.14em;color:var(--accent,#F56007);text-transform:uppercase;">{{ t.asiTrabajamos }}</div>
+      <h2 style="margin:14px 0 0;font-size:clamp(32px,4.4vw,58px);font-weight:900;letter-spacing:-.03em;line-height:1;max-width:18ch;">{{ t.procesoTitle }}</h2>
+      <div style="margin-top:46px;display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:2px 32px;">
+        <div style="padding:26px 0 8px;border-top:2px solid #141414;">
+          <div style="display:flex;align-items:center;justify-content:space-between;">
+            <span style="font-family:'IBM Plex Mono',monospace;font-size:28px;font-weight:700;letter-spacing:-.02em;">01</span>
+            <img src="/img/icono_recogida.webp" alt="" width="30" height="30" style="width:30px;height:30px;display:block;"/>
+          </div>
+          <h3 style="margin:18px 0 0;font-size:19px;font-weight:800;letter-spacing:-.01em;">{{ t.procStep1 }}</h3>
+          <p style="margin:8px 0 0;font-size:14.5px;color:#5e5e5e;line-height:1.5;">{{ t.procStep1Txt }}</p>
+        </div>
+        <div style="padding:26px 0 8px;border-top:2px solid #141414;">
+          <div style="display:flex;align-items:center;justify-content:space-between;">
+            <span style="font-family:'IBM Plex Mono',monospace;font-size:28px;font-weight:700;letter-spacing:-.02em;">02</span>
+            <img src="/img/icono_diagnostico.webp" alt="" width="30" height="30" style="width:30px;height:30px;display:block;"/>
+          </div>
+          <h3 style="margin:18px 0 0;font-size:19px;font-weight:800;letter-spacing:-.01em;">{{ t.procStep2 }}</h3>
+          <p style="margin:8px 0 0;font-size:14.5px;color:#5e5e5e;line-height:1.5;">{{ t.procStep2Txt }}</p>
+        </div>
+        <div style="padding:26px 0 8px;border-top:2px solid #141414;">
+          <div style="display:flex;align-items:center;justify-content:space-between;">
+            <span style="font-family:'IBM Plex Mono',monospace;font-size:28px;font-weight:700;letter-spacing:-.02em;">03</span>
+            <img src="/img/icono_presupuesto.webp" alt="" width="30" height="30" style="width:30px;height:30px;display:block;"/>
+          </div>
+          <h3 style="margin:18px 0 0;font-size:19px;font-weight:800;letter-spacing:-.01em;">{{ t.procStep3 }}</h3>
+          <p style="margin:8px 0 0;font-size:14.5px;color:#5e5e5e;line-height:1.5;">{{ t.procStep3Txt }}</p>
+        </div>
+        <div style="padding:26px 0 8px;border-top:2px solid #141414;">
+          <div style="display:flex;align-items:center;justify-content:space-between;">
+            <span style="font-family:'IBM Plex Mono',monospace;font-size:28px;font-weight:700;letter-spacing:-.02em;">04</span>
+            <img src="/img/icono_reparacion.webp" alt="" width="30" height="30" style="width:30px;height:30px;display:block;"/>
+          </div>
+          <h3 style="margin:18px 0 0;font-size:19px;font-weight:800;letter-spacing:-.01em;">{{ t.procStep4 }}</h3>
+          <p style="margin:8px 0 0;font-size:14.5px;color:#5e5e5e;line-height:1.5;">{{ t.procStep4Txt }}</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== 3 · SERVICIO PROFESIONAL / QUÉ REVISAMOS =====
+       Fotos de las tarjetas PENDIENTES: los huecos de imagen quedan reservados
+       (fondo provisional). Para añadir una foto, sustituye el "background" del div
+       marcado por  background:url('/img/ARCHIVO.jpg') center/cover no-repeat;  -->
+  <section style="background:#141414;color:#fff;">
+    <div style="max-width:1400px;margin:0 auto;padding:clamp(54px,7vw,88px) 30px;">
+      <div style="display:flex;align-items:flex-end;justify-content:space-between;gap:24px;flex-wrap:wrap;">
+        <div>
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:.14em;color:var(--accent,#F56007);text-transform:uppercase;">{{ t.servicioProfesional }}</div>
+          <h2 style="margin:14px 0 0;font-size:clamp(32px,4.4vw,58px);font-weight:900;letter-spacing:-.03em;line-height:1;">{{ t.queRevisamos }}</h2>
+        </div>
+        <button onClick="{{ goNosotros }}" style="flex:none;background:none;border:none;color:#fff;cursor:pointer;font-weight:700;font-size:14.5px;display:flex;align-items:center;gap:9px;padding:6px 0;" style-hover="color:var(--accent,#F56007)">{{ t.verTodosServicios }}
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </button>
+      </div>
+      <div style="margin-top:40px;display:grid;grid-template-columns:repeat(auto-fit,minmax(238px,1fr));gap:20px;">
+        <div onClick="{{ goNosotros }}" style="cursor:pointer;background:#fff;color:#141414;border:1px solid #242424;overflow:hidden;" style-hover="border-color:var(--accent,#F56007)">
+          <div style="position:relative;height:clamp(170px,20vw,210px);overflow:hidden;background:#1c1c1c;">
+            <img src="/img/02_servicio_mantenimiento.webp" alt="" loading="lazy" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center;display:block;"/>
+            
+          </div>
+          <div style="padding:20px 20px 22px;display:flex;align-items:flex-start;justify-content:space-between;gap:14px;">
+            <div><h3 style="margin:0;font-size:17px;font-weight:800;letter-spacing:-.01em;">{{ t.svcMantenimiento }}</h3><p style="margin:7px 0 0;font-size:13.5px;color:#6a6a6a;line-height:1.45;">{{ t.svcMantenimientoTxt }}</p></div>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--accent,#F56007)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex:none;margin-top:2px;"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </div>
+        </div>
+        <div onClick="{{ goNosotros }}" style="cursor:pointer;background:#fff;color:#141414;border:1px solid #242424;overflow:hidden;" style-hover="border-color:var(--accent,#F56007)">
+          <div style="position:relative;height:clamp(170px,20vw,210px);overflow:hidden;background:#1c1c1c;">
+            <img src="/img/03_servicio_frenos.webp" alt="" loading="lazy" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center;display:block;"/>
+            
+          </div>
+          <div style="padding:20px 20px 22px;display:flex;align-items:flex-start;justify-content:space-between;gap:14px;">
+            <div><h3 style="margin:0;font-size:17px;font-weight:800;letter-spacing:-.01em;">{{ t.svcFrenos }}</h3><p style="margin:7px 0 0;font-size:13.5px;color:#6a6a6a;line-height:1.45;">{{ t.svcFrenosTxt }}</p></div>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--accent,#F56007)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex:none;margin-top:2px;"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </div>
+        </div>
+        <div onClick="{{ goNosotros }}" style="cursor:pointer;background:#fff;color:#141414;border:1px solid #242424;overflow:hidden;" style-hover="border-color:var(--accent,#F56007)">
+          <div style="position:relative;height:clamp(170px,20vw,210px);overflow:hidden;background:#1c1c1c;">
+            <img src="/img/04_servicio_motor.webp" alt="" loading="lazy" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center;display:block;"/>
+            
+          </div>
+          <div style="padding:20px 20px 22px;display:flex;align-items:flex-start;justify-content:space-between;gap:14px;">
+            <div><h3 style="margin:0;font-size:17px;font-weight:800;letter-spacing:-.01em;">{{ t.svcMotor }}</h3><p style="margin:7px 0 0;font-size:13.5px;color:#6a6a6a;line-height:1.45;">{{ t.svcMotorTxt }}</p></div>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--accent,#F56007)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex:none;margin-top:2px;"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </div>
+        </div>
+        <div onClick="{{ goNosotros }}" style="cursor:pointer;background:#fff;color:#141414;border:1px solid #242424;overflow:hidden;" style-hover="border-color:var(--accent,#F56007)">
+          <div style="position:relative;height:clamp(170px,20vw,210px);overflow:hidden;background:#1c1c1c;">
+            <img src="/img/11_servicio_suspension_v2.webp" alt="" loading="lazy" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center;display:block;"/>
+            
+          </div>
+          <div style="padding:20px 20px 22px;display:flex;align-items:flex-start;justify-content:space-between;gap:14px;">
+            <div><h3 style="margin:0;font-size:17px;font-weight:800;letter-spacing:-.01em;">{{ t.svcSuspension }}</h3><p style="margin:7px 0 0;font-size:13.5px;color:#6a6a6a;line-height:1.45;">{{ t.svcSuspensionTxt }}</p></div>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--accent,#F56007)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex:none;margin-top:2px;"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== 4 · QUÉ DICEN DE NOSOTROS =====
+       PROTOTIPO: reseñas FICTICIAS de ejemplo, identificadas con la nota "Opiniones de ejemplo".
+       Los datos viven en el array `testimonios` de la lógica (junto a `faqs`): para poner
+       reseñas reales basta con cambiar allí nombre, iniciales, estrellas, texto y servicio;
+       esta plantilla no se toca. Para ocultar la nota: TESTIMONIOS_DEMO = false. -->
+  <section style="background:#FAFAF8;color:#141414;">
+    <div style="max-width:1400px;margin:0 auto;padding:clamp(44px,5.5vw,68px) 30px;">
+      <div style="display:flex;align-items:baseline;justify-content:space-between;gap:10px 24px;flex-wrap:wrap;">
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:.14em;color:var(--accent,#F56007);text-transform:uppercase;">{{ t.queDicen }}</div>
+      </div>
+      <div style="margin-top:26px;display:grid;grid-template-columns:repeat(auto-fit,minmax(272px,1fr));gap:18px;">
+        <sc-for list="{{ testimonios }}" as="r" hint-placeholder-count="3">
+          <article style="background:#fff;border:1px solid #ECECE6;border-radius:2px;padding:24px 24px 22px;display:flex;flex-direction:column;">
+            <div style="display:flex;gap:3px;" aria-label="{{ r.starsLabel }}">
+              <sc-for list="{{ r.starList }}" as="st" hint-placeholder-count="5">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="{{ st.fill }}" stroke="{{ st.stroke }}" stroke-width="1.6" stroke-linejoin="round"><path d="m12 2 3 6.9 7.5.6-5.7 4.9 1.8 7.3L12 18l-6.4 3.7 1.8-7.3L1.7 9.5 9.2 8.9 12 2Z"/></svg>
+              </sc-for>
+            </div>
+            <p style="flex:1;margin:14px 0 0;font-size:15px;color:#2e2e2e;line-height:1.55;">“{{ r.text }}”</p>
+            <div style="margin-top:20px;padding-top:16px;border-top:1px solid #F0F0EA;display:flex;align-items:center;gap:12px;">
+              <span style="width:40px;height:40px;border-radius:50%;background:#141414;color:#fff;flex:none;display:flex;align-items:center;justify-content:center;font-family:'IBM Plex Mono',monospace;font-size:13px;font-weight:600;letter-spacing:.04em;">{{ r.initials }}</span>
+              <div style="min-width:0;">
+                <div style="font-weight:800;font-size:14.5px;line-height:1.2;">{{ r.name }}</div>
+                <div style="margin-top:3px;font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--accent,#F56007);">{{ r.service }}</div>
+              </div>
+            </div>
+          </article>
+        </sc-for>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== 5 · ¿HABLAMOS DE TU MOTO? (cierre / contacto) =====
+       Foto 06_contacto anclada a la derecha y fundida en negro hacia la izquierda (mask
+       CSS, el degradado no está en la imagen). Todo el contenido —titular, botones y la
+       franja de compromisos— queda en la columna izquierda, sobre la zona oscura, sin
+       tapar al mecánico. En móvil la foto pasa a ser una banda superior (reglas .habla-*). -->
+  <section class="habla-sec" style="position:relative;overflow:hidden;background:#141414;color:#fff;">
+    <!-- ▼ fondo (foto del taller) ▼ -->
+    <div class="habla-photo" style="position:absolute;top:0;bottom:0;right:0;left:30%;"><img src="/img/12_contacto_mecanico_v2.webp" alt="" class="habla-img" style="width:100%;height:100%;object-fit:cover;object-position:68% 40%;display:block;"/></div>
+    <div class="habla-ov" style="position:absolute;inset:0;background:linear-gradient(90deg,rgba(18,18,18,.94) 0%,rgba(18,18,18,.8) 34%,rgba(18,18,18,.3) 64%,rgba(18,18,18,.12) 100%);"></div>
+    <div class="habla-inner" style="position:relative;z-index:2;max-width:1400px;margin:0 auto;padding:clamp(56px,7vw,92px) 30px;">
+      <div style="max-width:660px;">
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:.14em;color:var(--accent,#F56007);text-transform:uppercase;">{{ t.tuMotoBuenasManos }}</div>
+        <h2 style="margin:14px 0 0;font-size:clamp(32px,4.6vw,62px);font-weight:900;letter-spacing:-.03em;line-height:.98;">{{ t.hablamosTitle }}</h2>
+        <p style="margin:20px 0 0;font-size:clamp(16px,1.4vw,19px);color:rgba(255,255,255,.78);line-height:1.55;max-width:46ch;">{{ t.hablamosText }}</p>
+        <div style="margin-top:30px;display:flex;flex-wrap:wrap;gap:14px;">
+          <button onClick="{{ openForm }}" style="height:56px;padding:0 30px;background:var(--accent,#F56007);color:#fff;border:none;border-radius:0;font-weight:700;font-size:15px;cursor:pointer;display:flex;align-items:center;gap:10px;" style-hover="filter:brightness(1.1)">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+            {{ t.pedirCita }}</button>
+          <a href="{{ waContact }}" target="_blank" rel="noopener" style="height:56px;padding:0 26px;background:transparent;color:#fff;border:1.5px solid rgba(255,255,255,.5);border-radius:0;font-weight:700;font-size:15px;text-decoration:none;display:flex;align-items:center;gap:10px;" style-hover="border-color:#25D366;color:#25D366">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 0 0-8.6 15l-1.3 4.7 4.8-1.3A10 10 0 1 0 12 2Zm5.6 14.1c-.2.6-1.2 1.2-1.7 1.2-.4 0-1 .1-3.4-.9-2.9-1.2-4.7-4.1-4.9-4.3-.1-.2-1.1-1.5-1.1-2.8 0-1.3.7-2 .9-2.2.2-.3.5-.3.7-.3h.5c.2 0 .4 0 .6.5l.8 2c.1.2.1.4 0 .5l-.4.6c-.2.2-.3.4-.1.7.2.3.8 1.3 1.7 2.1 1.2 1 2.1 1.4 2.4 1.5.2.1.4.1.6-.1l.8-1c.2-.2.4-.2.6-.1l1.9.9c.3.1.5.2.5.3.1.2.1.7-.1 1.2Z"/></svg>
+            {{ t.escribeWhatsapp }}</a>
+        </div>
+        <!-- franja de compromisos: una fila alineada con separadores iguales -->
+        <div class="habla-checks" style="margin-top:40px;padding-top:24px;border-top:1px solid rgba(255,255,255,.14);display:flex;align-items:center;">
+          <div class="habla-item" style="display:flex;align-items:center;gap:11px;padding:0 24px 0 0;font-size:14.5px;font-weight:600;color:#fff;white-space:nowrap;"><span style="width:24px;height:24px;flex:none;border:1.5px solid var(--accent,#F56007);display:flex;align-items:center;justify-content:center;"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="var(--accent,#F56007)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span>{{ t.hablaCheck1 }}</div>
+          <div class="habla-item" style="display:flex;align-items:center;gap:11px;padding:0 24px;border-left:1px solid rgba(255,255,255,.14);font-size:14.5px;font-weight:600;color:#fff;white-space:nowrap;"><span style="width:24px;height:24px;flex:none;border:1.5px solid var(--accent,#F56007);display:flex;align-items:center;justify-content:center;"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="var(--accent,#F56007)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span>{{ t.hablaCheck2 }}</div>
+          <div class="habla-item" style="display:flex;align-items:center;gap:11px;padding:0 0 0 24px;border-left:1px solid rgba(255,255,255,.14);font-size:14.5px;font-weight:600;color:#fff;white-space:nowrap;"><span style="width:24px;height:24px;flex:none;border:1.5px solid var(--accent,#F56007);display:flex;align-items:center;justify-content:center;"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="var(--accent,#F56007)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span>{{ t.hablaCheck3 }}</div>
+        </div>
+      </div>
     </div>
   </section>
 </div>
@@ -928,9 +1172,9 @@ body.is-touch .moto-card-nav,body.is-touch .gallery-overlay{opacity:1!important}
   <h2 style="margin:16px 0 0;font-size:clamp(38px,5.4vw,76px);font-weight:900;letter-spacing:-.03em;line-height:.98;max-width:18ch;">{{ t.nosotrosTitle }}</h2>
   <p style="margin:28px 0 0;font-size:clamp(17px,1.6vw,21px);color:#4a4a4a;line-height:1.6;max-width:60ch;">{{ t.nosotrosSub }}</p>
   <div class="ns-grid" style="margin-top:56px;display:grid;grid-template-columns:2fr 1fr 1fr;gap:16px;">
-    <div style="grid-column:1;grid-row:1/3;min-height:420px;border-radius:16px;background:#EFEFEB center/cover no-repeat;background-image:url('https://precision-moto-build.lovable.app/assets/workshop-Dpnf8Qa6.jpg');"></div>
-    <div style="min-height:200px;border-radius:16px;background:#EFEFEB center/cover no-repeat;background-image:url('https://precision-moto-build.lovable.app/assets/tools-Vh9ad4na.jpg');"></div>
-    <div style="min-height:200px;border-radius:16px;background:#EFEFEB center/cover no-repeat;background-image:url('https://precision-moto-build.lovable.app/assets/phase-engine-DWcbONOH.jpg');"></div>
+    <div style="grid-column:1;grid-row:1/3;min-height:420px;border-radius:16px;background:#EFEFEB center/cover no-repeat;background-image:url('/img/nosotros/01_Nosotros_Foto_Principal.webp');"></div>
+    <div style="min-height:200px;border-radius:16px;background:#EFEFEB center/cover no-repeat;background-image:url('/img/nosotros/02_Nosotros_Foto_Superior_Herramientas.webp');"></div>
+    <div style="min-height:200px;border-radius:16px;background:#EFEFEB center/cover no-repeat;background-image:url('/img/nosotros/03_Nosotros_Foto_Superior_Mecanica.webp');"></div>
     <div style="grid-column:2/4;min-height:204px;border-radius:16px;background:var(--ink);color:#fff;padding:34px;display:flex;flex-direction:column;justify-content:center;">
       <div style="font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:.06em;color:rgba(255,255,255,.6);">{{ t.elCompromiso }}</div>
       <div style="margin-top:12px;font-size:22px;font-weight:800;line-height:1.25;">{{ t.compromisoText }}</div>
@@ -953,7 +1197,6 @@ body.is-touch .moto-card-nav,body.is-touch .gallery-overlay{opacity:1!important}
       <div onClick="{{ s.onToggle }}" onMouseEnter="{{ s.onEnter }}" onMouseLeave="{{ s.onLeave }}" style="flex:0 0 clamp(340px,44vw,560px);scroll-snap-align:center;">
         <div style="height:clamp(300px,36vw,440px);border-radius:18px;background:#EFEFEB center/cover no-repeat;background-image: {{ s.bgCss }};position:relative;overflow:hidden;border:1px solid #E4E4DE;cursor:pointer;">
           <div style="position:absolute;inset:0;background:linear-gradient(180deg,transparent 45%,rgba(0,0,0,.55) 100%);"></div>
-          <div style="position:absolute;top:16px;left:16px;z-index:3;font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.06em;color:#fff;background:rgba(20,20,20,.5);padding:5px 10px;border-radius:6px;">{{ s.code }}</div>
           <div style="position:absolute;left:24px;right:24px;bottom:22px;z-index:2;">
             <div style="color:#fff;font-size:clamp(23px,2.3vw,32px);font-weight:800;letter-spacing:-.02em;line-height:1.05;">{{ s.title }}</div>
             <div style="margin-top:8px;color:rgba(255,255,255,.7);font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.08em;text-transform:uppercase;">{{ s.tagline }}</div>
@@ -1388,6 +1631,8 @@ body.is-touch .moto-card-nav,body.is-touch .gallery-overlay{opacity:1!important}
 </x-dc>
 <script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:&quot;100%&quot;,&quot;height&quot;:&quot;100%&quot;},&quot;accentColor&quot;:{&quot;editor&quot;:&quot;color&quot;,&quot;default&quot;:&quot;#F56007&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Marca&quot;},&quot;tallerName&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;SOY DE MOTO&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Marca&quot;},&quot;whatsappNumber&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;34666666666&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Contacto&quot;}}">
 class Component extends DCLogic {
+  // Nº de slides del hero (incluye el slide emocional de cierre "Las motos nos mueven").
+  HERO_SLIDES = 4;
   state = {
     tab: 'inicio',
     navOpen: false,
@@ -1466,6 +1711,26 @@ class Component extends DCLogic {
   }
   tType(t) { if (this.state.lang !== 'ca' || !t) return t; return t.replace(/Naked/g,'Naked').replace(/Deportiva/g,'Esportiva').replace(/deportiva/g,'esportiva').replace(/Trail/g,'Trail').replace(/Custom/g,'Custom').replace(/Scooter/g,'Scooter').replace(/Clásica/g,'Clàssica').replace(/Touring/g,'Touring'); }
 
+  // ===== RESEÑAS («Qué dicen de nosotros») =====
+  // PROTOTIPO: opiniones FICTICIAS de ejemplo para enseñar la maqueta.
+  // Para usar reseñas reales, edita solo estos datos (la plantilla no cambia):
+  //   stars: 1-5 · name · initials (avatar) · text y service: [castellano, catalán]
+  // Cuando sean reales, pon TESTIMONIOS_DEMO = false para ocultar la nota de ejemplo.
+  TESTIMONIOS_DEMO = true;
+  testimonios = [
+    { stars: 5, name: 'Jordi M.', initials: 'JM',
+      text: ['Llevé la moto porque hacía un ruido raro. Me explicaron de dónde venía y qué había que hacer antes de tocar nada. Trato cercano y todo muy claro.',
+             'Vaig portar la moto perquè feia un soroll estrany. Em van explicar d\'on venia i què calia fer abans de tocar res. Tracte proper i tot molt clar.'],
+      service: ['Diagnóstico', 'Diagnòstic'] },
+    { stars: 5, name: 'Laura G.', initials: 'LG',
+      text: ['Fui para una revisión antes de salir de viaje. Me aconsejaron bien, sin intentar venderme cosas que no necesitaba. Da gusto encontrar un taller así.',
+             'Vaig anar a fer una revisió abans de marxar de viatge. Em van aconsellar bé, sense intentar vendre\'m coses que no necessitava. Fa goig trobar un taller així.'],
+      service: ['Revisión general', 'Revisió general'] },
+    { stars: 4, name: 'Marc T.', initials: 'MT',
+      text: ['Muy buena atención desde el primer momento. Me fueron explicando lo que revisaban y las opciones que tenía. La moto quedó perfecta y volvería.',
+             'Molt bona atenció des del primer moment. Em van anar explicant el que revisaven i les opcions que tenia. La moto va quedar perfecta i hi tornaria.'],
+      service: ['Mantenimiento', 'Manteniment'] },
+  ];
   faqs = [
     { q: ['¿Las motos de ocasión llevan garantía?', 'Les motos d\'ocasió tenen garantia?'], a: ['Sí. Todas nuestras motos de ocasión salen revisadas en nuestro banco y con garantía. Te entregamos el informe del estado real antes de comprar.', 'Sí. Totes les nostres motos d\'ocasió surten revisades al nostre banc i amb garantia. T\'entreguem l\'informe de l\'estat real abans de comprar.'] },
     { q: ['¿Puedo reservar una moto antes de verla?', 'Puc reservar una moto abans de veure-la?'], a: ['Claro. Desde la ficha de cada moto puedes reservarla y pedir cita para verla en el taller sin compromiso.', 'És clar. Des de la fitxa de cada moto pots reservar-la i demanar cita per veure-la al taller sense compromís.'] },
@@ -1480,19 +1745,19 @@ class Component extends DCLogic {
   fmt(n) { return n.toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' €'; }
 
   carouselCards = [
-    {code:'A-01', title:'Mantenimiento', titleCa:'Manteniment', tagline:'Revisiones · aceite · a punto', taglineCa:'Revisions · oli · a punt', img:'phase-engine-DWcbONOH.jpg',
+    {code:'A-01', title:'Mantenimiento', titleCa:'Manteniment', tagline:'Revisiones · aceite · a punto', taglineCa:'Revisions · oli · a punt', img:'/img/nosotros/A01_Mantenimiento.webp',
       summary:'Revisiones periódicas, cambios de aceite y filtros, y puesta a punto programada para que tu moto no falle cuando la necesitas.', summaryCa:'Revisions periòdiques, canvis d\'oli i filtres, i posada a punt programada perquè la teva moto no falli quan la necessites.'},
-    {code:'A-02', title:'Diagnosis electrónica', titleCa:'Diagnosi electrònica', tagline:'Centralita · sensores', taglineCa:'Centraleta · sensors', img:'phase-diagnosis-DQUMnOc1.jpg',
+    {code:'A-02', title:'Diagnosis electrónica', titleCa:'Diagnosi electrònica', tagline:'Centralita · sensores', taglineCa:'Centraleta · sensors', img:'/img/nosotros/A02_Diagnosis_Electronica.webp',
       summary:'Lectura de centralita, análisis de sensores y detección de fallos en banco. Sabemos qué falla antes de abrir nada.', summaryCa:'Lectura de centraleta, anàlisi de sensors i detecció d\'errors en banc. Sabem què falla abans d\'obrir res.'},
-    {code:'A-03', title:'Frenos y seguridad', titleCa:'Frens i seguretat', tagline:'Pastillas · discos · líquido', taglineCa:'Pastilles · discos · líquid', img:'phase-brakes-AI2atPTc.jpg',
+    {code:'A-03', title:'Frenos y seguridad', titleCa:'Frens i seguretat', tagline:'Pastillas · discos · líquido', taglineCa:'Pastilles · discos · líquid', img:'/img/nosotros/A03_Frenos_y_Seguridad.webp',
       summary:'Pastillas, discos, latiguillos y purgado del circuito. Lo que te mantiene pegado al asfalto, calibrado al milímetro.', summaryCa:'Pastilles, discos, latiguills i purga del circuit. El que et manté enganxat a l\'asfalt, calibrat al mil·límetre.'},
-    {code:'A-04', title:'Neumáticos y suspensión', titleCa:'Pneumàtics i suspensió', tagline:'Montaje · reglaje', taglineCa:'Muntatge · reglatge', img:'phase-fairing-DkWmpBy-.jpg',
+    {code:'A-04', title:'Neumáticos y suspensión', titleCa:'Pneumàtics i suspensió', tagline:'Montaje · reglaje', taglineCa:'Muntatge · reglatge', img:'/img/nosotros/A04_Neumaticos_y_Suspension.webp',
       summary:'Montaje y equilibrado de neumáticos según tu uso real, más reglaje de horquilla y amortiguador para un tacto preciso.', summaryCa:'Muntatge i equilibrat de pneumàtics segons el teu ús real, més reglatge de forquilla i amortidor per a un tacte precís.'},
-    {code:'A-05', title:'Motor y transmisión', titleCa:'Motor i transmissió', tagline:'Distribución · embrague', taglineCa:'Distribució · embragatge', img:'hero-bike-DfqVmL4B.jpg',
+    {code:'A-05', title:'Motor y transmisión', titleCa:'Motor i transmissió', tagline:'Distribución · embrague', taglineCa:'Distribució · embragatge', img:'/img/nosotros/A05_Motor_y_Transmision.webp',
       summary:'Distribución, juntas, embrague, kit de arrastre y trabajos de motor mayores. Entrega de potencia como debe ser.', summaryCa:'Distribució, juntes, embragatge, kit d\'arrossegament i treballs de motor majors. Lliurament de potència com cal.'},
-    {code:'A-06', title:'Compraventa de motos', titleCa:'Compravenda de motos', tagline:'Revisadas · con garantía', taglineCa:'Revisades · amb garantia', img:'bike-1-DZ28_UUy.jpg',
+    {code:'A-06', title:'Compraventa de motos', titleCa:'Compravenda de motos', tagline:'Revisadas · con garantía', taglineCa:'Revisades · amb garantia', img:'/img/nosotros/A06_Compraventa_de_Motos.webp',
       summary:'Compramos y vendemos motos de ocasión. Cada unidad pasa por nuestro banco, con historial revisado y garantía antes de salir.', summaryCa:'Comprem i venem motos d\'ocasió. Cada unitat passa pel nostre banc, amb historial revisat i garantia abans de sortir.'},
-    {code:'A-07', title:'Reparación de piezas sueltas', titleCa:'Reparació de peces soltes', tagline:'Por encargo · sin la moto', taglineCa:'Per encàrrec · sense la moto', img:'tools-Vh9ad4na.jpg',
+    {code:'A-07', title:'Reparación de piezas sueltas', titleCa:'Reparació de peces soltes', tagline:'Por encargo · sin la moto', taglineCa:'Per encàrrec · sense la moto', img:'/img/nosotros/A07_Reparacion_de_Piezas_Sueltas.webp',
       summary:'No hace falta traer la moto entera: aceptamos piezas individuales por encargo —horquillas, culatas, componentes— para repararlas.', summaryCa:'No cal portar la moto sencera: acceptem peces individuals per encàrrec —forquilles, culates, components— per reparar-les.'}
   ];
 
@@ -1653,13 +1918,13 @@ class Component extends DCLogic {
   scrollDetailGal(idx) { try { const sc = document.querySelector('.gallery-scroller'); if (sc) sc.scrollLeft = idx * sc.clientWidth; } catch (e) {} }
   heroSet(i) { if (i !== this.state.heroSlide) this.setState({ heroSlide: i }); }
   heroTo(i) { this.heroSet(i); }
-  heroNav(dir) { this.heroSet((this.state.heroSlide + dir + 3) % 3); }
+  heroNav(dir) { this.heroSet((this.state.heroSlide + dir + this.HERO_SLIDES) % this.HERO_SLIDES); }
   heroTick() {
     if (this.state.tab !== 'inicio') return;
     // en escritorio se pausa al pasar el ratón; en táctil no (un toque dejaría el hover activo para siempre)
     const canHover = typeof window !== 'undefined' && window.matchMedia && window.matchMedia('(hover: hover)').matches;
     if (canHover && this._heroHover) return;
-    this.heroSet((this.state.heroSlide + 1) % 3);
+    this.heroSet((this.state.heroSlide + 1) % this.HERO_SLIDES);
   }
   lockScroll(on) {
     try {
@@ -1840,7 +2105,7 @@ class Component extends DCLogic {
     // INICIO carousel
     const serviceCards = this.carouselCards.map((c, i) => ({
       code: c.code, title: this.L(c.title, c.titleCa), tagline: this.L(c.tagline, c.taglineCa), summary: this.L(c.summary, c.summaryCa),
-      bgCss: 'url("' + this.IMG + c.img + '")',
+      bgCss: 'url("' + (c.img.indexOf('/') === 0 ? c.img : this.IMG + c.img) + '")',
       overlayOpacity: (this.state.hoverCard === i || this.state.openCard === i) ? '1' : '0',
       onEnter: () => this.setState({ hoverCard: i }),
       onLeave: () => this.setState(s => ({ hoverCard: s.hoverCard === i ? null : s.hoverCard })),
@@ -2186,6 +2451,48 @@ class Component extends DCLogic {
         heroSub3: this.L('Ropa y accesorios de edición limitada con el sello del taller. Diseño propio y tirada corta.','Roba i accessoris d\'edició limitada amb el segell del taller. Disseny propi i tirada curta.'),
         verMerch: this.L('Ver merchandising','Veure marxandatge'),
         videoTaller: this.L('Vídeo · Taller en marcha','Vídeo · Taller en marxa'),
+        // --- Slide emocional de cierre (nuevo, último del carrusel) ---
+        heroTitle4: this.L('LAS MOTOS NOS MUEVEN.','LES MOTOS ENS MOUEN.'),
+        heroSub4: this.L('No es solo un medio de transporte. Es libertad, es tiempo para ti, es una forma de ver la vida. Por eso en Soy de Moto las cuidamos con el mismo respeto con el que tú las vives.','No és només un mitjà de transport. És llibertat, és temps per a tu, és una manera de veure la vida. Per això a Soy de Moto les cuidem amb el mateix respecte amb què tu les vius.'),
+        // --- Franja de confianza del hero (cifras PENDIENTES de confirmar) ---
+        trustCount: this.L('+500','+500'),
+        trustCountLabel: this.L('moteros confían en nosotros','motoristes confien en nosaltres'),
+        trustRating: this.L('4,9/5','4,9/5'),
+        trustRatingLabel: this.L('en reseñas de Google','en ressenyes de Google'),
+        // --- Así trabajamos / Un proceso claro ---
+        asiTrabajamos: this.L('Así trabajamos','Com treballem'),
+        procesoTitle: this.L('Un proceso claro, de principio a fin.','Un procés clar, de principi a fi.'),
+        procStep1: this.L('Recogida','Recollida'),
+        procStep1Txt: this.L('Traes la moto al taller (o la recogemos según zona).','Portes la moto al taller (o la recollim segons zona).'),
+        procStep2: this.L('Diagnóstico','Diagnòstic'),
+        procStep2Txt: this.L('Revisamos la moto e identificamos el problema.','Revisem la moto i identifiquem el problema.'),
+        procStep3: this.L('Presupuesto','Pressupost'),
+        procStep3Txt: this.L('Te explicamos qué necesita y el coste antes de intervenir.','T\'expliquem què necessita i el cost abans d\'intervenir.'),
+        procStep4: this.L('Reparación','Reparació'),
+        procStep4Txt: this.L('Realizamos el trabajo acordado con piezas de calidad.','Fem la feina acordada amb peces de qualitat.'),
+        // --- Qué revisamos ---
+        servicioProfesional: this.L('Servicio profesional','Servei professional'),
+        queRevisamos: this.L('Qué revisamos','Què revisem'),
+        verTodosServicios: this.L('Ver todos los servicios','Veure tots els serveis'),
+        svcMantenimiento: this.L('Mantenimiento y revisiones','Manteniment i revisions'),
+        svcMantenimientoTxt: this.L('Cambio de aceite, filtros y revisión general.','Canvi d\'oli, filtres i revisió general.'),
+        svcFrenos: this.L('Frenos','Frens'),
+        svcFrenosTxt: this.L('Pastillas, discos y líquido de frenos.','Pastilles, discs i líquid de frens.'),
+        svcMotor: this.L('Motor','Motor'),
+        svcMotorTxt: this.L('Diagnóstico y reparación completa.','Diagnòstic i reparació completa.'),
+        svcSuspension: this.L('Suspensión','Suspensió'),
+        svcSuspensionTxt: this.L('Ajustes, mantenimiento y mejoras.','Ajustos, manteniment i millores.'),
+        // --- Qué dicen de nosotros (reseñas reales; sin inventar) ---
+        queDicen: this.L('Qué dicen de nosotros','Què diuen de nosaltres'),
+        opinionesEjemplo: this.L('Opiniones de ejemplo para demostración','Opinions d\'exemple per a demostració'),
+        // --- ¿Hablamos de tu moto? ---
+        tuMotoBuenasManos: this.L('Tu moto en buenas manos','La teva moto en bones mans'),
+        hablamosTitle: this.L('¿Hablamos de tu moto?','Parlem de la teva moto?'),
+        hablamosText: this.L('Cuéntanos qué necesita y te asesoramos sin compromiso.','Explica\'ns què necessita i t\'assessorem sense compromís.'),
+        escribeWhatsapp: this.L('Escríbenos por WhatsApp','Escriu-nos per WhatsApp'),
+        hablaCheck1: this.L('Respuesta rápida','Resposta ràpida'),
+        hablaCheck2: this.L('Sin compromiso','Sense compromís'),
+        hablaCheck3: this.L('Te asesoramos de verdad','T\'assessorem de veritat'),
         cesta: this.L('Cesta','Cistella'),
         // favoritos
         favoritos: this.L('Favoritos','Preferits'),
@@ -2515,10 +2822,26 @@ class Component extends DCLogic {
       resvCheckOpacity: this.state.resvForm.terms ? '1' : '0',
       closeResv: () => this.closeResv(),
       // hero carrusel (crossfade dirigido por estado)
-      heroDots: [0, 1, 2].map(i => ({ onDot: () => this.heroTo(i), w: this.state.heroSlide === i ? '28px' : '9px', rad: this.state.heroSlide === i ? '5px' : '50%', bg: this.state.heroSlide === i ? acc : 'rgba(255,255,255,.42)' })),
+      heroDots: [0, 1, 2, 3].map(i => ({ onDot: () => this.heroTo(i), w: this.state.heroSlide === i ? '28px' : '9px', rad: this.state.heroSlide === i ? '5px' : '50%', bg: this.state.heroSlide === i ? acc : 'rgba(255,255,255,.42)' })),
       hs0: { op: this.state.heroSlide === 0 ? '1' : '0', pe: this.state.heroSlide === 0 ? 'auto' : 'none' },
       hs1: { op: this.state.heroSlide === 1 ? '1' : '0', pe: this.state.heroSlide === 1 ? 'auto' : 'none' },
       hs2: { op: this.state.heroSlide === 2 ? '1' : '0', pe: this.state.heroSlide === 2 ? 'auto' : 'none' },
+      hs3: { op: this.state.heroSlide === 3 ? '1' : '0', pe: this.state.heroSlide === 3 ? 'auto' : 'none' },
+      // En el slide 4 (imagen con texto integrado) se oculta la franja/dots para no taparlo.
+      // En el slide 4 la franja se muestra salvo en móvil vertical, donde taparía la última línea del párrafo integrado en la foto.
+      heroBarDisplay: (this.state.heroSlide === 3 && window.matchMedia && window.matchMedia('(max-width:760px) and (orientation:portrait)').matches) ? 'none' : 'block',
+      // Reseñas: estrellas naranjas rellenas según la valoración, el resto en gris contorno
+      testimoniosDemo: this.TESTIMONIOS_DEMO,
+      testimonios: this.testimonios.map(r => ({
+        name: r.name,
+        initials: r.initials,
+        text: this.L(r.text[0], r.text[1]),
+        service: this.L(r.service[0], r.service[1]),
+        starsLabel: this.L(r.stars + ' de 5 estrellas', r.stars + ' de 5 estrelles'),
+        starList: [1, 2, 3, 4, 5].map(n => n <= r.stars
+          ? { fill: acc, stroke: acc }
+          : { fill: 'none', stroke: '#C9C9C0' }),
+      })),
       onHeroPrev: () => this.heroNav(-1),
       onHeroNext: () => this.heroNav(1),
       onHeroEnter: () => { this._heroHover = true; },
@@ -2535,6 +2858,7 @@ class Component extends DCLogic {
       closeFilters: () => { this.lockScroll(false); this.setState({ filtersOpen: false }); },
       // pedir cita
       goInicio: () => this.setTab('inicio'),
+      goNosotros: () => this.setTab('nosotros'),
       goMerch: () => this.setState({ checkoutOpen: false, cartOpen: false, tab: 'merch', merchIdx: null }),
       goMotos: () => this.setTab('motos'),
       form: this.state.form, formOpen: this.state.formOpen,
