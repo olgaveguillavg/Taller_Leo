@@ -116,10 +116,6 @@ body.is-touch .moto-card-nav,body.is-touch .gallery-overlay{opacity:1!important}
 /* Fotos ancladas a la derecha que se funden en negro hacia el texto (sin cortes duros) */
 .hero-photo-r{-webkit-mask-image:linear-gradient(90deg,transparent 0,#000 40%);mask-image:linear-gradient(90deg,transparent 0,#000 40%)}
 .habla-photo{-webkit-mask-image:linear-gradient(90deg,transparent 0,#000 38%);mask-image:linear-gradient(90deg,transparent 0,#000 38%)}
-/* Slide "Las motos nos mueven": una sola imagen a sangre (cover) sin bandas ni difuminados.
-   El encuadre garantiza que el titular y el párrafo integrados en la foto siempre se ven. */
-.m4-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:100% 35%;display:block}
-@media (max-aspect-ratio:9/10){.m4-img{object-position:50% 100%}}
 @media (max-width:760px){
   /* Hero móvil: encuadres centrados en el elemento principal de cada foto */
   /* Slide 1 (moto) en móvil: la foto llena todo el hero. Posición ajustable con --h1-pos (x% y%) */
@@ -177,6 +173,8 @@ body.is-touch .moto-card-nav,body.is-touch .gallery-overlay{opacity:1!important}
 }
 @media (max-width:560px){
   .habla-btns>*{flex:1 1 100%!important;justify-content:center!important}
+  .ns-cta-btns{width:100%}
+  .ns-cta-btns>*{flex:1 1 100%!important}
   /* Carrusel de Nosotros: sin flechas (se desliza con el dedo) y asomando la siguiente tarjeta */
   .car-arrows{display:none!important}
   .svc-card{flex-basis:82vw!important}
@@ -336,21 +334,6 @@ body.is-touch .moto-card-nav,body.is-touch .gallery-overlay{opacity:1!important}
         </div>
       </div>
 
-      <!-- SLIDE 4 · Cierre emocional "Las motos nos mueven" (último del carrusel).
-           La IMAGEN ya lleva el texto integrado (comillas, título y párrafo): NO se añade
-           texto por HTML. Ocupa el hero de borde a borde (reglas .m4 en el <style>):
-           - Pantallas apaisadas: versión horizontal en "cover", encuadrada para no cortar
-             ni al motorista ni el texto.
-           - Pantallas verticales (móvil/tablet): versión vertical ajustada al ancho.
-           Si la proporción de la pantalla obligase a recortar texto, la imagen se ajusta
-           y el hueco se rellena con la misma foto difuminada (nunca bandas negras). -->
-      <div class="m4" style="position:absolute;inset:0;opacity: {{ hs3.op }};pointer-events: {{ hs3.pe }};">
-        <picture>
-          <source media="(max-aspect-ratio: 9/10)" srcset="/img/09_las_motos_nos_mueven_movil.webp"/>
-          <img class="m4-img" src="/img/09_las_motos_nos_mueven_escritorio.webp" alt="Las motos nos mueven. No es solo un medio de transporte. Es libertad, es tiempo para ti, es una forma de ver la vida. Por eso en Soy de Moto las cuidamos con el mismo respeto con el que las vives."/>
-        </picture>
-      </div>
-
     <!-- zonas de clic laterales (sin flechas visibles) -->
     <button onClick="{{ onHeroPrev }}" aria-label="Anterior" title="Anterior" style="position:absolute;top:0;left:0;width:28%;height:52%;background:transparent;border:none;cursor:pointer;z-index:4;"></button>
     <button onClick="{{ onHeroNext }}" aria-label="Siguiente" title="Siguiente" style="position:absolute;top:0;right:0;width:28%;height:52%;background:transparent;border:none;cursor:pointer;z-index:4;"></button>
@@ -360,7 +343,7 @@ body.is-touch .moto-card-nav,body.is-touch .gallery-overlay{opacity:1!important}
          activo. Fondo transparente (solo un degradado sutil para legibilidad).
          Incluye los puntitos del carrusel a la derecha.
          PENDIENTE DE CONFIRMAR: cifras (+500 / 4,9/5) en t.trustCount / t.trustRating. -->
-    <div class="trust-bar" style="position:absolute;left:0;right:0;bottom:0;z-index:6;display: {{ heroBarDisplay }};background:linear-gradient(0deg,rgba(16,16,16,.62) 0%,rgba(16,16,16,.2) 72%,transparent 100%);border-top:1px solid rgba(255,255,255,.14);">
+    <div class="trust-bar" style="position:absolute;left:0;right:0;bottom:0;z-index:6;background:linear-gradient(0deg,rgba(16,16,16,.62) 0%,rgba(16,16,16,.2) 72%,transparent 100%);border-top:1px solid rgba(255,255,255,.14);">
       <div style="max-width:1400px;margin:0 auto;padding:13px 30px;display:flex;align-items:center;justify-content:space-between;gap:12px 24px;flex-wrap:wrap;">
         <div style="display:flex;align-items:center;gap:20px;flex-wrap:wrap;">
           <div style="display:flex;align-items:center;gap:13px;">
@@ -379,7 +362,7 @@ body.is-touch .moto-card-nav,body.is-touch .gallery-overlay{opacity:1!important}
         </div>
         <!-- puntitos del carrusel -->
         <div style="display:flex;gap:9px;align-items:center;">
-          <sc-for list="{{ heroDots }}" as="hd" hint-placeholder-count="4">
+          <sc-for list="{{ heroDots }}" as="hd" hint-placeholder-count="3">
             <button onClick="{{ hd.onDot }}" aria-label="Ir al slide" class="hero-dot" style="width: {{ hd.w }};height:9px;border-radius: {{ hd.rad }};background: {{ hd.bg }};border:none;padding:0;cursor:pointer;transition:background .3s ease;"></button>
           </sc-for>
         </div>
@@ -1248,6 +1231,25 @@ body.is-touch .moto-card-nav,body.is-touch .gallery-overlay{opacity:1!important}
       </div>
     </sc-for>
   </div>
+  <!-- PEDIR CITA (Nosotros): bloque propio además del botón de la cabecera -->
+  <div class="ns-cta" style="margin-top:80px;background:var(--ink);color:#fff;border-radius:16px;padding:clamp(26px,4vw,48px);display:flex;align-items:center;justify-content:space-between;gap:28px 40px;flex-wrap:wrap;">
+    <div style="flex:1 1 320px;min-width:0;">
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:.12em;color:var(--accent,#F56007);text-transform:uppercase;">{{ t.nosCtaKicker }}</div>
+      <h3 style="margin:12px 0 0;font-size:clamp(26px,3.2vw,40px);font-weight:900;letter-spacing:-.025em;line-height:1.05;">{{ t.nosCtaTitle }}</h3>
+      <p style="margin:14px 0 0;font-size:clamp(15px,1.3vw,17px);color:rgba(255,255,255,.75);line-height:1.55;max-width:48ch;">{{ t.nosCtaText }}</p>
+    </div>
+    <div class="ns-cta-btns" style="flex:0 1 auto;display:flex;flex-wrap:wrap;gap:12px;">
+      <button onClick="{{ openForm }}" style="height:56px;padding:0 30px;background:var(--accent,#F56007);color:#fff;border:none;border-radius:0;font-weight:700;font-size:15px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:10px;" style-hover="filter:brightness(1.1)">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+        {{ t.pedirCita }}</button>
+      <a href="{{ waContact }}" target="_blank" rel="noopener" style="height:56px;padding:0 24px;background:transparent;color:#fff;border:1.5px solid rgba(255,255,255,.5);border-radius:0;font-weight:700;font-size:15px;text-decoration:none;display:flex;align-items:center;justify-content:center;gap:10px;" style-hover="border-color:#25D366;color:#25D366">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 0 0-8.6 15l-1.3 4.7 4.8-1.3A10 10 0 1 0 12 2Zm5.6 14.1c-.2.6-1.2 1.2-1.7 1.2-.4 0-1 .1-3.4-.9-2.9-1.2-4.7-4.1-4.9-4.3-.1-.2-1.1-1.5-1.1-2.8 0-1.3.7-2 .9-2.2.2-.3.5-.3.7-.3h.5c.2 0 .4 0 .6.5l.8 2c.1.2.1.4 0 .5l-.4.6c-.2.2-.3.4-.1.7.2.3.8 1.3 1.7 2.1 1.2 1 2.1 1.4 2.4 1.5.2.1.4.1.6-.1l.8-1c.2-.2.4-.2.6-.1l1.9.9c.3.1.5.2.5.3.1.2.1.7-.1 1.2Z"/></svg>
+        WhatsApp</a>
+      <a href="tel:+34666666666" style="height:56px;padding:0 24px;background:transparent;color:#fff;border:1.5px solid rgba(255,255,255,.5);border-radius:0;font-weight:700;font-size:15px;text-decoration:none;display:flex;align-items:center;justify-content:center;gap:10px;" style-hover="border-color:#fff">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1 1 .4 1.9.7 2.8a2 2 0 0 1-.5 2.1L8.1 9.9a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.6 2.8.7a2 2 0 0 1 1.7 2z"/></svg>
+        +34 666 66 66 66</a>
+    </div>
+  </div>
 </div>
 </sc-if>
 
@@ -1669,8 +1671,8 @@ body.is-touch .moto-card-nav,body.is-touch .gallery-overlay{opacity:1!important}
 </x-dc>
 <script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:&quot;100%&quot;,&quot;height&quot;:&quot;100%&quot;},&quot;accentColor&quot;:{&quot;editor&quot;:&quot;color&quot;,&quot;default&quot;:&quot;#F56007&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Marca&quot;},&quot;tallerName&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;SOY DE MOTO&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Marca&quot;},&quot;whatsappNumber&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;34666666666&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Contacto&quot;}}">
 class Component extends DCLogic {
-  // Nº de slides del hero (incluye el slide emocional de cierre "Las motos nos mueven").
-  HERO_SLIDES = 4;
+  // Nº de slides del hero (Pedir cita · Compra/Vende · Merchandising).
+  HERO_SLIDES = 3;
   state = {
     tab: 'inicio',
     navOpen: false,
@@ -2513,9 +2515,6 @@ class Component extends DCLogic {
         heroSub3: this.L('Ropa y accesorios de edición limitada con el sello del taller. Diseño propio y tirada corta.','Roba i accessoris d\'edició limitada amb el segell del taller. Disseny propi i tirada curta.'),
         verMerch: this.L('Ver merchandising','Veure marxandatge'),
         videoTaller: this.L('Vídeo · Taller en marcha','Vídeo · Taller en marxa'),
-        // --- Slide emocional de cierre (nuevo, último del carrusel) ---
-        heroTitle4: this.L('LAS MOTOS NOS MUEVEN.','LES MOTOS ENS MOUEN.'),
-        heroSub4: this.L('No es solo un medio de transporte. Es libertad, es tiempo para ti, es una forma de ver la vida. Por eso en Soy de Moto las cuidamos con el mismo respeto con el que tú las vives.','No és només un mitjà de transport. És llibertat, és temps per a tu, és una manera de veure la vida. Per això a Soy de Moto les cuidem amb el mateix respecte amb què tu les vius.'),
         // --- Franja de confianza del hero (cifras PENDIENTES de confirmar) ---
         trustCount: this.L('+500','+500'),
         trustCountLabel: this.L('moteros confían en nosotros','motoristes confien en nosaltres'),
@@ -2545,6 +2544,9 @@ class Component extends DCLogic {
         svcSuspension: this.L('Suspensión','Suspensió'),
         svcSuspensionTxt: this.L('Ajustes, mantenimiento y mejoras.','Ajustos, manteniment i millores.'),
         // --- Qué dicen de nosotros (reseñas reales; sin inventar) ---
+        nosCtaKicker: this.L('Pide cita','Demana cita'),
+        nosCtaTitle: this.L('¿Le echamos un vistazo a tu moto?','Li fem una ullada a la teva moto?'),
+        nosCtaText: this.L('Cuéntanos qué le pasa y te damos cita, sin compromiso. Elige cómo prefieres contactar.','Explica\'ns què li passa i et donem cita, sense compromís. Tria com prefereixes contactar.'),
         queDicen: this.L('Qué dicen de nosotros','Què diuen de nosaltres'),
         opinionesEjemplo: this.L('Opiniones de ejemplo para demostración','Opinions d\'exemple per a demostració'),
         // --- ¿Hablamos de tu moto? ---
@@ -2884,14 +2886,10 @@ class Component extends DCLogic {
       resvCheckOpacity: this.state.resvForm.terms ? '1' : '0',
       closeResv: () => this.closeResv(),
       // hero carrusel (crossfade dirigido por estado)
-      heroDots: [0, 1, 2, 3].map(i => ({ onDot: () => this.heroTo(i), w: this.state.heroSlide === i ? '28px' : '9px', rad: this.state.heroSlide === i ? '5px' : '50%', bg: this.state.heroSlide === i ? acc : 'rgba(255,255,255,.42)' })),
+      heroDots: [0, 1, 2].map(i => ({ onDot: () => this.heroTo(i), w: this.state.heroSlide === i ? '28px' : '9px', rad: this.state.heroSlide === i ? '5px' : '50%', bg: this.state.heroSlide === i ? acc : 'rgba(255,255,255,.42)' })),
       hs0: { op: this.state.heroSlide === 0 ? '1' : '0', pe: this.state.heroSlide === 0 ? 'auto' : 'none' },
       hs1: { op: this.state.heroSlide === 1 ? '1' : '0', pe: this.state.heroSlide === 1 ? 'auto' : 'none' },
       hs2: { op: this.state.heroSlide === 2 ? '1' : '0', pe: this.state.heroSlide === 2 ? 'auto' : 'none' },
-      hs3: { op: this.state.heroSlide === 3 ? '1' : '0', pe: this.state.heroSlide === 3 ? 'auto' : 'none' },
-      // En el slide 4 (imagen con texto integrado) se oculta la franja/dots para no taparlo.
-      // En el slide 4 la franja se muestra salvo en móvil vertical, donde taparía la última línea del párrafo integrado en la foto.
-      heroBarDisplay: (this.state.heroSlide === 3 && window.matchMedia && window.matchMedia('(max-width:760px) and (orientation:portrait)').matches) ? 'none' : 'block',
       // Reseñas: estrellas naranjas rellenas según la valoración, el resto en gris contorno
       testimoniosDemo: this.TESTIMONIOS_DEMO,
       testimonios: this.testimonios.map(r => ({
