@@ -42,7 +42,7 @@ body.is-touch .moto-card-nav,body.is-touch .gallery-overlay{opacity:1!important}
   #tab-strip{overflow-x:auto;justify-content:flex-start!important}
   .logo-img{height:44px!important}
   .hero-h1{font-size:clamp(40px,10vw,68px)!important}
-  .detail-grid{grid-template-columns:1fr!important}
+  .detail-grid{grid-template-columns:minmax(0,1fr)!important}
   .cat-grid{grid-template-columns:1fr!important}
   .co-grid{grid-template-columns:1fr!important}
   .motos-layout{grid-template-columns:1fr!important}
@@ -57,25 +57,30 @@ body.is-touch .moto-card-nav,body.is-touch .gallery-overlay{opacity:1!important}
 }
 /* Cabecera móvil: menú hamburguesa (drawer lateral). La nav superior, el
    selector de idioma, la cesta y "Pedir cita" se mueven al drawer. */
-@media (max-width:760px){
-  /* Cabecera más compacta (estrecha) en móvil */
+/* Cabecera compacta con menú hamburguesa en móvil, tablet y portátil pequeño:
+   por debajo de 1200 px los enlaces de escritorio no caben y quedarían ocultos. */
+@media (max-width:1199px){
   header{height:58px!important}
   header + div{padding-top:58px!important}
   .hdr-bar{padding:0 max(16px,env(safe-area-inset-right)) 0 max(16px,env(safe-area-inset-left))!important;gap:12px!important}
   .logo-plate{height:auto!important;margin-right:0!important}
-  .logo-img{height:28px!important}
-  .nav-burger{width:40px!important;height:34px!important}
-  /* Hero ajustado: sin tanto aire arriba y sin necesidad de scroll */
-  .hero-sec{height:calc(100dvh - 58px)!important;min-height:0!important}
-  .hero-body{top:0!important;bottom:0!important;display:flex!important;flex-direction:column!important;justify-content:center!important;padding:24px 22px 98px!important}
-  /* Franja de confianza compacta en móvil (deja ver la foto detrás) */
-  .trust-bar > div{padding:11px 16px!important;gap:8px 16px!important}
+  .logo-img{height:32px!important}
+  .nav-burger{width:44px!important;height:40px!important}
   #tab-strip{display:none!important}
   .hdr-actions{margin-left:auto!important}
   .lang-switch{display:none!important}
   .cesta-btn{display:none!important}
   .cta-cita{display:none!important}
   .nav-burger{display:flex!important}
+  .hero-sec{height:calc(100dvh - 58px)!important}
+}
+@media (max-width:760px){
+  .logo-img{height:28px!important}
+  /* Hero ajustado: sin tanto aire arriba y sin necesidad de scroll */
+  .hero-sec{height:calc(100dvh - 58px)!important;min-height:0!important}
+  .hero-body{top:0!important;bottom:0!important;display:flex!important;flex-direction:column!important;justify-content:center!important;padding:24px 22px 98px!important}
+  /* Franja de confianza compacta en móvil (deja ver la foto detrás) */
+  .trust-bar > div{padding:11px 16px!important;gap:8px 16px!important}
   /* Barra superior de Motos estilo mundimoto: buscador arriba; debajo Filtros (izq) y Orden (der) */
   .motos-topbar{gap:12px!important}
   .topbar-search{flex:1 0 100%!important;order:1}
@@ -86,7 +91,6 @@ body.is-touch .moto-card-nav,body.is-touch .gallery-overlay{opacity:1!important}
   .alert-btn{display:none!important}
 }
 @media (max-width:560px){
-  .ns-grid{grid-template-columns:1fr!important}
   .motos-results{grid-template-columns:1fr!important}
   .logo-img{height:26px!important}
   /* Modal "Pedir cita" responsive */
@@ -138,6 +142,43 @@ body.is-touch .moto-card-nav,body.is-touch .gallery-overlay{opacity:1!important}
   .habla-checks{flex-direction:column!important;align-items:stretch!important;margin-top:30px!important;padding-top:0!important;border-top:none!important}
   .habla-item{padding:14px 0!important;border-left:none!important;border-top:1px solid rgba(255,255,255,.14)!important}
 }
+/* ===== Adaptación responsive (móvil y tablet) ===== */
+/* Las columnas de las fichas nunca se ensanchan por su contenido (galerías deslizables) */
+.detail-grid>*{min-width:0}
+/* Foco visible al navegar con teclado */
+:focus-visible{outline:2px solid var(--accent,#F56007);outline-offset:2px}
+/* Zonas táctiles de al menos 44 px sin cambiar el aspecto visual */
+.tap-x,.moto-card-nav{position:relative}
+.tap-x::after,.moto-card-nav::after{content:"";position:absolute;inset:-8px}
+.hero-dot{box-sizing:content-box!important;padding:17px 4px!important;margin:-17px -4px!important;background-clip:content-box!important}
+@media (pointer:coarse){.tap44{min-height:44px!important;display:inline-flex!important;align-items:center!important}}
+/* En pantallas táctiles los puntitos del carrusel se separan un poco para que cada uno tenga su zona de pulsación */
+@media (pointer:coarse){.hero-dot{padding:17px 13px!important;margin:-17px -6px!important}}
+/* WhatsApp flotante respetando el área segura (iPhone) */
+.wa-float{right:max(24px,env(safe-area-inset-right))!important;bottom:calc(24px + env(safe-area-inset-bottom))!important}
+@media (max-width:940px){
+  /* Nosotros: foto grande arriba, las dos pequeñas en pareja y "El compromiso" debajo */
+  .ns-grid>div:nth-child(1){grid-column:1/3!important;min-height:clamp(220px,52vw,340px)!important}
+  .ns-grid>div:nth-child(2),.ns-grid>div:nth-child(3){min-height:clamp(140px,30vw,220px)!important}
+  .ns-grid>div:nth-child(4){grid-column:1/3!important;min-height:0!important}
+}
+@media (max-width:760px){
+  .wa-float{width:54px!important;height:54px!important;right:max(16px,env(safe-area-inset-right))!important;bottom:calc(16px + env(safe-area-inset-bottom))!important}
+  /* hueco al final de cada página para que el botón de WhatsApp no tape el último contenido */
+  .page-wrap{padding-bottom:calc(84px + env(safe-area-inset-bottom))}
+  /* 16 px en campos: evita el zoom automático de iPhone al escribir */
+  input,select,textarea{font-size:16px!important}
+  /* Ficha de moto: datos rápidos en 2 columnas y miniaturas en una fila deslizable */
+  .det-quick{grid-template-columns:1fr 1fr!important;gap:10px!important}
+  .det-thumbs{flex-wrap:nowrap!important;overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+  .det-thumbs>*{flex:none}
+}
+@media (max-width:560px){
+  .habla-btns>*{flex:1 1 100%!important;justify-content:center!important}
+  /* Carrusel de Nosotros: sin flechas (se desliza con el dedo) y asomando la siguiente tarjeta */
+  .car-arrows{display:none!important}
+  .svc-card{flex-basis:82vw!important}
+}
 </style>
 </helmet>
 <div style="--accent: {{ accent }}; --ink:#141414;">
@@ -179,7 +220,7 @@ body.is-touch .moto-card-nav,body.is-touch .gallery-overlay{opacity:1!important}
       </button>
       </sc-if>
       <button onClick="{{ openForm }}" class="cta-cita" style="height:40px;padding:0 18px;border:none;border-radius:0;background:var(--accent,#F56007);color:#fff;font-weight:700;font-size:13px;cursor:pointer;" style-hover="filter:brightness(1.08)">{{ t.pedirCita }}</button>
-      <button onClick="{{ onToggleNav }}" class="nav-burger" title="Menú" aria-label="Menú" style="display:none;width:46px;height:42px;border:1.5px solid #3a3a3a;border-radius:0;background:transparent;cursor:pointer;align-items:center;justify-content:center;padding:0;">
+      <button onClick="{{ onToggleNav }}" class="nav-burger" title="Menú" aria-label="Menú" aria-controls="menu-movil" aria-expanded="{{ navOpenAttr }}" style="display:none;width:46px;height:42px;border:1.5px solid #3a3a3a;border-radius:0;background:transparent;cursor:pointer;align-items:center;justify-content:center;padding:0;">
         <sc-if value="{{ navOpen }}">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>
         </sc-if>
@@ -195,7 +236,7 @@ body.is-touch .moto-card-nav,body.is-touch .gallery-overlay{opacity:1!important}
 <sc-if value="{{ navOpen }}">
 <div class="nav-drawer" style="position:fixed;inset:0;z-index:75;">
   <div onClick="{{ closeNav }}" style="position:absolute;inset:0;background:rgba(8,8,8,.55);backdrop-filter:blur(3px);animation:fadeIn .25s ease both;"></div>
-  <nav style="position:absolute;top:0;right:0;height:100%;width:min(370px,88vw);background:#141414;box-shadow:-24px 0 60px rgba(0,0,0,.55);display:flex;flex-direction:column;overflow-y:auto;animation:drawerIn .3s cubic-bezier(.22,.61,.36,1) both;">
+  <nav id="menu-movil" role="dialog" aria-modal="true" aria-label="Menú" style="position:absolute;top:0;right:0;height:100%;width:min(370px,88vw);background:#141414;box-shadow:-24px 0 60px rgba(0,0,0,.55);display:flex;flex-direction:column;overflow-y:auto;animation:drawerIn .3s cubic-bezier(.22,.61,.36,1) both;">
     <div style="position:absolute;inset:0;background:repeating-linear-gradient(115deg,rgba(255,255,255,.014) 0px,rgba(255,255,255,.014) 2px,transparent 2px,transparent 26px);pointer-events:none;"></div>
     <div style="position:relative;display:flex;align-items:center;justify-content:space-between;padding:20px 22px;border-bottom:1px solid #262626;">
       <img src="/img/logo-v2.png" alt="{{ taller }}" style="height:34px;width:auto;display:block;"/>
@@ -342,7 +383,7 @@ body.is-touch .moto-card-nav,body.is-touch .gallery-overlay{opacity:1!important}
         <!-- puntitos del carrusel -->
         <div style="display:flex;gap:9px;align-items:center;">
           <sc-for list="{{ heroDots }}" as="hd" hint-placeholder-count="4">
-            <button onClick="{{ hd.onDot }}" aria-label="Ir al slide" style="width: {{ hd.w }};height:9px;border-radius: {{ hd.rad }};background: {{ hd.bg }};border:none;padding:0;cursor:pointer;transition:background .3s ease;"></button>
+            <button onClick="{{ hd.onDot }}" aria-label="Ir al slide" class="hero-dot" style="width: {{ hd.w }};height:9px;border-radius: {{ hd.rad }};background: {{ hd.bg }};border:none;padding:0;cursor:pointer;transition:background .3s ease;"></button>
           </sc-for>
         </div>
       </div>
@@ -354,7 +395,7 @@ body.is-touch .moto-card-nav,body.is-touch .gallery-overlay{opacity:1!important}
     <div style="max-width:1400px;margin:0 auto;padding:clamp(54px,7vw,88px) 30px;">
       <div style="font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:.14em;color:var(--accent,#F56007);text-transform:uppercase;">{{ t.asiTrabajamos }}</div>
       <h2 style="margin:14px 0 0;font-size:clamp(32px,4.4vw,58px);font-weight:900;letter-spacing:-.03em;line-height:1;max-width:18ch;">{{ t.procesoTitle }}</h2>
-      <div style="margin-top:46px;display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:2px 32px;">
+      <div style="margin-top:46px;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(210px,100%),1fr));gap:2px 32px;">
         <div style="padding:26px 0 8px;border-top:2px solid #141414;">
           <div style="display:flex;align-items:center;justify-content:space-between;">
             <span style="font-family:'IBM Plex Mono',monospace;font-size:28px;font-weight:700;letter-spacing:-.02em;">01</span>
@@ -402,11 +443,11 @@ body.is-touch .moto-card-nav,body.is-touch .gallery-overlay{opacity:1!important}
           <div style="font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:.14em;color:var(--accent,#F56007);text-transform:uppercase;">{{ t.servicioProfesional }}</div>
           <h2 style="margin:14px 0 0;font-size:clamp(32px,4.4vw,58px);font-weight:900;letter-spacing:-.03em;line-height:1;">{{ t.queRevisamos }}</h2>
         </div>
-        <button onClick="{{ goNosotros }}" style="flex:none;background:none;border:none;color:#fff;cursor:pointer;font-weight:700;font-size:14.5px;display:flex;align-items:center;gap:9px;padding:6px 0;" style-hover="color:var(--accent,#F56007)">{{ t.verTodosServicios }}
+        <button onClick="{{ goNosotros }}" class="tap44" style="flex:none;background:none;border:none;color:#fff;cursor:pointer;font-weight:700;font-size:14.5px;display:flex;align-items:center;gap:9px;padding:6px 0;" style-hover="color:var(--accent,#F56007)">{{ t.verTodosServicios }}
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
         </button>
       </div>
-      <div style="margin-top:40px;display:grid;grid-template-columns:repeat(auto-fit,minmax(238px,1fr));gap:20px;">
+      <div style="margin-top:40px;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(238px,100%),1fr));gap:20px;">
         <div onClick="{{ goNosotros }}" style="cursor:pointer;background:#fff;color:#141414;border:1px solid #242424;overflow:hidden;" style-hover="border-color:var(--accent,#F56007)">
           <div style="position:relative;height:clamp(170px,20vw,210px);overflow:hidden;background:#1c1c1c;">
             <img src="/img/02_servicio_mantenimiento.webp" alt="" loading="lazy" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center;display:block;"/>
@@ -461,7 +502,7 @@ body.is-touch .moto-card-nav,body.is-touch .gallery-overlay{opacity:1!important}
       <div style="display:flex;align-items:baseline;justify-content:space-between;gap:10px 24px;flex-wrap:wrap;">
         <div style="font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:.14em;color:var(--accent,#F56007);text-transform:uppercase;">{{ t.queDicen }}</div>
       </div>
-      <div style="margin-top:26px;display:grid;grid-template-columns:repeat(auto-fit,minmax(272px,1fr));gap:18px;">
+      <div style="margin-top:26px;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(272px,100%),1fr));gap:18px;">
         <sc-for list="{{ testimonios }}" as="r" hint-placeholder-count="3">
           <article style="background:#fff;border:1px solid #ECECE6;border-radius:2px;padding:24px 24px 22px;display:flex;flex-direction:column;">
             <div style="display:flex;gap:3px;" aria-label="{{ r.starsLabel }}">
@@ -497,7 +538,7 @@ body.is-touch .moto-card-nav,body.is-touch .gallery-overlay{opacity:1!important}
         <div style="font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:.14em;color:var(--accent,#F56007);text-transform:uppercase;">{{ t.tuMotoBuenasManos }}</div>
         <h2 style="margin:14px 0 0;font-size:clamp(32px,4.6vw,62px);font-weight:900;letter-spacing:-.03em;line-height:.98;">{{ t.hablamosTitle }}</h2>
         <p style="margin:20px 0 0;font-size:clamp(16px,1.4vw,19px);color:rgba(255,255,255,.78);line-height:1.55;max-width:46ch;">{{ t.hablamosText }}</p>
-        <div style="margin-top:30px;display:flex;flex-wrap:wrap;gap:14px;">
+        <div class="habla-btns" style="margin-top:30px;display:flex;flex-wrap:wrap;gap:14px;">
           <button onClick="{{ openForm }}" style="height:56px;padding:0 30px;background:var(--accent,#F56007);color:#fff;border:none;border-radius:0;font-weight:700;font-size:15px;cursor:pointer;display:flex;align-items:center;gap:10px;" style-hover="filter:brightness(1.1)">
             <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
             {{ t.pedirCita }}</button>
@@ -548,7 +589,7 @@ body.is-touch .moto-card-nav,body.is-touch .gallery-overlay{opacity:1!important}
          de alertas (alertEmail / onAlertEmail / onSoonNotify / soonDone).
     <sc-if value="{{ soonNotDone }}">
       <div style="margin:42px 0 0;max-width:460px;display:flex;gap:10px;flex-wrap:wrap;">
-        <input value="{{ alertEmail }}" onInput="{{ onAlertEmail }}" placeholder="{{ soonEmailPh }}" style="flex:1;min-width:200px;height:52px;background:rgba(255,255,255,.06);border:1.5px solid #3a3a3a;border-radius:0;padding:0 16px;font-size:15px;color:#fff;outline:none;" style-focus="border-color:var(--accent,#F56007)"/>
+        <input value="{{ alertEmail }}" onInput="{{ onAlertEmail }}" type="email" inputmode="email" autocomplete="email" autocapitalize="off" spellcheck="false" placeholder="{{ soonEmailPh }}" style="flex:1;min-width:200px;height:52px;background:rgba(255,255,255,.06);border:1.5px solid #3a3a3a;border-radius:0;padding:0 16px;font-size:15px;color:#fff;outline:none;" style-focus="border-color:var(--accent,#F56007)"/>
         <button onClick="{{ onSoonNotify }}" style="height:52px;padding:0 24px;background:var(--accent,#F56007);color:#fff;border:none;border-radius:0;font-weight:700;font-size:14.5px;cursor:pointer;white-space:nowrap;" style-hover="filter:brightness(1.1)">{{ soonNotifyLabel }}</button>
       </div>
     </sc-if>
@@ -735,7 +776,7 @@ body.is-touch .moto-card-nav,body.is-touch .gallery-overlay{opacity:1!important}
       </sc-if>
       <div style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:#8a8a82;letter-spacing:.04em;margin-bottom:20px;">{{ t.mostrando }} {{ resultCount }} {{ t.motosLabel }}</div>
       <sc-if value="{{ hasResults }}" hint-placeholder-val="{{ true }}">
-        <div class="motos-results" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:26px;">
+        <div class="motos-results" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(min(320px,100%),1fr));gap:26px;">
           <sc-for list="{{ motosView }}" as="m" hint-placeholder-count="4">
             <div onClick="{{ m.onView }}" class="moto-card" style="background:#fff;border:1px solid #E8E8E2;border-radius:18px;overflow:hidden;cursor: {{ m.cardCursor }};transition:box-shadow .2s,border-color .2s,transform .2s;" style-hover="box-shadow:0 14px 34px -18px rgba(0,0,0,.4);border-color:#DADAD3;transform:translateY(-3px)">
               <div style="height:230px;position:relative;opacity: {{ m.imgOpacity }};filter: {{ m.imgGray }};">
@@ -745,7 +786,7 @@ body.is-touch .moto-card-nav,body.is-touch .gallery-overlay{opacity:1!important}
                   </sc-for>
                 </div>
                 <div style="position:absolute;top:0;left:0;right:0;display:flex;align-items:flex-start;justify-content:space-between;padding:16px;background:linear-gradient(180deg,rgba(0,0,0,.3) 0%,transparent 40%);z-index:2;pointer-events:none;">
-                  <button onClick="{{ m.onToggleSaved }}" title="{{ t.guardarTip }}" style="width:38px;height:38px;border:none;background:rgba(20,20,20,.4);backdrop-filter:blur(3px);border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;flex:none;pointer-events:auto;" style-hover="background:rgba(20,20,20,.65)">
+                  <button onClick="{{ m.onToggleSaved }}" title="{{ t.guardarTip }}" class="tap-x" style="width:38px;height:38px;border:none;background:rgba(20,20,20,.4);backdrop-filter:blur(3px);border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;flex:none;pointer-events:auto;" style-hover="background:rgba(20,20,20,.65)">
                     <svg width="19" height="19" viewBox="0 0 24 24" fill="{{ m.heartFill }}" stroke="{{ m.heartStroke }}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="transition:all .2s;"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1-1.1a5.5 5.5 0 0 0-7.8 7.8l1 1.1L12 21l7.8-7.5 1-1.1a5.5 5.5 0 0 0 0-7.8z"/></svg>
                   </button>
                   <sc-if value="{{ m.showState }}" hint-placeholder-val="{{ true }}">
@@ -817,7 +858,7 @@ body.is-touch .moto-card-nav,body.is-touch .gallery-overlay{opacity:1!important}
             <div class="gallery-overlay" style="position:absolute;top:12px;left:12px;font-family:'IBM Plex Mono',monospace;font-size:11px;color:#fff;background:rgba(0,0,0,.5);padding:3px 8px;pointer-events:none;z-index:2;">{{ detail.gCount }} fotos</div>
           </sc-if>
           <div style="position:absolute;top:12px;right:12px;display:flex;gap:6px;z-index:3;">
-            <button onClick="{{ detail.onToggleSaved }}" title="{{ t.guardarTip }}" style="width:30px;height:30px;border:none;background:rgba(20,20,20,.42);backdrop-filter:blur(3px);color:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;" style-hover="background:rgba(20,20,20,.7)">
+            <button onClick="{{ detail.onToggleSaved }}" title="{{ t.guardarTip }}" class="tap-x" style="width:30px;height:30px;border:none;background:rgba(20,20,20,.42);backdrop-filter:blur(3px);color:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;" style-hover="background:rgba(20,20,20,.7)">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="{{ detail.heartFill }}" stroke="{{ detail.heartStroke }}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="transition:all .2s;"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1-1.1a5.5 5.5 0 0 0-7.8 7.8l1 1.1L12 21l7.8-7.5 1-1.1a5.5 5.5 0 0 0 0-7.8z"/></svg>
             </button>
             <button onClick="{{ detail.onAlert }}" title="Crear alerta" style="width:30px;height:30px;border:none;background:rgba(20,20,20,.42);backdrop-filter:blur(3px);color:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;" style-hover="background:rgba(20,20,20,.7)">
@@ -847,7 +888,7 @@ body.is-touch .moto-card-nav,body.is-touch .gallery-overlay{opacity:1!important}
             </div>
           </sc-if>
         </div>
-        <div style="margin-top:12px;display:flex;gap:10px;flex-wrap:wrap;">
+        <div class="det-thumbs" style="margin-top:12px;display:flex;gap:10px;flex-wrap:wrap;">
           <sc-for list="{{ detail.thumbs }}" as="t" hint-placeholder-count="5">
             <div onClick="{{ t.onClick }}" style="width:88px;height:66px;background:#EFEFEB center/cover no-repeat;background-image: {{ t.css }};border:2px solid {{ t.border }};cursor:pointer;transition:border-color .2s;"></div>
           </sc-for>
@@ -885,7 +926,7 @@ body.is-touch .moto-card-nav,body.is-touch .gallery-overlay{opacity:1!important}
       </div>
     </div>
 
-    <div style="margin-top:44px;display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:14px;max-width:900px;">
+    <div class="det-quick" style="margin-top:44px;display:grid;grid-template-columns:repeat(auto-fill,minmax(min(180px,100%),1fr));gap:14px;max-width:900px;">
       <sc-for list="{{ detailQuick }}" as="q" hint-placeholder-count="4">
         <div style="border:1px solid #E8E8E2;background:#fff;padding:16px 18px;">
           <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#7a7a7a;letter-spacing:.06em;text-transform:uppercase;">{{ q.k }}</div>
@@ -901,7 +942,7 @@ body.is-touch .moto-card-nav,body.is-touch .gallery-overlay{opacity:1!important}
           <span style="font-size:26px;color:var(--accent,#F56007);font-weight:400;line-height:1;">{{ detail.specsIcon }}</span>
         </button>
         <sc-if value="{{ detail.specsOpen }}" hint-placeholder-val="{{ true }}">
-          <div style="padding-bottom:24px;display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:0 40px;">
+          <div style="padding-bottom:24px;display:grid;grid-template-columns:repeat(auto-fill,minmax(min(240px,100%),1fr));gap:0 40px;">
             <sc-for list="{{ detail.specs }}" as="s" hint-placeholder-count="8">
               <div style="display:flex;align-items:center;justify-content:space-between;gap:16px;padding:12px 0;border-bottom:1px solid #ECECE6;">
                 <span style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:#8a8a8a;letter-spacing:.04em;">{{ s.k }}</span>
@@ -951,9 +992,9 @@ body.is-touch .moto-card-nav,body.is-touch .gallery-overlay{opacity:1!important}
         <h3 style="margin:0;font-size:24px;font-weight:800;letter-spacing:-.02em;color:#141414;">{{ t.dudaMoto }}</h3>
         <p style="margin:10px 0 0;font-size:14px;color:#6a6a64;line-height:1.5;">Déjanos tus datos y te contamos todo lo que quieras saber, sin compromiso.</p>
         <div style="margin-top:22px;display:flex;flex-direction:column;gap:12px;">
-          <input placeholder="Nombre" style="height:48px;background:#fff;border:1px solid #E0E0DA;border-radius:2px;padding:0 14px;font-size:15px;color:#141414;outline:none;" style-focus="border-color:#F56007"/>
-          <input placeholder="Teléfono" style="height:48px;background:#fff;border:1px solid #E0E0DA;border-radius:2px;padding:0 14px;font-size:15px;color:#141414;outline:none;" style-focus="border-color:#F56007"/>
-          <input placeholder="Email" style="height:48px;background:#fff;border:1px solid #E0E0DA;border-radius:2px;padding:0 14px;font-size:15px;color:#141414;outline:none;" style-focus="border-color:#F56007"/>
+          <input placeholder="Nombre" autocomplete="name" style="height:48px;background:#fff;border:1px solid #E0E0DA;border-radius:2px;padding:0 14px;font-size:15px;color:#141414;outline:none;" style-focus="border-color:#F56007"/>
+          <input placeholder="Teléfono" type="tel" inputmode="tel" autocomplete="tel" style="height:48px;background:#fff;border:1px solid #E0E0DA;border-radius:2px;padding:0 14px;font-size:15px;color:#141414;outline:none;" style-focus="border-color:#F56007"/>
+          <input placeholder="Email" type="email" inputmode="email" autocomplete="email" autocapitalize="off" spellcheck="false" style="height:48px;background:#fff;border:1px solid #E0E0DA;border-radius:2px;padding:0 14px;font-size:15px;color:#141414;outline:none;" style-focus="border-color:#F56007"/>
           <a href="{{ detail.waHref }}" target="_blank" rel="noopener" style="height:52px;background:var(--accent,#F56007);color:#fff;border-radius:0;font-weight:700;font-size:15px;cursor:pointer;display:flex;align-items:center;justify-content:center;text-decoration:none;" style-hover="filter:brightness(1.1)">{{ t.enviarConsulta }}</a>
         </div>
       </div>
@@ -996,7 +1037,7 @@ body.is-touch .moto-card-nav,body.is-touch .gallery-overlay{opacity:1!important}
   <div style="font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:.12em;color:var(--accent,#F56007);text-transform:uppercase;">{{ t.tiendaMerch }}</div>
   <h2 style="margin:14px 0 0;font-size:clamp(38px,5vw,68px);font-weight:900;letter-spacing:-.03em;line-height:.98;">{{ t.merchTitle }}</h2>
   <p style="margin:18px 0 0;font-size:17px;color:#5e5e5e;max-width:56ch;line-height:1.55;">{{ t.merchSub }}</p>
-  <div style="margin-top:56px;display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:44px 32px;">
+  <div style="margin-top:56px;display:grid;grid-template-columns:repeat(auto-fill,minmax(min(280px,100%),1fr));gap:44px 32px;">
     <sc-for list="{{ merchView }}" as="p" hint-placeholder-count="8">
       <div onClick="{{ p.onOpen }}" class="moto-card" style="cursor:pointer;display:flex;flex-direction:column;">
         <div style="aspect-ratio:3/4;position:relative;background: {{ p.tileCss }};display:flex;align-items:center;justify-content:center;opacity: {{ p.imgOpacity }};overflow:hidden;">
@@ -1006,7 +1047,7 @@ body.is-touch .moto-card-nav,body.is-touch .gallery-overlay{opacity:1!important}
           <sc-if value="{{ p.soldOut }}" hint-placeholder-val="{{ false }}">
             <span style="position:absolute;top:14px;right:14px;z-index:2;font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:#fff;background:rgba(74,74,74,.9);padding:4px 9px;font-weight:700;">{{ t.sinStock }}</span>
           </sc-if>
-          <button onClick="{{ p.onToggleSaved }}" title="{{ t.guardarTip }}" style="position:absolute;bottom:12px;right:12px;z-index:4;width:36px;height:36px;border:none;background:rgba(20,20,20,.4);backdrop-filter:blur(3px);border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;" style-hover="background:rgba(20,20,20,.65)">
+          <button onClick="{{ p.onToggleSaved }}" title="{{ t.guardarTip }}" class="tap-x" style="position:absolute;bottom:12px;right:12px;z-index:4;width:36px;height:36px;border:none;background:rgba(20,20,20,.4);backdrop-filter:blur(3px);border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;" style-hover="background:rgba(20,20,20,.65)">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="{{ p.heartFill }}" stroke="{{ p.heartStroke }}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="transition:all .2s;"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1-1.1a5.5 5.5 0 0 0-7.8 7.8l1 1.1L12 21l7.8-7.5 1-1.1a5.5 5.5 0 0 0 0-7.8z"/></svg>
           </button>
           <span style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:#C4C4BC;letter-spacing:.08em;">{{ p.tag }}</span>
@@ -1045,7 +1086,7 @@ body.is-touch .moto-card-nav,body.is-touch .gallery-overlay{opacity:1!important}
         <span style="position:absolute;top:16px;left:16px;width:10px;height:10px;background:var(--accent,#F56007);border-radius:50%;"></span>
         <span style="font-family:'IBM Plex Mono',monospace;font-size:13px;color:#A8A8A0;letter-spacing:.08em;">{{ merchDetail.tag }}</span>
         <div class="gallery-overlay" style="position:absolute;top:14px;left:14px;display:flex;gap:8px;z-index:4;">
-          <button onClick="{{ merchDetail.onToggleSaved }}" title="{{ t.guardarTip }}" style="width:38px;height:38px;border:none;background:rgba(20,20,20,.5);backdrop-filter:blur(3px);color:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;" style-hover="background:rgba(20,20,20,.75)">
+          <button onClick="{{ merchDetail.onToggleSaved }}" title="{{ t.guardarTip }}" class="tap-x" style="width:38px;height:38px;border:none;background:rgba(20,20,20,.5);backdrop-filter:blur(3px);color:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;" style-hover="background:rgba(20,20,20,.75)">
             <svg width="17" height="17" viewBox="0 0 24 24" fill="{{ merchDetail.heartFill }}" stroke="{{ merchDetail.heartStroke }}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="transition:all .2s;"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1-1.1a5.5 5.5 0 0 0-7.8 7.8l1 1.1L12 21l7.8-7.5 1-1.1a5.5 5.5 0 0 0 0-7.8z"/></svg>
           </button>
           <div style="position:relative;">
@@ -1147,7 +1188,7 @@ body.is-touch .moto-card-nav,body.is-touch .gallery-overlay{opacity:1!important}
 
   <div style="margin-top:72px;">
     <h3 style="margin:0 0 26px;font-size:clamp(24px,3vw,36px);font-weight:900;letter-spacing:-.02em;">{{ t.tambienInteresar }}</h3>
-    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:20px;">
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(min(240px,100%),1fr));gap:20px;">
       <sc-for list="{{ merchDetail.related }}" as="r" hint-placeholder-count="4">
         <div style="background:#fff;border:1px solid #E8E8E2;display:flex;flex-direction:column;">
           <div onClick="{{ r.onOpen }}" style="height:180px;position:relative;background:repeating-linear-gradient(135deg,#F2F2EE,#F2F2EE 12px,#EBEBE5 12px,#EBEBE5 24px);display:flex;align-items:center;justify-content:center;cursor:pointer;">
@@ -1187,14 +1228,14 @@ body.is-touch .moto-card-nav,body.is-touch .gallery-overlay{opacity:1!important}
       <div style="font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:.12em;color:var(--accent,#F56007);text-transform:uppercase;">{{ t.loQueHacemos }}</div>
       <h2 style="margin:12px 0 0;font-size:clamp(34px,4.4vw,60px);font-weight:900;letter-spacing:-.03em;line-height:1;">{{ t.todoTaller }}</h2>
     </div>
-    <div style="display:flex;gap:12px;flex:none;">
+    <div class="car-arrows" style="display:flex;gap:12px;flex:none;">
       <button onClick="{{ onCarPrev }}" title="Anterior" style="width:56px;height:56px;border-radius:50%;border:1.5px solid #DADAD3;background:#fff;cursor:pointer;font-size:22px;line-height:1;color:var(--ink);display:flex;align-items:center;justify-content:center;" style-hover="border-color:var(--ink);background:var(--ink);color:#fff">‹</button>
       <button onClick="{{ onCarNext }}" title="Siguiente" style="width:56px;height:56px;border-radius:50%;border:1.5px solid #DADAD3;background:#fff;cursor:pointer;font-size:22px;line-height:1;color:var(--ink);display:flex;align-items:center;justify-content:center;" style-hover="border-color:var(--ink);background:var(--ink);color:#fff">›</button>
     </div>
   </div>
   <div id="svc-carousel" style="margin:40px -30px 0;display:flex;gap:26px;overflow-x:auto;scroll-snap-type:x mandatory;padding:6px 30px 24px;cursor:grab;scroll-behavior:smooth;">
     <sc-for list="{{ serviceCards }}" as="s" hint-placeholder-count="5">
-      <div onClick="{{ s.onToggle }}" onMouseEnter="{{ s.onEnter }}" onMouseLeave="{{ s.onLeave }}" style="flex:0 0 clamp(340px,44vw,560px);scroll-snap-align:center;">
+      <div onClick="{{ s.onToggle }}" onMouseEnter="{{ s.onEnter }}" onMouseLeave="{{ s.onLeave }}" class="svc-card" style="flex:0 0 clamp(340px,44vw,560px);scroll-snap-align:center;">
         <div style="height:clamp(300px,36vw,440px);border-radius:18px;background:#EFEFEB center/cover no-repeat;background-image: {{ s.bgCss }};position:relative;overflow:hidden;border:1px solid #E4E4DE;cursor:pointer;">
           <div style="position:absolute;inset:0;background:linear-gradient(180deg,transparent 45%,rgba(0,0,0,.55) 100%);"></div>
           <div style="position:absolute;left:24px;right:24px;bottom:22px;z-index:2;">
@@ -1247,14 +1288,14 @@ body.is-touch .moto-card-nav,body.is-touch .gallery-overlay{opacity:1!important}
 
 <!-- ================= TAB · CONTACTO ================= -->
 <sc-if value="{{ isContacto }}" hint-placeholder-val="{{ false }}">
-<div style="animation:fadeIn .5s ease both;max-width:1400px;margin:0 auto;padding:72px 30px 110px;display:grid;grid-template-columns:repeat(auto-fit,minmax(340px,1fr));gap:52px;">
+<div style="animation:fadeIn .5s ease both;max-width:1400px;margin:0 auto;padding:72px 30px 110px;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(340px,100%),1fr));gap:52px;">
   <div>
     <div style="font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:.12em;color:var(--accent,#F56007);text-transform:uppercase;">{{ t.contacto }}</div>
     <h2 style="margin:14px 0 0;font-size:clamp(38px,5vw,72px);font-weight:900;letter-spacing:-.03em;line-height:.98;">{{ t.traenosMoto }}</h2>
     <div style="margin-top:36px;">
-      <div style="display:flex;justify-content:space-between;padding:20px 0;border-top:1px solid #ECECE6;"><span style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:#9a9a92;text-transform:uppercase;letter-spacing:.06em;">WhatsApp</span><a href="{{ waContact }}" target="_blank" rel="noopener" style="font-weight:700;color:var(--ink);text-decoration:none;font-size:16px;" style-hover="color:#25D366">+34 666 66 66 66</a></div>
-      <div style="display:flex;justify-content:space-between;padding:20px 0;border-top:1px solid #ECECE6;"><span style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:#9a9a92;text-transform:uppercase;letter-spacing:.06em;">{{ t.telefono }}</span><a href="tel:+34666666666" style="font-weight:700;color:var(--ink);text-decoration:none;font-size:16px;">+34 666 66 66 66</a></div>
-      <div style="display:flex;justify-content:space-between;padding:20px 0;border-top:1px solid #ECECE6;"><span style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:#9a9a92;text-transform:uppercase;letter-spacing:.06em;">{{ t.email }}</span><a href="mailto:hola@taller.com" style="font-weight:700;color:var(--ink);text-decoration:none;font-size:16px;">hola@taller.com</a></div>
+      <div style="display:flex;justify-content:space-between;padding:20px 0;border-top:1px solid #ECECE6;"><span style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:#9a9a92;text-transform:uppercase;letter-spacing:.06em;">WhatsApp</span><a href="{{ waContact }}" target="_blank" rel="noopener" class="tap44" style="font-weight:700;color:var(--ink);text-decoration:none;font-size:16px;" style-hover="color:#25D366">+34 666 66 66 66</a></div>
+      <div style="display:flex;justify-content:space-between;padding:20px 0;border-top:1px solid #ECECE6;"><span style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:#9a9a92;text-transform:uppercase;letter-spacing:.06em;">{{ t.telefono }}</span><a href="tel:+34666666666" class="tap44" style="font-weight:700;color:var(--ink);text-decoration:none;font-size:16px;">+34 666 66 66 66</a></div>
+      <div style="display:flex;justify-content:space-between;padding:20px 0;border-top:1px solid #ECECE6;"><span style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:#9a9a92;text-transform:uppercase;letter-spacing:.06em;">{{ t.email }}</span><a href="mailto:hola@taller.com" class="tap44" style="font-weight:700;color:var(--ink);text-decoration:none;font-size:16px;">hola@taller.com</a></div>
       <div style="display:flex;justify-content:space-between;padding:20px 0;border-top:1px solid #ECECE6;"><span style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:#9a9a92;text-transform:uppercase;letter-spacing:.06em;">{{ t.direccion }}</span><span style="font-weight:700;font-size:16px;text-align:right;">C/ del Motor 14<br>28000 · {{ t.ciudad }}</span></div>
       <div style="display:flex;justify-content:space-between;padding:20px 0;border-top:1px solid #ECECE6;border-bottom:1px solid #ECECE6;"><span style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:#9a9a92;text-transform:uppercase;letter-spacing:.06em;">{{ t.horario }}</span><span style="font-weight:700;font-size:16px;text-align:right;">{{ t.horarioVal }}<br>{{ t.horarioSab }}</span></div>
     </div>
@@ -1273,7 +1314,7 @@ body.is-touch .moto-card-nav,body.is-touch .gallery-overlay{opacity:1!important}
 </div><!-- /padding-top -->
 
 <!-- ================= FLOATING WHATSAPP ================= -->
-<a href="{{ waContact }}" target="_blank" rel="noopener" title="WhatsApp" style="position:fixed;right:24px;bottom:24px;z-index:55;width:60px;height:60px;background:#25D366;border-radius:50%;display:flex;align-items:center;justify-content:center;text-decoration:none;box-shadow:0 8px 24px rgba(37,211,102,.4);animation:wa-pulse 2.4s infinite;" style-hover="filter:brightness(1.06)">
+<a href="{{ waContact }}" target="_blank" rel="noopener" title="WhatsApp" class="wa-float" style="position:fixed;right:24px;bottom:24px;z-index:55;width:60px;height:60px;background:#25D366;border-radius:50%;display:flex;align-items:center;justify-content:center;text-decoration:none;box-shadow:0 8px 24px rgba(37,211,102,.4);animation:wa-pulse 2.4s infinite;" style-hover="filter:brightness(1.06)">
   <svg width="29" height="29" viewBox="0 0 24 24" fill="#fff"><path d="M12 2a10 10 0 0 0-8.6 15l-1.3 4.7 4.8-1.3A10 10 0 1 0 12 2Zm5.6 14.1c-.2.6-1.2 1.2-1.7 1.2-.4 0-1 .1-3.4-.9-2.9-1.2-4.7-4.1-4.9-4.3-.1-.2-1.1-1.5-1.1-2.8 0-1.3.7-2 .9-2.2.2-.3.5-.3.7-.3h.5c.2 0 .4 0 .6.5l.8 2c.1.2.1.4 0 .5l-.4.6c-.2.2-.3.4-.1.7.2.3.8 1.3 1.7 2.1 1.2 1 2.1 1.4 2.4 1.5.2.1.4.1.6-.1l.8-1c.2-.2.4-.2.6-.1l1.9.9c.3.1.5.2.5.3.1.2.1.7-.1 1.2Z"/></svg>
 </a>
 
@@ -1392,12 +1433,12 @@ body.is-touch .moto-card-nav,body.is-touch .gallery-overlay{opacity:1!important}
         <div>
           <div style="font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:.08em;color:var(--accent,#F56007);text-transform:uppercase;">{{ t.datosEnvio }}</div>
           <div style="margin-top:16px;display:grid;grid-template-columns:1fr 1fr;gap:14px;">
-            <input value="{{ coForm.name }}" onInput="{{ onCoName }}" placeholder="{{ t.nombreApellidos }}" style="grid-column:1/3;height:48px;border:1px solid #E0E0DA;border-radius:2px;padding:0 14px;font-size:15px;background:#fff;outline:none;" style-focus="border-color:var(--ink)"/>
-            <input value="{{ coForm.phone }}" onInput="{{ onCoPhone }}" placeholder="{{ t.telefono }}" style="height:48px;border:1px solid #E0E0DA;border-radius:2px;padding:0 14px;font-size:15px;background:#fff;outline:none;" style-focus="border-color:var(--ink)"/>
-            <input value="{{ coForm.email }}" onInput="{{ onCoEmail }}" placeholder="{{ t.email }}" style="height:48px;border:1px solid #E0E0DA;border-radius:2px;padding:0 14px;font-size:15px;background:#fff;outline:none;" style-focus="border-color:var(--ink)"/>
-            <input value="{{ coForm.address }}" onInput="{{ onCoAddress }}" placeholder="{{ t.dirEnvio }}" style="grid-column:1/3;height:48px;border:1px solid #E0E0DA;border-radius:2px;padding:0 14px;font-size:15px;background:#fff;outline:none;" style-focus="border-color:var(--ink)"/>
-            <input value="{{ coForm.city }}" onInput="{{ onCoCity }}" placeholder="{{ t.ciudad }}" style="height:48px;border:1px solid #E0E0DA;border-radius:2px;padding:0 14px;font-size:15px;background:#fff;outline:none;" style-focus="border-color:var(--ink)"/>
-            <input value="{{ coForm.zip }}" onInput="{{ onCoZip }}" placeholder="{{ t.codPostal }}" style="height:48px;border:1px solid #E0E0DA;border-radius:2px;padding:0 14px;font-size:15px;background:#fff;outline:none;" style-focus="border-color:var(--ink)"/>
+            <input value="{{ coForm.name }}" onInput="{{ onCoName }}" autocomplete="name" placeholder="{{ t.nombreApellidos }}" style="grid-column:1/3;height:48px;border:1px solid #E0E0DA;border-radius:2px;padding:0 14px;font-size:15px;background:#fff;outline:none;" style-focus="border-color:var(--ink)"/>
+            <input value="{{ coForm.phone }}" onInput="{{ onCoPhone }}" type="tel" inputmode="tel" autocomplete="tel" placeholder="{{ t.telefono }}" style="height:48px;border:1px solid #E0E0DA;border-radius:2px;padding:0 14px;font-size:15px;background:#fff;outline:none;" style-focus="border-color:var(--ink)"/>
+            <input value="{{ coForm.email }}" onInput="{{ onCoEmail }}" type="email" inputmode="email" autocomplete="email" autocapitalize="off" spellcheck="false" placeholder="{{ t.email }}" style="height:48px;border:1px solid #E0E0DA;border-radius:2px;padding:0 14px;font-size:15px;background:#fff;outline:none;" style-focus="border-color:var(--ink)"/>
+            <input value="{{ coForm.address }}" onInput="{{ onCoAddress }}" autocomplete="street-address" placeholder="{{ t.dirEnvio }}" style="grid-column:1/3;height:48px;border:1px solid #E0E0DA;border-radius:2px;padding:0 14px;font-size:15px;background:#fff;outline:none;" style-focus="border-color:var(--ink)"/>
+            <input value="{{ coForm.city }}" onInput="{{ onCoCity }}" autocomplete="address-level2" placeholder="{{ t.ciudad }}" style="height:48px;border:1px solid #E0E0DA;border-radius:2px;padding:0 14px;font-size:15px;background:#fff;outline:none;" style-focus="border-color:var(--ink)"/>
+            <input value="{{ coForm.zip }}" onInput="{{ onCoZip }}" inputmode="numeric" autocomplete="postal-code" placeholder="{{ t.codPostal }}" style="height:48px;border:1px solid #E0E0DA;border-radius:2px;padding:0 14px;font-size:15px;background:#fff;outline:none;" style-focus="border-color:var(--ink)"/>
             <textarea value="{{ coForm.notes }}" onInput="{{ onCoNotes }}" placeholder="{{ t.comentariosOpc }}" rows="3" style="grid-column:1/3;border:1px solid #E0E0DA;border-radius:2px;padding:12px 14px;font-size:15px;background:#fff;outline:none;resize:vertical;" style-focus="border-color:var(--ink)"></textarea>
           </div>
         </div>
@@ -1516,7 +1557,7 @@ body.is-touch .moto-card-nav,body.is-touch .gallery-overlay{opacity:1!important}
               <span style="color:var(--accent,#F56007);font-size:15px;">✱</span>{{ t.noFiltros }}
             </div>
           </sc-if>
-          <label style="display:flex;flex-direction:column;gap:6px;"><span style="font-size:12px;font-weight:700;color:#555;">{{ t.email }} <span style="color:var(--accent,#F56007);">*</span></span><input value="{{ alertEmail }}" onInput="{{ onAlertEmail }}" placeholder="tu@email.com" style="height:48px;border:1px solid #E0E0DA;border-radius:2px;padding:0 13px;font-size:15px;background:#fff;outline:none;" style-focus="border-color:var(--ink)"/></label>
+          <label style="display:flex;flex-direction:column;gap:6px;"><span style="font-size:12px;font-weight:700;color:#555;">{{ t.email }} <span style="color:var(--accent,#F56007);">*</span></span><input value="{{ alertEmail }}" onInput="{{ onAlertEmail }}" type="email" inputmode="email" autocomplete="email" autocapitalize="off" spellcheck="false" placeholder="tu@email.com" style="height:48px;border:1px solid #E0E0DA;border-radius:2px;padding:0 13px;font-size:15px;background:#fff;outline:none;" style-focus="border-color:var(--ink)"/></label>
           <button onClick="{{ onAlertSubmit }}" style="margin-top:20px;width:100%;height:52px;background:var(--accent,#F56007);color:#fff;border:none;border-radius:0;font-weight:700;font-size:15px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:10px;opacity: {{ alertBtnOpacity }};" style-hover="filter:brightness(1.1)">
             <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/></svg>
             Crear alerta</button>
@@ -1538,9 +1579,9 @@ body.is-touch .moto-card-nav,body.is-touch .gallery-overlay{opacity:1!important}
       </div>
       <div style="padding:22px 28px 28px;">
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">
-          <input value="{{ sellForm.name }}" onInput="{{ onSellName }}" placeholder="{{ t.nombre }}" style="grid-column:1/3;height:46px;border:1px solid #E0E0DA;border-radius:2px;padding:0 13px;font-size:15px;background:#fff;outline:none;" style-focus="border-color:var(--ink)"/>
-          <input value="{{ sellForm.phone }}" onInput="{{ onSellPhone }}" placeholder="{{ t.telefono }}" style="height:46px;border:1px solid #E0E0DA;border-radius:2px;padding:0 13px;font-size:15px;background:#fff;outline:none;" style-focus="border-color:var(--ink)"/>
-          <input value="{{ sellForm.email }}" onInput="{{ onSellEmail }}" placeholder="{{ t.email }}" style="height:46px;border:1px solid #E0E0DA;border-radius:2px;padding:0 13px;font-size:15px;background:#fff;outline:none;" style-focus="border-color:var(--ink)"/>
+          <input value="{{ sellForm.name }}" onInput="{{ onSellName }}" autocomplete="name" placeholder="{{ t.nombre }}" style="grid-column:1/3;height:46px;border:1px solid #E0E0DA;border-radius:2px;padding:0 13px;font-size:15px;background:#fff;outline:none;" style-focus="border-color:var(--ink)"/>
+          <input value="{{ sellForm.phone }}" onInput="{{ onSellPhone }}" type="tel" inputmode="tel" autocomplete="tel" placeholder="{{ t.telefono }}" style="height:46px;border:1px solid #E0E0DA;border-radius:2px;padding:0 13px;font-size:15px;background:#fff;outline:none;" style-focus="border-color:var(--ink)"/>
+          <input value="{{ sellForm.email }}" onInput="{{ onSellEmail }}" type="email" inputmode="email" autocomplete="email" autocapitalize="off" spellcheck="false" placeholder="{{ t.email }}" style="height:46px;border:1px solid #E0E0DA;border-radius:2px;padding:0 13px;font-size:15px;background:#fff;outline:none;" style-focus="border-color:var(--ink)"/>
           <input value="{{ sellForm.model }}" onInput="{{ onSellModel }}" placeholder="{{ t.marcaModelo }}" style="grid-column:1/3;height:46px;border:1px solid #E0E0DA;border-radius:2px;padding:0 13px;font-size:15px;background:#fff;outline:none;" style-focus="border-color:var(--ink)"/>
           <input value="{{ sellForm.year }}" onInput="{{ onSellYear }}" placeholder="{{ t.anyo }}" inputmode="numeric" style="height:46px;border:1px solid #E0E0DA;border-radius:2px;padding:0 13px;font-size:15px;background:#fff;outline:none;" style-focus="border-color:var(--ink)"/>
           <input value="{{ sellForm.km }}" onInput="{{ onSellKm }}" placeholder="{{ t.kmLabel }}" inputmode="numeric" style="height:46px;border:1px solid #E0E0DA;border-radius:2px;padding:0 13px;font-size:15px;background:#fff;outline:none;" style-focus="border-color:var(--ink)"/>
@@ -1566,9 +1607,9 @@ body.is-touch .moto-card-nav,body.is-touch .gallery-overlay{opacity:1!important}
         <button onClick="{{ closeResv }}" style="width:36px;height:36px;border:1px solid #333;background:#141414;border-radius:2px;cursor:pointer;font-size:18px;line-height:1;color:#aaa;flex:none;">✕</button>
       </div>
       <div style="padding:22px 28px 28px;display:flex;flex-direction:column;gap:12px;">
-        <input value="{{ resvForm.name }}" onInput="{{ onResvName }}" placeholder="{{ t.nombreApellidos }}" style="height:48px;background:#141414;border:1px solid #333;border-radius:2px;padding:0 14px;font-size:15px;color:#fff;outline:none;" style-focus="border-color:#F56007"/>
-        <input value="{{ resvForm.phone }}" onInput="{{ onResvPhone }}" placeholder="{{ t.telefono }}" style="height:48px;background:#141414;border:1px solid #333;border-radius:2px;padding:0 14px;font-size:15px;color:#fff;outline:none;" style-focus="border-color:#F56007"/>
-        <input value="{{ resvForm.email }}" onInput="{{ onResvEmail }}" placeholder="{{ t.email }}" style="height:48px;background:#141414;border:1px solid #333;border-radius:2px;padding:0 14px;font-size:15px;color:#fff;outline:none;" style-focus="border-color:#F56007"/>
+        <input value="{{ resvForm.name }}" onInput="{{ onResvName }}" autocomplete="name" placeholder="{{ t.nombreApellidos }}" style="height:48px;background:#141414;border:1px solid #333;border-radius:2px;padding:0 14px;font-size:15px;color:#fff;outline:none;" style-focus="border-color:#F56007"/>
+        <input value="{{ resvForm.phone }}" onInput="{{ onResvPhone }}" type="tel" inputmode="tel" autocomplete="tel" placeholder="{{ t.telefono }}" style="height:48px;background:#141414;border:1px solid #333;border-radius:2px;padding:0 14px;font-size:15px;color:#fff;outline:none;" style-focus="border-color:#F56007"/>
+        <input value="{{ resvForm.email }}" onInput="{{ onResvEmail }}" type="email" inputmode="email" autocomplete="email" autocapitalize="off" spellcheck="false" placeholder="{{ t.email }}" style="height:48px;background:#141414;border:1px solid #333;border-radius:2px;padding:0 14px;font-size:15px;color:#fff;outline:none;" style-focus="border-color:#F56007"/>
         <button onClick="{{ onResvTerms }}" style="display:flex;align-items:center;gap:11px;background:none;border:none;cursor:pointer;padding:6px 0;text-align:left;">
           <span style="flex:none;width:22px;height:22px;border-radius:3px;border:1.5px solid {{ resvTermsBorder }};background:{{ resvTermsBg }};display:flex;align-items:center;justify-content:center;transition:all .2s;">
             <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round" style="opacity: {{ resvCheckOpacity }};"><path d="M20 6 9 17l-5-5"/></svg>
@@ -1596,9 +1637,9 @@ body.is-touch .moto-card-nav,body.is-touch .gallery-overlay{opacity:1!important}
       </div>
       <div style="padding:22px 28px 28px;">
         <div class="cita-grid" style="display:grid;gap:14px;grid-template-columns: {{ citaCols }};">
-          <label style="display:flex;flex-direction:column;gap:6px;"><span style="font-size:12px;font-weight:700;color:#555;">{{ t.nombreApellidos }} <span style="color:var(--accent,#F56007);">*</span></span><input value="{{ form.name }}" onInput="{{ onName }}" placeholder="{{ t.tuNombre }}" style="height:46px;border:1px solid #E0E0DA;border-radius:9px;padding:0 13px;font-size:15px;background:#fff;outline:none;" style-focus="border-color:var(--ink)"/></label>
-          <label style="display:flex;flex-direction:column;gap:6px;"><span style="font-size:12px;font-weight:700;color:#555;">{{ t.telefono }} <span style="color:var(--accent,#F56007);">*</span></span><input value="{{ form.phone }}" onInput="{{ onPhone }}" placeholder="600 00 00 00" style="height:46px;border:1px solid #E0E0DA;border-radius:9px;padding:0 13px;font-size:15px;background:#fff;outline:none;" style-focus="border-color:var(--ink)"/></label>
-          <label style="display:flex;flex-direction:column;gap:6px;"><span style="font-size:12px;font-weight:700;color:#555;">{{ t.email }} <span style="color:var(--accent,#F56007);">*</span></span><input value="{{ form.email }}" onInput="{{ onEmail }}" placeholder="tu@email.com" style="height:46px;border:1px solid #E0E0DA;border-radius:9px;padding:0 13px;font-size:15px;background:#fff;outline:none;" style-focus="border-color:var(--ink)"/></label>
+          <label style="display:flex;flex-direction:column;gap:6px;"><span style="font-size:12px;font-weight:700;color:#555;">{{ t.nombreApellidos }} <span style="color:var(--accent,#F56007);">*</span></span><input value="{{ form.name }}" onInput="{{ onName }}" autocomplete="name" placeholder="{{ t.tuNombre }}" style="height:46px;border:1px solid #E0E0DA;border-radius:9px;padding:0 13px;font-size:15px;background:#fff;outline:none;" style-focus="border-color:var(--ink)"/></label>
+          <label style="display:flex;flex-direction:column;gap:6px;"><span style="font-size:12px;font-weight:700;color:#555;">{{ t.telefono }} <span style="color:var(--accent,#F56007);">*</span></span><input value="{{ form.phone }}" onInput="{{ onPhone }}" type="tel" inputmode="tel" autocomplete="tel" placeholder="600 00 00 00" style="height:46px;border:1px solid #E0E0DA;border-radius:9px;padding:0 13px;font-size:15px;background:#fff;outline:none;" style-focus="border-color:var(--ink)"/></label>
+          <label style="display:flex;flex-direction:column;gap:6px;"><span style="font-size:12px;font-weight:700;color:#555;">{{ t.email }} <span style="color:var(--accent,#F56007);">*</span></span><input value="{{ form.email }}" onInput="{{ onEmail }}" type="email" inputmode="email" autocomplete="email" autocapitalize="off" spellcheck="false" placeholder="tu@email.com" style="height:46px;border:1px solid #E0E0DA;border-radius:9px;padding:0 13px;font-size:15px;background:#fff;outline:none;" style-focus="border-color:var(--ink)"/></label>
           <label style="display:flex;flex-direction:column;gap:6px;"><span style="font-size:12px;font-weight:700;color:#555;">{{ t.modeloMoto }} <span style="color:var(--accent,#F56007);">*</span></span><input value="{{ form.model }}" onInput="{{ onModel }}" placeholder="{{ t.ejModelo }}" style="height:46px;border:1px solid #E0E0DA;border-radius:9px;padding:0 13px;font-size:15px;background:#fff;outline:none;" style-focus="border-color:var(--ink)"/></label>
           <label style="display:flex;flex-direction:column;gap:6px;grid-column: {{ citaSpan }};"><span style="font-size:12px;font-weight:700;color:#555;">{{ t.numBastidor }} <span style="color:var(--accent,#F56007);">*</span></span><input value="{{ form.plate }}" onInput="{{ onPlate }}" placeholder="{{ t.caracteresAlfa }}" style="height:46px;border:1px solid #E0E0DA;border-radius:9px;padding:0 13px;font-size:15px;background:#fff;outline:none;" style-focus="border-color:var(--ink)"/></label>
         </div>
@@ -2020,6 +2061,29 @@ class Component extends DCLogic {
       window.__heroInterval = setInterval(() => { const c = window.__heroComp; if (c) c.heroTick(); }, 5000);
     }
   }
+  // Menú hamburguesa: bloquea el scroll del fondo mientras está abierto, se cierra con
+  // Escape (también filtros, favoritos, cesta y cita) y al pasar a pantalla ancha.
+  ensureNav() {
+    const open = !!this.state.navOpen;
+    if (open !== !!this._navLocked) {
+      if (open) { this._navTab = this.state.tab; if (!this.state.filtersOpen) this.lockScroll(true); }
+      else { if (this.state.tab !== this._navTab) this._scrollY = 0; if (!this.state.filtersOpen) this.lockScroll(false); }
+      this._navLocked = open;
+    }
+    if (this._navKeysInit) return;
+    this._navKeysInit = true;
+    document.addEventListener('keydown', (e) => {
+      if (e.key !== 'Escape') return;
+      const c = window.__heroComp || this, st = c.state;
+      if (!(st.navOpen || st.filtersOpen || st.favOpen || st.cartOpen || st.formOpen)) return;
+      if (st.filtersOpen) c.lockScroll(false);
+      c.setState({ navOpen: false, filtersOpen: false, favOpen: false, cartOpen: false, formOpen: false });
+    });
+    window.addEventListener('resize', () => {
+      const c = window.__heroComp || this;
+      if (c.state.navOpen && window.innerWidth > 1199) c.setState({ navOpen: false });
+    });
+  }
   ensureCardDots() {
     if (this._cardDotsInit) return;
     this._cardDotsInit = true;
@@ -2071,6 +2135,7 @@ class Component extends DCLogic {
 
   renderVals() {
     this.ensureHero();
+    this.ensureNav();
     this.bindLightboxSwipe();
     const acc = this.accent;
     const tab = this.state.tab;
@@ -2579,7 +2644,7 @@ class Component extends DCLogic {
         avisameDisponible: this.L('Avísame cuando esté disponible','Avisa\'m quan estigui disponible'),
         anadidoCesta: this.L('Añadido a la cesta','Afegit a la cistella'),
         detalles: this.L('Detalles','Detalls'),
-        tambienInteresar: this.L('{{ t.tambienInteresar }}','També et pot interessar'),
+        tambienInteresar: this.L('También te puede interesar','També et pot interessar'),
         antesAnadir: this.L('antes de añadir a la cesta.','abans d\'afegir a la cistella.'),
         guardarTip: this.L('Guardar','Desar'),
         compartirTip: this.L('Compartir','Compartir'),
@@ -2848,6 +2913,7 @@ class Component extends DCLogic {
       onHeroLeave: () => { this._heroHover = false; },
       // menú móvil (hamburguesa)
       navOpen: this.state.navOpen,
+      navOpenAttr: this.state.navOpen ? 'true' : 'false',
       navClosed: !this.state.navOpen,
       onToggleNav: () => this.setState(s => ({ navOpen: !s.navOpen })),
       closeNav: () => this.setState({ navOpen: false }),
